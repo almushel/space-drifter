@@ -17,3 +17,13 @@ function drawBitmapCenteredAtLocationWithRotation(graphic, atX, atY,withAngle) {
   canvasContext.drawImage(graphic,-graphic.width/2,-graphic.height/2); // center, draw
   canvasContext.restore(); // undo the translation movement and rotation since save()
 }
+
+function drawLine(startX, startY, endX, endY, strokeColor) {
+	canvasContext.save();
+	canvasContext.strokeStyle = strokeColor;
+	canvasContext.beginPath();
+	canvasContext.moveTo(startX, startY);
+	canvasContext.lineTo(endX, endY);
+	canvasContext.stroke();
+	canvasContext.restore();
+}
