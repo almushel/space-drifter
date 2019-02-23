@@ -55,24 +55,23 @@ function shipClass() {
 	  
 	this.superClassMove = this.move;
 	this.move = function() {
-
 			if(this.keyHeld_TurnLeft) {
-				this.ang -= TURN_RATE*Math.PI;
+				this.ang -= (TURN_RATE * deltaT) * Math.PI;
 			}
 
 			if(this.keyHeld_TurnRight) {
-				this.ang += TURN_RATE*Math.PI;
+				this.ang += (TURN_RATE * deltaT) * Math.PI;
 			}
 			
 			if(this.keyHeld_Gas) {
-				this.xv += Math.cos(this.ang) * THRUST_POWER;
-				this.yv += Math.sin(this.ang) * THRUST_POWER;
+				this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
+				this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
 			}
 			
 			this.superClassMove();
 			
-			this.xv *= SPACE_DECAY_MULT;
-			this.yv *= SPACE_DECAY_MULT;
+			this.xv *= SPACE_DECAY_MULT * deltaT;
+			this.yv *= SPACE_DECAY_MULT * deltaT;
 			
 			this.myShot.move();
 	  }

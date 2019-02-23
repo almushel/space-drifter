@@ -23,8 +23,8 @@ function movingWrapPositionClass() {
 	  }
 	  
 	  this.move = function() {
-			this.x += this.xv;
-			this.y += this.yv;
+			this.x += this.xv * deltaT;
+			this.y += this.yv * deltaT;
 				
 			this.handleScreenWrap();
 	  }

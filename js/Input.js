@@ -34,7 +34,7 @@ function keyPressed(evt) {
   if (evt.keyCode == p1.controlKeyForCannonFire){
 	  p1.fireCannon();
   }
-  evt.preventDefault(); // without this, arrow keys scroll the browser!
+  evt.preventDefault(); // without this, arrow keys scroll the browser
 }
 
 function keyReleased(evt) {

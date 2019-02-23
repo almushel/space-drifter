@@ -1,4 +1,7 @@
 // save the canvas for dimensions, and its 2d context for drawing to it
+const UPDATE_INTERVAL = 1000/60;
+var currentFrame, lastFrame, deltaT;
+
 var canvas, canvasContext;
 
 var p1 = new shipClass();
@@ -12,25 +15,30 @@ window.onload = function() {
 }
 
 function loadingDoneSoStartGame() {
-  // these next few lines set up our game logic and render to happen 30 times per second
-  var framesPerSecond = 60;
-  setInterval(function() {
-      moveEverything();
-      drawEverything();
-    }, 1000/framesPerSecond);
-  
   p1.init(playerPic);
   enemy.init(UFOPic);
-  initInput();  
+  initInput();
+
+  lastFrame = performance.now();
+  requestAnimationFrame(update);
 }
 
-function moveEverything() {
+function update() {
+  currentFrame = performance.now();
+  deltaT = (currentFrame - lastFrame)/UPDATE_INTERVAL;//Ratio of current frametime to target update interval
+  lastFrame = currentFrame;
+  moveAll();
+  drawAll();
+  requestAnimationFrame(update);
+}
+
+function moveAll() {
   p1.move();
   enemy.move();
   p1.checkShipAndShotCollisionAgainst(enemy);
 }
 
-function drawEverything() {
+function drawAll() {
 	colorRect(0,0, canvas.width, canvas.height, 'black');
 	p1.draw();
 	enemy.draw();

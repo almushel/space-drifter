@@ -23,7 +23,7 @@ function shotClass() {
 			this.y = shipFiring.y;
 			
 			this.xv = Math.cos(shipFiring.ang) * SHOT_SPEED + shipFiring.xv;
-			this.yv = Math.sin(shipFiring.ang)* SHOT_SPEED + shipFiring.yv;
+			this.yv = Math.sin(shipFiring.ang) * SHOT_SPEED + shipFiring.yv;
 			
 			this.shotLife = SHOT_LIFE;
 	  }
@@ -39,7 +39,7 @@ function shotClass() {
 	  
 	  this.move = function() {
 			if(this.shotLife > 0){
-				this.shotLife--;
+				this.shotLife -= deltaT;
 				this.superClassMove();
 			}
 	  }
