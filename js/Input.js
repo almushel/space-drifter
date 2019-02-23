@@ -26,14 +26,14 @@ function setKeyHoldState(thisKey, thisShip, setTo) {
   if(thisKey == thisShip.controlKeyForGas) {
     thisShip.keyHeld_Gas = setTo;
   }
+  if(thisKey == thisShip.controlKeyForCannonFire) {
+    thisShip.keyHeld_Fire = setTo;
+  }
 
 }
 
 function keyPressed(evt) {
   setKeyHoldState(evt.keyCode, p1, true);
-  if (evt.keyCode == p1.controlKeyForCannonFire){
-	  p1.fireCannon();
-  }
   evt.preventDefault(); // without this, arrow keys scroll the browser
 }
 

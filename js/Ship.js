@@ -2,6 +2,7 @@
 const SPACE_DECAY_MULT = 0.99;
 const THRUST_POWER = 0.15;
 const TURN_RATE = 0.03;
+const SHOT_MAX = 8;
 
 shipClass.prototype = new movingWrapPositionClass();
 
@@ -12,12 +13,14 @@ function shipClass() {
 	  this.xv = 0;
 	  this.yv = 0;
 	  
-	  this.myShot = new shotClass();
+	  this.shotList = [];
+	  this.canShoot = true;
 
 	  // keyboard hold state variables, to use keys more like buttons
 	  this.keyHeld_Gas = false;
 	  this.keyHeld_TurnLeft = false;
 	  this.keyHeld_TurnRight = false;
+	  this.keyHeld_Fire = false;
 
 	  // key controls used for this
 	  this.setupControls = function(forwardKey,leftKey,rightKey, fireKey) {
@@ -36,8 +39,16 @@ function shipClass() {
 	  this.reset = function() {
 			this.superClassReset();
 			this.ang = -0.5 * Math.PI;
-			this.myShot.reset();
-
+			console.log(SHOT_MAX - this.shotList.length);
+			if (this.shotList.length < SHOT_MAX) {
+				for (var i=0; i < SHOT_MAX; i++) {
+					var newShot = new shotClass();
+					newShot.reset();
+					this.shotList.push(newShot);
+					console.log('new shot');
+				}
+			}
+			console.log(this.shotList.length);
 	} // end of reset
 	  
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
@@ -46,11 +57,14 @@ function shipClass() {
 			document.getElementById("debugText").innterHTML = "Player Crashed!";
 		}
 		
-		if(this.myShot.hitTest(thisEnemy)) {
-			thisEnemy.reset();
-			this.myShot.reset();
-			document.getElementById("debugText").innterHTML = "Enemy Destroyed!";
+		for (var i=0; i < this.shotList.length; i++) {
+			if(this.shotList[i].hitTest(thisEnemy)) {
+				thisEnemy.reset();
+				this.shotList[i].reset();
+				document.getElementById("debugText").innterHTML = "Enemy Destroyed!";
+			}
 		}
+
 	}
 	  
 	this.superClassMove = this.move;
@@ -58,14 +72,16 @@ function shipClass() {
 			if(this.keyHeld_TurnLeft) {
 				this.ang -= (TURN_RATE * deltaT) * Math.PI;
 			}
-
 			if(this.keyHeld_TurnRight) {
 				this.ang += (TURN_RATE * deltaT) * Math.PI;
 			}
-			
 			if(this.keyHeld_Gas) {
 				this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
 				this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
+			}
+
+			if (this.keyHeld_Fire) {
+				this.fireCannon();
 			}
 			
 			this.superClassMove();
@@ -73,18 +89,32 @@ function shipClass() {
 			this.xv *= SPACE_DECAY_MULT * deltaT;
 			this.yv *= SPACE_DECAY_MULT * deltaT;
 			
-			this.myShot.move();
+			for (var i=0; i < this.shotList.length; i++) {
+				this.shotList[i].move();
+			}
 	  }
 	  
 	this.fireCannon = function() {
-		  if (this.myShot.isReadyToFire()){
-			this.myShot.shootFrom(this);
-		  }
+		if (!this.canShoot) {
+			return;
+		}
+
+		for(var i=0; i < this.shotList.length; i++) {
+			if (this.shotList[i].isReadyToFire()){
+				this.shotList[i].shootFrom(this);
+				this.canShoot = false;
+				setTimeout(function (self) {self.canShoot = true}, 250, this);
+				break;
+			  }
+		}  
+
 	  }
 	  
-	  this.draw = function() {
-			this.myShot.draw();
-			drawBitmapCenteredAtLocationWithRotation( this.myBitmap, this.x, this.y, this.ang );
+	this.draw = function() {
+		for (var i=0; i<this.shotList.length; i++) {
+			this.shotList[i].draw();
+		}
+		drawBitmapCenteredAtLocationWithRotation( this.myBitmap, this.x, this.y, this.ang );
 	  }
 
 } // end of class
