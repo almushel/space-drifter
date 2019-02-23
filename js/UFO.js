@@ -6,7 +6,7 @@ const UFO_COLLISION_RADIUS = 20;
 ufoClass.prototype = new movingWrapPositionClass();
 
 function ufoClass() {
-
+	var picAngOffset = Math.PI/2;
 	this.init = function(whichGraphic,whichName) {
 		this.myBitmap = whichGraphic;
 		this.reset();
@@ -15,6 +15,7 @@ function ufoClass() {
 	this.superClassReset = this.reset;
 	this.reset = function() {
 		this.superClassReset();
+		this.ang = 0;
 		this.cyclesUntilDirectionChange = 0;
 		
 		this.x = Math.random()*canvas.width;
@@ -33,17 +34,17 @@ function ufoClass() {
 	this.move = function() {
 		this.superClassMove();
 		
-		this.cyclesUntilDirectionChange--;
+		this.cyclesUntilDirectionChange -= deltaT;
 		if(this.cyclesUntilDirectionChange <= 0) {
-			var randAng = Math.random()*Math.PI*2.0;
-			this.xv = Math.cos(randAng) * UFO_SPEED;
-			this.yv = Math.sin(randAng) * UFO_SPEED;
+			this.ang = Math.random()*Math.PI*2.0;
+			this.xv = Math.cos(this.ang) * UFO_SPEED;
+			this.yv = Math.sin(this.ang) * UFO_SPEED;
 			this.cyclesUntilDirectionChange = UFO_DIR_CHANGE_INTERVAL;
 		}
 	  }
 	  
 	this.draw = function() {
-		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, this.x, this.y, 0);
+		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, this.x, this.y, this.ang+picAngOffset);
 	}
 
 } // end of class
