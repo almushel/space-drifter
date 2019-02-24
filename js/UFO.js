@@ -35,10 +35,7 @@ function ufoClass() {
 	this.superClassMove = this.move; 
 	this.move = function() {
 		this.superClassMove();
-		var angDeltaX = (this.x + Math.cos(this.targetAng)) - this.x;
-		var angDeltaY = (this.y + Math.sin(this.targetAng)) - this.y;
-		var turnAngDelta = angDeltaX*Math.sin(this.ang) - angDeltaY*Math.cos(this.ang);
-		
+		var turnAngDelta = Math.cos(this.targetAng)*Math.sin(this.ang) - Math.sin(this.targetAng)*Math.cos(this.ang);
 
 		if (turnAngDelta > -UFO_TURN_PRECISION && turnAngDelta < UFO_TURN_PRECISION) {
 			this.cyclesUntilDirectionChange -= deltaT;
@@ -60,6 +57,7 @@ function ufoClass() {
 	  
 	this.draw = function() {
 		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, this.x, this.y, this.ang+picAngOffset);
+		//For testing turning behavior
 		//drawLine(this.x, this.y, this.x + Math.cos(this.ang) * 100, this.y + Math.sin(this.ang) * 100, 'yellow');
 		//drawLine(this.x, this.y, this.x + Math.cos(this.targetAng) * 100, this.y + Math.sin(this.targetAng) * 100, 'green');
 	}
