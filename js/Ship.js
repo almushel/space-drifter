@@ -1,5 +1,5 @@
 // tuning constants
-const SPACE_DECAY_MULT = 0.99;
+const SPACE_FRICTION = 0.02;
 const THRUST_POWER = 0.15;
 const TURN_RATE = 0.03;
 const SHOT_MAX = 8;
@@ -86,8 +86,8 @@ function shipClass() {
 			
 			this.superClassMove();
 			
-			this.xv *= SPACE_DECAY_MULT * deltaT;
-			this.yv *= SPACE_DECAY_MULT * deltaT;
+			this.xv *= 1 - SPACE_FRICTION * deltaT;
+			this.yv *= 1 - SPACE_FRICTION * deltaT;
 			
 			for (var i=0; i < this.shotList.length; i++) {
 				this.shotList[i].move();
@@ -103,7 +103,7 @@ function shipClass() {
 			if (this.shotList[i].isReadyToFire()){
 				this.shotList[i].shootFrom(this);
 				this.canShoot = false;
-				setTimeout(function (self) {self.canShoot = true}, 250, this);
+				setTimeout(function (self) {self.canShoot = true}, 200, this);
 				break;
 			  }
 		}  

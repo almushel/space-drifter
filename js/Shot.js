@@ -1,6 +1,6 @@
 // tuning constants
-const SHOT_SPEED = 6.0;
-const SHOT_LIFE = 60;
+const SHOT_SPEED = 7.0;
+const SHOT_LIFE = 80;
 const SHOT_DISPLAY_RADIUS = 2.0;
 
 shotClass.prototype = new movingWrapPositionClass();
