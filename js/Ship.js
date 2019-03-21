@@ -39,16 +39,13 @@ function shipClass() {
 	  this.reset = function() {
 			this.superClassReset();
 			this.ang = -0.5 * Math.PI;
-			console.log(SHOT_MAX - this.shotList.length);
 			if (this.shotList.length < SHOT_MAX) {
 				for (var i=0; i < SHOT_MAX; i++) {
 					var newShot = new shotClass();
 					newShot.reset();
 					this.shotList.push(newShot);
-					console.log('new shot');
 				}
 			}
-			console.log(this.shotList.length);
 	} // end of reset
 	  
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
