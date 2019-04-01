@@ -6,6 +6,8 @@ var canvas, canvasContext;
 var starField = [];
 
 var p1 = new shipClass();
+var enemyList = [];
+var wave1 = [0,0,0,0];
 var enemy = new ufoClass();
 
 window.onload = function() {
@@ -18,7 +20,8 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
   createStarField();
   p1.init(playerPic);
-  enemy.init(UFOPic);
+  spawnWave(wave1);
+  //enemy.init(UFOPic);
   initInput();
 
   lastFrame = performance.now();
@@ -36,15 +39,21 @@ function update() {
 
 function moveAll() {
   p1.move();
-  enemy.move();
-  p1.checkShipAndShotCollisionAgainst(enemy);
+  //enemy.move();
+  for (var i=0; i<enemyList.length; i++) {
+    enemyList[i].move();
+    p1.checkShipAndShotCollisionAgainst(enemyList[i]);
+  }
 }
 
 function drawAll() {
   colorRect(0,0, canvas.width, canvas.height, '#000a30');
   drawStarField();
-	p1.draw();
-	enemy.draw();
+  p1.draw();
+  for (var i=0; i<enemyList.length; i++) {
+    enemyList[i].draw();
+  }
+	//enemy.draw();
 }
 
 function createStarField() {

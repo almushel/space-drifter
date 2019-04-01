@@ -57,9 +57,30 @@ function ufoClass() {
 	  
 	this.draw = function() {
 		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, this.x, this.y, this.ang+picAngOffset);
+		
+		var wrapX = this.x;
+		var wrapY = this.y;
+
+		if (this.x < this.myBitmap.width/2) {
+			wrapX = this.x + canvas.width;
+		} else if (this.x > canvas.width - this.myBitmap.width/2) {
+			wrapX = this.x - canvas.width;
+		}
+
+		if (this.y < this.myBitmap.height/2) {
+			wrapY = this.y + canvas.height;
+		} else if (this.y > canvas.height - this.myBitmap.height/2) {
+			wrapY = this.y - canvas.height;
+		}
+
+		if (wrapX != this.x || wrapY != this.y) {
+			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, wrapX, wrapY, this.ang + picAngOffset);
+		}
+		
 		//For testing turning behavior
 		//drawLine(this.x, this.y, this.x + Math.cos(this.ang) * 100, this.y + Math.sin(this.ang) * 100, 'yellow');
 		//drawLine(this.x, this.y, this.x + Math.cos(this.targetAng) * 100, this.y + Math.sin(this.targetAng) * 100, 'green');
+
 	}
 
 } // end of class

@@ -51,14 +51,12 @@ function shipClass() {
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
 		if(thisEnemy.isOverlappingPoint(this.x, this.y)) {
 			this.reset();
-			document.getElementById("debugText").innterHTML = "Player Crashed!";
 		}
 		
 		for (var i=0; i < this.shotList.length; i++) {
 			if(this.shotList[i].hitTest(thisEnemy)) {
 				thisEnemy.reset();
 				this.shotList[i].reset();
-				document.getElementById("debugText").innterHTML = "Enemy Destroyed!";
 			}
 		}
 
@@ -112,6 +110,25 @@ function shipClass() {
 			this.shotList[i].draw();
 		}
 		drawBitmapCenteredAtLocationWithRotation( this.myBitmap, this.x, this.y, this.ang );
+
+		var wrapX = this.x;
+		var wrapY = this.y;
+
+		if (this.x < this.myBitmap.width/2) {
+			wrapX = this.x + canvas.width;
+		} else if (this.x > canvas.width - this.myBitmap.width/2) {
+			wrapX = this.x - canvas.width;
+		}
+
+		if (this.y < this.myBitmap.height/2) {
+			wrapY = this.y + canvas.height;
+		} else if (this.y > canvas.height - this.myBitmap.height/2) {
+			wrapY = this.y - canvas.height;
+		}
+
+		if (wrapX != this.x || wrapY != this.y) {
+			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, wrapX, wrapY, this.ang);
+		}
 	  }
 
 } // end of class
