@@ -43,3 +43,16 @@ function drawLine(startX, startY, endX, endY, strokeColor) {
 	canvasContext.stroke();
 	canvasContext.restore();
 }
+
+function drawPolygon(centerX, centerY, polyPoints, color) {
+		canvasContext.save();
+		canvasContext.strokeStyle = color;
+		canvasContext.beginPath();
+		canvasContext.moveTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
+		for (var p=1; p<polyPoints.length; p++) {
+			canvasContext.lineTo(centerX + polyPoints[p].x, centerY + polyPoints[p].y);
+		}
+		canvasContext.lineTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
+		canvasContext.stroke();
+		canvasContext.restore();
+}

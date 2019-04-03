@@ -9,6 +9,11 @@ var p1 = new shipClass();
 var enemyList = [];
 var wave1 = [0,0,0,0];
 var wave2 = [1,1,1,1];
+var wave3 = [2,1,2,1,2,1,2,2,2,2,2];
+
+document.onvisibilitychange = function() {
+	lastFrame = performance.now() - UPDATE_INTERVAL;
+}
 
 window.onload = function() {
   canvas = document.getElementById('gameCanvas');
@@ -20,7 +25,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
   createStarField();
   p1.init(playerPic);
-  spawnWave(wave2);
+  spawnWave(wave3);
   initInput();
 
   lastFrame = performance.now();

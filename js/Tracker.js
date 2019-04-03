@@ -2,7 +2,7 @@
 const TRACKER_ACCEL = 0.13;
 const TRACKER_FRICTION = 0.02;
 const TRACKER_TURN_RATE = Math.PI/90;
-const TRACKER_CHANGE_INTERVAL = 7;
+const TRACKER_CHANGE_INTERVAL = 3;
 //const UFO_COLLISION_RADIUS = 20;
 const TRACKER_PRECISION = 0.05;
 
@@ -50,6 +50,8 @@ function trackerClass() {
 			} else if (turnAngDelta > 0) {
 				this.ang -= deltaT * TRACKER_TURN_RATE;
 			}
+			this.xv += Math.cos(this.ang) * TRACKER_ACCEL/2 * deltaT;
+			this.yv += Math.sin(this.ang) * TRACKER_ACCEL/2 * deltaT;
 		}
 		
 		if(this.cyclesUntilDirectionChange <= 0) {
@@ -67,7 +69,7 @@ function trackerClass() {
 	  }
 	  
 	this.draw = function() {
-		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, this.x, this.y, this.ang+picAngOffset);
+		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
 		
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -85,7 +87,7 @@ function trackerClass() {
 		}
 
 		if (wrapX != this.x || wrapY != this.y) {
-			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, wrapX, wrapY, this.ang + picAngOffset);
+			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
 		}
 		
 		//For testing turning behavior
