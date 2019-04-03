@@ -2,8 +2,6 @@
 const TRACKER_ACCEL = 0.13;
 const TRACKER_FRICTION = 0.02;
 const TRACKER_TURN_RATE = Math.PI/90;
-const TRACKER_CHANGE_INTERVAL = 3;
-//const UFO_COLLISION_RADIUS = 20;
 const TRACKER_PRECISION = 0.05;
 
 trackerClass.prototype = new movingWrapPositionClass();
@@ -20,7 +18,6 @@ function trackerClass() {
 		this.superClassReset();
 		this.ang = 0;
 		this.targetAng = 0;
-		this.cyclesUntilDirectionChange = 0;
 		
 		this.x = Math.random()*canvas.width;
 		this.y = Math.random()*canvas.height;
@@ -38,30 +35,25 @@ function trackerClass() {
 	this.move = function() {
 		this.superClassMove();
 
-		var turnAngDelta = Math.cos(this.targetAng)*Math.sin(this.ang) - Math.sin(this.targetAng)*Math.cos(this.ang);
+		this.targetAng = Math.atan2(p1.y - this.y, p1.x - this.x);//Angle to player
+		if (this.targetAng < 0) {
+			this.targetAng += Math.PI*2;
+		} else if (this.targetAng > Math.PI*2) {
+			this.targetAng -= Math.PI*2;
+		}
 
+		var turnAngDelta = Math.cos(this.targetAng)*Math.sin(this.ang) - Math.sin(this.targetAng)*Math.cos(this.ang);
 		if (turnAngDelta > -TRACKER_PRECISION && turnAngDelta < TRACKER_PRECISION) {
 			this.xv += Math.cos(this.ang) * TRACKER_ACCEL * deltaT;
 			this.yv += Math.sin(this.ang) * TRACKER_ACCEL * deltaT;
-			this.cyclesUntilDirectionChange -= deltaT;
 		} else {
 			if (turnAngDelta < 0) {
-				this.ang += deltaT * TRACKER_TURN_RATE;
+				this.ang += TRACKER_TURN_RATE * deltaT;
 			} else if (turnAngDelta > 0) {
-				this.ang -= deltaT * TRACKER_TURN_RATE;
+				this.ang -= TRACKER_TURN_RATE * deltaT;
 			}
 			this.xv += Math.cos(this.ang) * TRACKER_ACCEL/2 * deltaT;
 			this.yv += Math.sin(this.ang) * TRACKER_ACCEL/2 * deltaT;
-		}
-		
-		if(this.cyclesUntilDirectionChange <= 0) {
-			this.targetAng = Math.atan2(p1.y - this.y, p1.x - this.x);
-			if (this.targetAng < 0) {
-				this.targetAng += Math.PI*2;
-			} else if (this.targetAng > Math.PI*2) {
-				this.targetAng -= Math.PI*2;
-			}
-			this.cyclesUntilDirectionChange = TRACKER_CHANGE_INTERVAL;
 		}
 
 		this.xv *= 1 - TRACKER_FRICTION * deltaT;
