@@ -6,7 +6,7 @@ drifterClass.prototype = new movingWrapPositionClass();
 function drifterClass() {
 	var picAngOffset = Math.PI/2;
 	this.polyPoints = [];
-	
+
 	this.init = function(whichGraphic) {
 		this.myBitmap = whichGraphic;
 		this.reset();
@@ -51,7 +51,13 @@ function drifterClass() {
 	this.superClassMove = this.move; 
 	this.move = function() {
 		this.superClassMove();
-	}
+		var magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
+
+		if (magnitude > DRIFT_RATE) {
+			this.xv *= 0.99;
+			this.yv *= 0.99;
+		}
+	} 
 	
 	this.draw = function() {
 		drawPolygon(this.x, this.y, this.polyPoints, 'aqua');

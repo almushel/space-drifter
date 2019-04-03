@@ -45,6 +45,7 @@ function moveAll() {
   p1.move();
   for (var i=0; i<enemyList.length; i++) {
     enemyList[i].move();
+    enemyList[i].bumpCollision(enemyList);
     p1.checkShipAndShotCollisionAgainst(enemyList[i]);
   }
 }
