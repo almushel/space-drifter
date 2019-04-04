@@ -1,11 +1,14 @@
 // tuning constants
 const DRIFT_RATE = 1;
+const DRIFT_RADIUS = 30;
 
 drifterClass.prototype = new movingWrapPositionClass();
 
 function drifterClass() {
 	var picAngOffset = Math.PI/2;
 	this.polyPoints = [];
+	this.radius = DRIFT_RADIUS;
+	this.UFO_COLLISION_RADIUS = DRIFT_RADIUS;
 
 	this.init = function(whichGraphic) {
 		this.myBitmap = whichGraphic;
@@ -17,7 +20,6 @@ function drifterClass() {
 	this.reset = function() {
 		this.superClassReset();
 		this.ang = 0;
-		this.radius = 30;
 		
 		this.x = Math.random()*canvas.width;
 		this.y = Math.random()*canvas.height;

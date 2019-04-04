@@ -30,35 +30,33 @@ function movingWrapPositionClass() {
 			this.handleScreenWrap();
 	  }
 
-	  this.bumpCollision = function(whichEntities) {
-		  for (var i=0; i<whichEntities.length; i++) {
-
-			var deltaX = whichEntities[i].x - this.x,
-				deltaY = whichEntities[i].y - this.y,
+	  this.bumpCollision = function(whichEntity) {
+			var deltaX = whichEntity.x - this.x,
+				deltaY = whichEntity.y - this.y,
 				distTo = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 									   
-			if (distTo < this.collisionRadius + whichEntities[i].collisionRadius) {
+			if (distTo < this.collisionRadius + whichEntity.collisionRadius) {
 				var yBump = 0,
 					xBump = 0;
+					
 
 				if (deltaX != 0) {
-					xBump = deltaX/distTo;
+					xBump = (deltaX/distTo);
 				}
 				if (deltaY != 0) {
-					yBump - deltaY/distTo;
+					yBump = (deltaY/distTo);
 				}
-/*
-				this.x -= xBump;
-				this.y -= yBump;
-				whichEntities[i].x += xBump;
-				whichEntities[i].y += yBump;
-*/
-				this.xv -= xBump;
-				this.yv -= yBump;
-				whichEntities[i].xv += xBump;
-				whichEntities[i].yv += yBump;
+
+				if (xBump != 0) {
+					this.xv -= xBump;
+					whichEntity.xv += xBump;
+				}
+				
+				if (yBump != 0) {
+					this.yv -= yBump;
+					whichEntity.yv += yBump;		
+				}
 			}
-		  }
 	  }
 
 } // end of class

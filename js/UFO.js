@@ -8,7 +8,7 @@ ufoClass.prototype = new movingWrapPositionClass();
 
 function ufoClass() {
 	var picAngOffset = Math.PI/2;
-	this.init = function(whichGraphic,whichName) {
+	this.init = function(whichGraphic) {
 		this.myBitmap = whichGraphic;
 		this.reset();
 	}
