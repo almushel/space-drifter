@@ -50,7 +50,7 @@ function shipClass() {
 	  
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
 		if(thisEnemy.isOverlappingPoint(this.x, this.y)) {
-			this.reset();
+			//this.reset();
 			thisEnemy.reset();
 		}
 		
@@ -58,6 +58,7 @@ function shipClass() {
 			if(this.shotList[i].hitTest(thisEnemy)) {
 				thisEnemy.reset();
 				this.shotList[i].reset();
+				updateScore(1);
 			}
 		}
 

@@ -18,20 +18,13 @@ function drawBitmapCenteredAtLocationWithRotation(graphic, atX, atY,withAngle) {
   canvasContext.restore(); // undo the translation movement and rotation since save()
 }
 
-function rotateImage(ang, img) {
-  var clipCanvas = document.createElement('canvas');
-  var clipCtx = clipCanvas.getContext('2d');
-
-  clipCanvas.width = img.width;
-  clipCanvas.height = img.height;
-
-  clipCtx.save(); // allows us to undo translate movement and rotate spin
-  clipCtx.translate(0,0); // sets the point where our graphic will go
-  clipCtx.rotate(ang); // sets the rotation
-  clipCtx.drawImage(img,-img.width/2,-img.height/2); // center, draw
-  clipCtx.restore(); // undo the translation movement and rotation since save()
-
-  return clipCanvas;
+function colorAlignedText(textX, textY, textAlign, textFont, textColor, textString) {
+	canvasContext.save();
+	canvasContext.font = textFont;
+  canvasContext.textAlign = textAlign;
+  canvasContext.fillStyle = textColor;
+	canvasContext.fillText(textString, textX, textY);
+	canvasContext.restore();
 }
 
 function drawLine(startX, startY, endX, endY, strokeColor) {

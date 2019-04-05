@@ -8,7 +8,7 @@ var starField = [];
 var p1 = new shipClass();
 var enemyList = [];
 var wave1 = [0,0,0,0];
-var wave2 = [1,1,1,1];
+var wave2 = [2,2,2,2,2,2,2,2,2];
 var wave3 = [2,1,2,1,2,1,2,2,2,2,2];
 
 document.onvisibilitychange = function() {
@@ -25,7 +25,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
   createStarField();
   p1.init(playerPic);
-  spawnWave(wave3);
+  spawnWave(wave2);
   initInput();
 
   lastFrame = performance.now();
@@ -50,7 +50,7 @@ function moveAll() {
       enemyList[i].bumpCollision(enemyList[e]);
     }
     
-    //p1.checkShipAndShotCollisionAgainst(enemyList[i]);
+    p1.checkShipAndShotCollisionAgainst(enemyList[i]);
     p1.bumpCollision(enemyList[i]);
   }
 }
@@ -62,6 +62,7 @@ function drawAll() {
   for (var i=0; i<enemyList.length; i++) {
     enemyList[i].draw();
   }
+  drawScore();
 }
 
 function createStarField() {
