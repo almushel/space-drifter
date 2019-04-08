@@ -24,10 +24,14 @@ function setKeyHoldState(thisKey, thisShip, setTo) {
     thisShip.keyHeld_TurnRight = setTo;
   }
   if(thisKey == thisShip.controlKeyForGas) {
-    thisShip.keyHeld_Gas = setTo;
+      thisShip.keyHeld_Gas = setTo;
   }
   if(thisKey == thisShip.controlKeyForCannonFire) {
-    thisShip.keyHeld_Fire = setTo;
+    if (!gameStart) {
+      gameStart = true;
+    } else {
+      thisShip.keyHeld_Fire = setTo;
+    }
   }
 
 }

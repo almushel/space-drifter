@@ -36,7 +36,11 @@ function update() {
   currentFrame = performance.now();
   deltaT = (currentFrame - lastFrame)/UPDATE_INTERVAL;//Ratio of current frametime to target update interval
   lastFrame = currentFrame;
-  moveAll();
+  
+  if (gameStart) {
+    moveAll();
+  }
+  
   drawAll();
   requestAnimationFrame(update);
 }
@@ -58,9 +62,14 @@ function moveAll() {
 function drawAll() {
   colorRect(0,0, canvas.width, canvas.height, '#000a30');
   drawStarField();
-  p1.draw();
-  for (var i=0; i<enemyList.length; i++) {
-    enemyList[i].draw();
+  if (gameStart) {
+    p1.draw();
+    for (var i=0; i<enemyList.length; i++) {
+      enemyList[i].draw();
+    }
+    drawHUD();
+  } else {
+    drawTitleScreen();
   }
-  drawScore();
+  
 }
