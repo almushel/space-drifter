@@ -8,7 +8,7 @@ function drifterClass() {
 	var picAngOffset = Math.PI/2;
 	this.polyPoints = [];
 	this.radius = DRIFT_RADIUS;
-	this.UFO_COLLISION_RADIUS = DRIFT_RADIUS;
+	this.collisionRadius = DRIFT_RADIUS;
 
 	this.init = function(whichGraphic) {
 		this.myBitmap = whichGraphic;
@@ -56,13 +56,13 @@ function drifterClass() {
 		var magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
 
 		if (magnitude > DRIFT_RATE) {
-			this.xv *= 0.99;
-			this.yv *= 0.99;
+			this.xv *= 1 - 0.02 * deltaT;
+			this.yv *= 1 - 0.02 * deltaT;
 		}
 	} 
 	
 	this.draw = function() {
-		drawPolygon(this.x, this.y, this.polyPoints, 'aqua');
+		drawPolygon(this.x, this.y, this.polyPoints, 'dimgrey', true);
 
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -80,7 +80,7 @@ function drifterClass() {
 		}
 
 		if (wrapX != this.x || wrapY != this.y) {
-			drawPolygon(wrapX, wrapY, this.polyPoints, 'aqua');
+			drawPolygon(wrapX, wrapY, this.polyPoints, 'dimgrey', true);
 		}
 	}
 

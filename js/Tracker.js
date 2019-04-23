@@ -3,11 +3,15 @@ const TRACKER_ACCEL = 0.13;
 const TRACKER_FRICTION = 0.02;
 const TRACKER_TURN_RATE = Math.PI/90;
 const TRACKER_PRECISION = 0.05;
+const TRACKER_COLLISION_RADIUS = 18;
 
 trackerClass.prototype = new movingWrapPositionClass();
 
 function trackerClass() {
 	var picAngOffset = Math.PI/2;
+	
+	this.collisionRadius = TRACKER_COLLISION_RADIUS;
+
 	this.init = function(whichGraphic) {
 		this.myBitmap = whichGraphic;
 		this.reset();

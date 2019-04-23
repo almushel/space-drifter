@@ -7,7 +7,7 @@ const UFO_TURN_PRECISION = 0.05;
 ufoClass.prototype = new movingWrapPositionClass();
 
 function ufoClass() {
-	var picAngOffset = Math.PI/2;
+	this.collisionRadius = UFO_COLLISION_RADIUS;
 	this.init = function(whichGraphic) {
 		this.myBitmap = whichGraphic;
 		this.reset();
@@ -53,10 +53,17 @@ function ufoClass() {
 			this.targetAng = Math.random()*Math.PI*2.0;
 			this.cyclesUntilDirectionChange = UFO_DIR_CHANGE_INTERVAL;
 		}
+
+		var magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
+
+		if (magnitude > UFO_SPEED) {
+			this.xv *= 1 - 0.02 * deltaT;
+			this.yv *= 1 - 0.02 * deltaT;
+		}
 	  }
 	  
 	this.draw = function() {
-		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
+		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), 0);
 		
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -74,7 +81,7 @@ function ufoClass() {
 		}
 
 		if (wrapX != this.x || wrapY != this.y) {
-			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
+			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), 0);
 		}
 		
 		//For testing turning behavior
