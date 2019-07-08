@@ -46,6 +46,7 @@ function shotClass() {
 	  
 	this.draw = function() {
 		if(this.shotLife > 0) {
+			colorCircle(Math.round(this.x), Math.round(this.y), SHOT_DISPLAY_RADIUS+1, 'white');
 			colorCircle(Math.round(this.x), Math.round(this.y), SHOT_DISPLAY_RADIUS, 'aqua');
 		}
 	}

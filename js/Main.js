@@ -2,7 +2,7 @@
 const UPDATE_INTERVAL = 1000/60;
 var currentFrame, lastFrame, deltaT;
 
-var canvas, canvasContext;
+var canvas, canvasContext, bg, bgContext;
 var starField = [];
 
 var p1 = new shipClass();
@@ -16,6 +16,9 @@ document.onvisibilitychange = function() {
 }
 
 window.onload = function() {
+  bg = document.getElementById('bg');
+  bgContext = bg.getContext('2d', { alpha: false });
+
   canvas = document.getElementById('gameCanvas');
   canvasContext = canvas.getContext('2d');
   
@@ -25,7 +28,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
   createStarField();
   p1.init(playerPic);
-  spawnWave(wave1);
+  spawnWave(wave2);
   initInput();
 
   lastFrame = performance.now();
@@ -60,8 +63,7 @@ function moveAll() {
 }
 
 function drawAll() {
-  colorRect(0,0, canvas.width, canvas.height, '#000a30');
-  drawStarField();
+  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   if (gameStart) {
     p1.draw();
     for (var i=0; i<enemyList.length; i++) {
