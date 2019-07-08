@@ -1,2 +1,2 @@
-# js-asteroids
-Simple asteroids style JavaScript game.
+# space-drifter
+An old school, momentum-based arcade shoot-em-up, made from scratch.
