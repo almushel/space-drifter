@@ -1,7 +1,25 @@
 var gameStart = false;
+var meterOuterPoly = [{x: -50, y: 10}, 
+                    {x: -44, y: -10}, 
+                    {x: +52, y: -10}, 
+                    {x: +46, y: 10}];
+            
+var meterInnerPoly = [{x: -47, y: 8}, 
+                    {x: -42, y: -8}, 
+                    {x: +48, y: -8}, 
+                    {x: +42, y: 8}];
 
 function drawHUD() {
+    drawThrustMeter();
     drawScore();
+}
+
+function drawThrustMeter() {
+    drawPolygon(60, canvas.height - 16, meterOuterPoly, 'white', true);
+    var thrustDelta = p1.thrust/100;
+    meterInnerPoly[2].x = -41 + Math.floor(thrustDelta * 90);
+    meterInnerPoly[3].x = -41 + Math.floor(thrustDelta * 90) - 5;
+    drawPolygon(60, canvas.height - 16, meterInnerPoly, 'aqua', true);
 }
 
 function drawTitleScreen() {

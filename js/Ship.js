@@ -3,6 +3,7 @@ const SPACE_FRICTION = 0.02;
 const THRUST_POWER = 0.15;
 const TURN_RATE = 0.03;
 const SHOT_MAX = 8;
+const THRUST_MAX = 100;
 
 shipClass.prototype = new movingWrapPositionClass();
 
@@ -15,6 +16,7 @@ function shipClass() {
 	  
 	this.shotList = [];
 	this.canShoot = true;
+	this.thrust = THRUST_MAX;
 
 	// keyboard hold state variables, to use keys more like buttons
 	this.keyHeld_Gas = false;
@@ -66,7 +68,6 @@ function shipClass() {
 				updateScore(1);
 			}
 		}
-
 	}
 	  
 	this.superClassMove = this.move;
@@ -77,9 +78,18 @@ function shipClass() {
 		if(this.keyHeld_TurnRight) {
 			this.ang += (TURN_RATE * deltaT) * Math.PI;
 		}
-		if(this.keyHeld_Gas) {
+		if(this.keyHeld_Gas && this.thrust > 0) {
+			this.thrust -= 0.5 * deltaT;
 			this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
 			this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
+			
+			var tParticle = new particleClass();
+			tParticle.randomReset(this.x - Math.cos(this.ang) * 17, this.y - Math.sin(this.ang) * 17, 'aqua', 'aqua', 'aqua');
+			tParticle.xv = -this.xv;
+			tParticle.yv = -this.yv;
+			particleList.push(tParticle);
+		} else if (!this.keyHeld_Gas && this.thrust < 100) {
+			this.thrust += 1 * deltaT;
 		}
 
 		if (this.keyHeld_Fire) {

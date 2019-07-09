@@ -22,7 +22,6 @@ window.onload = function() {
 
   canvas = document.getElementById('gameCanvas');
   canvasContext = canvas.getContext('2d');
-  
   loadImages();
 }
 
@@ -70,13 +69,13 @@ function moveAll() {
 function drawAll() {
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   if (gameStart) {
-    p1.draw();
     for (var i=0; i<enemyList.length; i++) {
       enemyList[i].draw();
     }
     for (var n=0; n<particleList.length; n++) {
       particleList[n].draw();
     }
+    p1.draw();
     drawHUD();
   } else {
     drawTitleScreen();
