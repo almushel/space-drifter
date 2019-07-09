@@ -65,7 +65,7 @@ function trackerClass() {
 	  }
 	  
 	this.draw = function() {
-		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
+		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
 		
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -83,7 +83,7 @@ function trackerClass() {
 		}
 
 		if (wrapX != this.x || wrapY != this.y) {
-			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
 		}
 		
 		//For testing turning behavior

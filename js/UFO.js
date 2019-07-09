@@ -63,7 +63,7 @@ function ufoClass() {
 	  }
 	  
 	this.draw = function() {
-		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), 0);
+		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), 0);
 		
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -81,7 +81,7 @@ function ufoClass() {
 		}
 
 		if (wrapX != this.x || wrapY != this.y) {
-			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), 0);
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), 0);
 		}
 		
 		//For testing turning behavior

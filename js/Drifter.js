@@ -85,7 +85,7 @@ function drifterClass() {
 	}
 
 	this.draw2 = function() {
-		drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
+		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
 		
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -103,7 +103,7 @@ function drifterClass() {
 		}
 
 		if (wrapX != this.x || wrapY != this.y) {
-			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
 		}
 		
 		//For testing turning behavior

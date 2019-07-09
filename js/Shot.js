@@ -1,7 +1,7 @@
 // tuning constants
 const SHOT_SPEED = 7.0;
 const SHOT_LIFE = 80;
-const SHOT_DISPLAY_RADIUS = 2.0;
+const SHOT_DISPLAY_RADIUS = 2.5;
 
 shotClass.prototype = new movingWrapPositionClass();
 
@@ -46,8 +46,7 @@ function shotClass() {
 	  
 	this.draw = function() {
 		if(this.shotLife > 0) {
-			colorCircle(Math.round(this.x), Math.round(this.y), SHOT_DISPLAY_RADIUS+1, 'white');
-			colorCircle(Math.round(this.x), Math.round(this.y), SHOT_DISPLAY_RADIUS, 'aqua');
+			colorCircle(this.x, this.y, SHOT_DISPLAY_RADIUS, 'aqua');
 		}
 	}
 

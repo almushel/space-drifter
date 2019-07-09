@@ -8,44 +8,44 @@ shipClass.prototype = new movingWrapPositionClass();
 
 function shipClass() {
   // variables to keep track of position
-	  this.x = 75;
-	  this.y = 75;
-	  this.xv = 0;
-	  this.yv = 0;
+	this.x = 75;
+	this.y = 75;
+	this.xv = 0;
+	this.yv = 0;
 	  
-	  this.shotList = [];
-	  this.canShoot = true;
+	this.shotList = [];
+	this.canShoot = true;
 
-	  // keyboard hold state variables, to use keys more like buttons
-	  this.keyHeld_Gas = false;
-	  this.keyHeld_TurnLeft = false;
-	  this.keyHeld_TurnRight = false;
-	  this.keyHeld_Fire = false;
+	// keyboard hold state variables, to use keys more like buttons
+	this.keyHeld_Gas = false;
+	this.keyHeld_TurnLeft = false;
+	this.keyHeld_TurnRight = false;
+	this.keyHeld_Fire = false;
 
-	  // key controls used for this
-	  this.setupControls = function(forwardKey,leftKey,rightKey, fireKey) {
-			this.controlKeyForGas = forwardKey;
-			this.controlKeyForTurnLeft = leftKey;
-			this.controlKeyForTurnRight = rightKey;
-			this.controlKeyForCannonFire = fireKey;
-	  }
+	// key controls used for this
+	this.setupControls = function(forwardKey,leftKey,rightKey, fireKey) {
+		this.controlKeyForGas = forwardKey;
+		this.controlKeyForTurnLeft = leftKey;
+		this.controlKeyForTurnRight = rightKey;
+		this.controlKeyForCannonFire = fireKey;
+	}
 
-	  this.init = function(whichGraphic) {
-			this.myBitmap = whichGraphic;
-			this.reset();
-		  }
+	this.init = function(whichGraphic) {
+		this.myBitmap = whichGraphic;
+		this.reset();
+	}
 	this.superClassReset = this.reset;
 	  
-	  this.reset = function() {
-			this.superClassReset();
-			this.ang = -0.5 * Math.PI;
-			if (this.shotList.length < SHOT_MAX) {
-				for (var i=0; i < SHOT_MAX; i++) {
-					var newShot = new shotClass();
-					newShot.reset();
-					this.shotList.push(newShot);
-				}
+	this.reset = function() {
+		this.superClassReset();
+		this.ang = -0.5 * Math.PI;
+		if (this.shotList.length < SHOT_MAX) {
+			for (var i=0; i < SHOT_MAX; i++) {
+				var newShot = new shotClass();
+				newShot.reset();
+				this.shotList.push(newShot);
 			}
+		}
 	} // end of reset
 	  
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
@@ -56,6 +56,11 @@ function shipClass() {
 		
 		for (var i=0; i < this.shotList.length; i++) {
 			if(this.shotList[i].hitTest(thisEnemy)) {
+				var newSplode = new explosionClass();
+				newSplode.reset('white', 'dimgrey', 'lightblue');
+				newSplode.explodeNow(thisEnemy.x, thisEnemy.y);
+				particleList.push(newSplode);
+				
 				thisEnemy.reset();
 				this.shotList[i].reset();
 				updateScore(1);
@@ -66,30 +71,30 @@ function shipClass() {
 	  
 	this.superClassMove = this.move;
 	this.move = function() {
-			if(this.keyHeld_TurnLeft) {
-				this.ang -= (TURN_RATE * deltaT) * Math.PI;
-			}
-			if(this.keyHeld_TurnRight) {
-				this.ang += (TURN_RATE * deltaT) * Math.PI;
-			}
-			if(this.keyHeld_Gas) {
-				this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
-				this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
-			}
+		if(this.keyHeld_TurnLeft) {
+			this.ang -= (TURN_RATE * deltaT) * Math.PI;
+		}
+		if(this.keyHeld_TurnRight) {
+			this.ang += (TURN_RATE * deltaT) * Math.PI;
+		}
+		if(this.keyHeld_Gas) {
+			this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
+			this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
+		}
 
-			if (this.keyHeld_Fire) {
-				this.fireCannon();
-			}
+		if (this.keyHeld_Fire) {
+			this.fireCannon();
+		}
 			
-			this.superClassMove();
+		this.superClassMove();
 			
-			this.xv *= 1 - SPACE_FRICTION * deltaT;
-			this.yv *= 1 - SPACE_FRICTION * deltaT;
+		this.xv *= 1 - SPACE_FRICTION * deltaT;
+		this.yv *= 1 - SPACE_FRICTION * deltaT;
 			
-			for (var i=0; i < this.shotList.length; i++) {
-				this.shotList[i].move();
-			}
-	  }
+		for (var i=0; i < this.shotList.length; i++) {
+			this.shotList[i].move();
+		}
+	}
 	  
 	this.fireCannon = function() {
 		if (!this.canShoot) {
@@ -102,16 +107,15 @@ function shipClass() {
 				this.canShoot = false;
 				setTimeout(function (self) {self.canShoot = true}, 200, this);
 				break;
-			  }
+			}
 		}  
-
-	  }
+	}
 	  
 	this.draw = function() {
 		for (var i=0; i<this.shotList.length; i++) {
 			this.shotList[i].draw();
 		}
-		drawBitmapCenteredAtLocationWithRotation( this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang );
+		drawBitmapCenteredWithRotation( this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang );
 
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -129,8 +133,7 @@ function shipClass() {
 		}
 
 		if (wrapX != this.x || wrapY != this.y) {
-			drawBitmapCenteredAtLocationWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang);
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang);
 		}
-	  }
-
+	}
 } // end of class
