@@ -9,10 +9,16 @@ var currentScore = 0,
 
 function drawScore() {
     updateChainTimer();
-    colorAlignedText(10, 30, 'left', '20px Arial', 'white', 'Score: '+ currentScore);
-    colorAlignedText(10, 60, 'left', '20px Arial', 'white', 'x'+ currentMultiplier);
-    colorAlignedText(10, 90, 'left', '20px Arial', 'white', 'Chain: '+ currentChain);
-    colorAlignedText(10, 120, 'left', '20px Arial', 'white', 'Timer: '+ currentTimeCount);
+    
+    canvasContext.save();
+	canvasContext.font = '20px Arial';
+    canvasContext.textAlign = 'left';
+    canvasContext.fillStyle = 'white';
+	canvasContext.fillText('Score: '+ currentScore, 10, 30);
+	canvasContext.fillText('x'+ currentMultiplier, 10, 60);
+	canvasContext.fillText('Chain: '+ currentChain, 10, 90);
+	canvasContext.fillText('Timer: '+ currentTimeCount, 10, 120);
+	canvasContext.restore();
 }
 
 function updateScore(baseValue) {
