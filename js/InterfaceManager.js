@@ -39,10 +39,12 @@ function drawThrustMeter() {
     }
     
     drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterOuterPoly, tmColorOuter, true);
-    var thrustDelta = p1.thrust/100;
-    meterInnerPoly[0].x = 48 - Math.floor(thrustDelta * 89) - 6;
-    meterInnerPoly[1].x = 48 - Math.floor(thrustDelta * 89) - 1;
-    drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterInnerPoly, tmColorInner, true);
+    if (p1.thrust >= 1) {
+        var thrustDelta = p1.thrust/100;
+        meterInnerPoly[0].x = 48 - Math.floor(thrustDelta * 89) - 6;
+        meterInnerPoly[1].x = 48 - Math.floor(thrustDelta * 89) - 1;
+        drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterInnerPoly, tmColorInner, true);
+    }
 }
 
 function drawWeaponHeat() {
@@ -53,10 +55,13 @@ function drawWeaponHeat() {
     }
 
     drawPolygon(canvas.width/2 + 60, canvas.height - 16, heatOuterPoly, hmColorOuter, true);
-    var heatDelta = p1.weaponHeat/100;
-    heatInnerPoly[2].x = -41 + Math.floor(heatDelta * 90) - 5;
-    heatInnerPoly[3].x = -41 + Math.floor(heatDelta * 90);
-    drawPolygon(canvas.width/2 + 60, canvas.height - 16, heatInnerPoly, hmColorInner, true);
+    if (p1.weaponHeat >= 1) {
+        var heatDelta = p1.weaponHeat/100;
+        heatInnerPoly[2].x = -41 + Math.floor(heatDelta * 90) - 5;
+        heatInnerPoly[3].x = -41 + Math.floor(heatDelta * 90);
+        drawPolygon(canvas.width/2 + 60, canvas.height - 16, heatInnerPoly, hmColorInner, true);
+    }
+
 }
 
 function drawTitleScreen() {
