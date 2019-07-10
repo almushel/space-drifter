@@ -19,6 +19,11 @@ var heatInnerPoly = [{x: -42, y: 8},
                     {x: +42, y: -8}, 
                     {x: +47, y: 8}];
 
+var meterBG = [{x: -125, y: 22},
+                {x: -113, y: -22},
+                {x: 113, y: -22},
+                {x: 125, y: 22}];
+
 var tmColorOuter = 'white';
 var tmColorInner = 'aqua';
 
@@ -26,6 +31,12 @@ var hmColorOuter = 'white';
 var hmColorInner = 'red';
 
 function drawHUD() {
+    canvasContext.save();
+    canvasContext.shadowColor = 'aqua';
+    canvasContext.shadowBlur = 3;
+    drawPolygon(canvas.width / 2, canvas.height - 22, meterBG, '#383838', true);
+    drawPolygon(canvas.width/2 + 1, canvas.height - 20, [{x: 0, y: -20}, {x: 13, y: 20}, {x: -13, y: 20}], 'aqua', true);
+    canvasContext.restore();
     drawThrustMeter();
     drawWeaponHeat();
     drawScore();
@@ -37,12 +48,16 @@ function drawThrustMeter() {
     } else {
         tmColorOuter = 'orange';
     }
-    
+    canvasContext.save();
+    canvasContext.shadowColor = 'black';
+    canvasContext.shadowBlur = 5;
+    colorAlignedText(canvas.width/2 -  56, canvas.height - 30, 'center', '10px Orbitron', 'white', 'Thrust Power');
     drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterOuterPoly, tmColorOuter, true);
+    canvasContext.restore();
     if (p1.thrust >= 1) {
         var thrustDelta = p1.thrust/100;
-        meterInnerPoly[0].x = 48 - Math.floor(thrustDelta * 89) - 6;
-        meterInnerPoly[1].x = 48 - Math.floor(thrustDelta * 89) - 1;
+        meterInnerPoly[2].x = -41 + Math.floor(thrustDelta * 90);
+        meterInnerPoly[3].x = -41 + Math.floor(thrustDelta * 90) - 5;
         drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterInnerPoly, tmColorInner, true);
     }
 }
@@ -53,8 +68,12 @@ function drawWeaponHeat() {
     } else {
         hmColorOuter = 'orange';
     }
-
+    canvasContext.save();
+    canvasContext.shadowColor = 'black';
+    canvasContext.shadowBlur = 6;
     drawPolygon(canvas.width/2 + 60, canvas.height - 16, heatOuterPoly, hmColorOuter, true);
+    colorAlignedText(canvas.width/2 +  56, canvas.height - 30, 'center', '10px Orbitron', 'white', 'Weapon Temp');
+    canvasContext.restore();
     if (p1.weaponHeat >= 1) {
         var heatDelta = p1.weaponHeat/100;
         heatInnerPoly[2].x = -41 + Math.floor(heatDelta * 90) - 5;
