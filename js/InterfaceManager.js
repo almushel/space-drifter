@@ -6,20 +6,57 @@ var meterOuterPoly = [{x: -50, y: 10},
             
 var meterInnerPoly = [{x: -47, y: 8}, 
                     {x: -42, y: -8}, 
-                    {x: +48, y: -8}, 
-                    {x: +42, y: 8}];
+                    {x: +49, y: -8}, 
+                    {x: +44, y: 8}];
+
+var heatOuterPoly = [{x: -44, y: 10}, 
+                    {x: -50, y: -10}, 
+                    {x: +46, y: -10}, 
+                    {x: +52, y: 10}];
+                
+var heatInnerPoly = [{x: -42, y: 8}, 
+                    {x: -47, y: -8}, 
+                    {x: +42, y: -8}, 
+                    {x: +47, y: 8}];
+
+var tmColorOuter = 'white';
+var tmColorInner = 'aqua';
+
+var hmColorOuter = 'white';
+var hmColorInner = 'red';
 
 function drawHUD() {
     drawThrustMeter();
+    drawWeaponHeat();
     drawScore();
 }
 
 function drawThrustMeter() {
-    drawPolygon(60, canvas.height - 16, meterOuterPoly, 'white', true);
+    if (p1.thrust > 0) {
+        tmColorOuter = 'white';
+    } else {
+        tmColorOuter = 'orange';
+    }
+    
+    drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterOuterPoly, tmColorOuter, true);
     var thrustDelta = p1.thrust/100;
-    meterInnerPoly[2].x = -41 + Math.floor(thrustDelta * 90);
-    meterInnerPoly[3].x = -41 + Math.floor(thrustDelta * 90) - 5;
-    drawPolygon(60, canvas.height - 16, meterInnerPoly, 'aqua', true);
+    meterInnerPoly[0].x = 48 - Math.floor(thrustDelta * 89) - 6;
+    meterInnerPoly[1].x = 48 - Math.floor(thrustDelta * 89) - 1;
+    drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterInnerPoly, tmColorInner, true);
+}
+
+function drawWeaponHeat() {
+    if (p1.weaponHeat < 100) {
+        hmColorOuter = 'white';
+    } else {
+        hmColorOuter = 'orange';
+    }
+
+    drawPolygon(canvas.width/2 + 60, canvas.height - 16, heatOuterPoly, hmColorOuter, true);
+    var heatDelta = p1.weaponHeat/100;
+    heatInnerPoly[2].x = -41 + Math.floor(heatDelta * 90) - 5;
+    heatInnerPoly[3].x = -41 + Math.floor(heatDelta * 90);
+    drawPolygon(canvas.width/2 + 60, canvas.height - 16, heatInnerPoly, hmColorInner, true);
 }
 
 function drawTitleScreen() {
