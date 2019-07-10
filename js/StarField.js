@@ -1,6 +1,7 @@
-const TWINKLE_INTERVAL = 120;
+const TWINKLE_INTERVAL = 180;
 
 var twinkleTimer = 0;
+var twinkleTimers = [];
 var twinkles = [];
 
 function createStarField() {
@@ -14,37 +15,36 @@ function createStarField() {
         starField[i] = 0;
       }
     }
-
+    generateTwinkles();
     drawStarField();
+}
+
+function generateTwinkles() {
+  for (var i=0; i<200; i++) {
+    var randX = Math.floor(Math.random() * bg.width);
+    var randY = Math.floor(Math.random() * bg.height);
+    if (starField[randX * bg.height + randY] == 0) {
+      i--;
+      continue;
+    }
+    twinkles.push({x: randX, y: randY, color: getStarColor(starField[randX * bg.height + randY])});
+    twinkleTimers.push(Math.random() * TWINKLE_INTERVAL);
   }
+}
 
 function twinkleStars() {
-  twinkleTimer -= deltaT;
-  if (twinkleTimer <= 0) {
-    twinkles.length = 0;
-    for (var i=0; i<30; i++) {
-      var randStar = Math.floor(Math.random() * starField.length);
-      if (starField[randStar] == 0) {
-        i--;
-        continue;
-      }
-      twinkles.push(randStar);
-    }
-    twinkleTimer = TWINKLE_INTERVAL;
-  }
   canvasContext.save();
-  //Make twinkles fade in and out
-  canvasContext.globalAlpha = 1 - Math.abs(1 - (twinkleTimer / TWINKLE_INTERVAL) * 2);
   for (var t=0; t<twinkles.length; t++) {
-    //These values do not match the bg starfield :(
-    var x = twinkles[t] % canvas.width;
-    var y = (twinkles[t] - x) / canvas.width;
-    console.log(y);
-
-    colorCircle(x, y, 1, getStarColor(starField[twinkles[t]]));
+    //Make twinkles fade in and out
+    canvasContext.globalAlpha = 1 - Math.abs(1 - (twinkleTimers[t] / TWINKLE_INTERVAL) * 2);
+    colorCircle(twinkles[t].x+0.5, twinkles[t].y+0.5, 1, twinkles[t].color);
+    
+    twinkleTimers[t] -= deltaT;
+    if (twinkleTimers[t] <= 0) {
+      twinkleTimers[t] = TWINKLE_INTERVAL;
+    }
   }
   canvasContext.restore();
-  
 }
 
 function getStarColor(value) {
@@ -73,42 +73,11 @@ function getStarColor(value) {
 }
 
 function drawStarField() {
-  bgColorRect(0,0, canvas.width, canvas.height, '#000a30');
-    for (var x=0; x<canvas.width; x++) {
-      for (var y=0; y<canvas.height; y++) {
-        if (starField[x*canvas.height + y] != 0) {
-          switch(starField[x*canvas.height + y]) {
-            case 1:
-              bgColorRect(x, y, 1, 1, 'white');
-               break;
-            case 2:
-              bgColorRect(x, y, 1, 1, 'yellow');
-              break;
-            case 3:
-              bgColorCircle(x, y, 1, 'deepskyblue')
-              break;
-            case 4:
-              bgColorRect(x, y, 1, 1, 'green');
-              break;
-            case 5:
-              bgColorRect(x, y, 1, 1, 'orange');
-              break;
-            case 6:
-              bgColorRect(x, y, 1, 1, 'dimgrey');
-              break;
-            case 7:
-              bgColorRect(x, y, 1, 1, 'lightslategrey');
-              break;
-            case 8:
-              bgColorRect(x, y, 1, 1, 'purple');
-              break;
-            case 9:
-              bgColorRect(x, y, 1, 1, 'gold');
-              break;
-            default:
-              bgColorRect(x, y, 1, 1, 'white');
-              break;
-          }//End of switch
+  bgColorRect(0,0, bg.width, bg.height, '#000a30');
+    for (var x=0; x<bg.width; x++) {
+      for (var y=0; y<bg.height; y++) {
+        if (starField[x*bg.height + y] != 0) {
+          bgColorRect(x, y, 1, 1, getStarColor(starField[x*bg.height + y]));
         }//End of if
       }//End of y for
     }//End of x for
