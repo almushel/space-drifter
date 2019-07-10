@@ -16,26 +16,37 @@ function initInput() {
   document.addEventListener("keydown", keyPressed);
   document.addEventListener("keyup", keyReleased);
   
-  p1.setupControls(KEY_UP_ARROW,KEY_LEFT_ARROW,KEY_RIGHT_ARROW, KEY_SPACEBAR);
+  p1.setupControls(KEY_UP_ARROW, KEY_LEFT_ARROW, KEY_RIGHT_ARROW, KEY_LETTER_Q, KEY_LETTER_E, KEY_SPACEBAR);
 }
 
 function setKeyHoldState(thisKey, thisShip, setTo) {
   if(thisKey == thisShip.controlKeyForTurnLeft) {
     thisShip.keyHeld_TurnLeft = setTo;
   }
+
   if(thisKey == thisShip.controlKeyForTurnRight) {
     thisShip.keyHeld_TurnRight = setTo;
   }
+
   if(thisKey == thisShip.controlKeyForGas) {
-      thisShip.keyHeld_Gas = setTo;
+    thisShip.keyHeld_Gas = setTo;
   }
+
+  if(thisKey == thisShip.controlKeyForThrustLeft && !thisShip.heyHeld_ThrustRight) {
+    thisShip.keyHeld_ThrustLeft = setTo;
+  }
+
+  if(thisKey == thisShip.controlKeyForThrustRight && !thisShip.heyHeld_ThrustLeft) {
+    thisShip.keyHeld_ThrustRight = setTo;
+  }
+
   if(thisKey == thisShip.controlKeyForCannonFire) {
     if (!gameStart) {
       gameStart = true;
     } else {
       thisShip.keyHeld_Fire = setTo;
-    }
   }
+}
 
 }
 

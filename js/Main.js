@@ -28,7 +28,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
   createStarField();
   p1.init(playerPic);
-  spawnWave(wave3);
+  //spawnWave(wave3);
   initInput();
 
   lastFrame = performance.now();
