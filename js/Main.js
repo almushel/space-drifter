@@ -68,6 +68,7 @@ function moveAll() {
 
 function drawAll() {
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+  twinkleStars();
   if (gameStart) {
     for (var i=0; i<enemyList.length; i++) {
       enemyList[i].draw();
