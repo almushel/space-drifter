@@ -32,6 +32,7 @@ function drifterClass() {
 
 	this.generatePoly = function() {
 		var sides = 5 + Math.floor(Math.random()*4);
+		var colRadius = 0;
 		for (var i=0; i<sides; i++) {
 			var pointDist = this.radius/2 + Math.random() * this.radius/2,
 				newAng = (Math.PI*2/sides)*i,
@@ -39,7 +40,10 @@ function drifterClass() {
 				newY = Math.sin(newAng) * pointDist;
 			
 			this.polyPoints.push({x: newX, y: newY});
+
+			if (pointDist > colRadius) colRadius = pointDist;
 		}
+		this.collisionRadius = colRadius;
 	}
 	  
 	this.isOverlappingPoint = function(pointX, pointY){
