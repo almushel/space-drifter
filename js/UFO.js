@@ -20,8 +20,9 @@ function ufoClass() {
 		this.targetAng = 0;
 		this.cyclesUntilDirectionChange = 0;
 		
-		this.x = Math.random()*canvas.width;
-		this.y = Math.random()*canvas.height;
+		var newPos = getClearSpawn(this);
+		this.x = newPos.x;
+		this.y = newPos.y;
 	} // end of reset
 	  
 	this.isOverlappingPoint = function(pointX, pointY){

@@ -6,6 +6,7 @@ const TURN_RATE = 0.03;
 const SHOT_MAX = 8;
 const THRUST_MAX = 100;
 const HEAT_MAX = 100;
+const SHIP_RADIUS = 15;
 
 shipClass.prototype = new movingWrapPositionClass();
 
@@ -15,6 +16,7 @@ function shipClass() {
 	this.y = 75;
 	this.xv = 0;
 	this.yv = 0;
+	this.collisionRadius = SHIP_RADIUS;
 	  
 	this.shotList = [];
 	this.canShoot = true;

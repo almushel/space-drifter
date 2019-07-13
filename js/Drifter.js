@@ -21,8 +21,9 @@ function drifterClass() {
 		this.superClassReset();
 		this.ang = 0;
 		
-		this.x = Math.random()*canvas.width;
-		this.y = Math.random()*canvas.height;
+		var newPos = getClearSpawn(this);
+		this.x = newPos.x;
+		this.y = newPos.y;
 
 		var randAng = Math.random() * (Math.PI*2);
 		this.xv = Math.cos(randAng)*DRIFT_RATE;
