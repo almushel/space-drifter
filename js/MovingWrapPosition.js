@@ -6,6 +6,7 @@ function movingWrapPositionClass() {
 		this.xv = this.yv = 0;
 		this.x = canvas.width/2;
 		this.y = canvas.height/2;
+		this.isDead = false;
 	} // end of reset
 	  
 	this.handleScreenWrap = function() {
@@ -41,22 +42,27 @@ function movingWrapPositionClass() {
 					
 
 			if (deltaX != 0) {
-				xBump = (deltaX/distTo);
+				xBump = (deltaX/distTo)/3;
+
 			}
 			if (deltaY != 0) {
-				yBump = (deltaY/distTo);
+				yBump = (deltaY/distTo)/3;
 			}
 
 			if (xBump != 0) {
-				this.xv -= xBump/2;
-				whichEntity.xv += xBump/2;
+				this.xv -= xBump * deltaT;
+				whichEntity.xv += xBump * deltaT;
 			}
 				
 			if (yBump != 0) {
-				this.yv -= yBump/2;
-				whichEntity.yv += yBump/2;		
+				this.yv -= yBump;
+				whichEntity.yv += yBump * deltaT;		
 			}
 		}
+	}
+
+	this.die = function() {
+		this.isDead = true;
 	}
 
 } // end of class

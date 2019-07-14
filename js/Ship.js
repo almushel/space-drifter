@@ -62,7 +62,8 @@ function shipClass() {
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
 		if(thisEnemy.isOverlappingPoint(this.x, this.y)) {
 			//this.reset();
-			thisEnemy.reset();
+			//thisEnemy.reset();
+			thisEnemy.die();
 		}
 		
 		for (var i=0; i < this.shotList.length; i++) {
@@ -72,7 +73,8 @@ function shipClass() {
 				newSplode.explodeNow(thisEnemy.x, thisEnemy.y);
 				particleList.push(newSplode);
 				
-				thisEnemy.reset();
+				//thisEnemy.reset();
+				thisEnemy.die();
 				this.shotList[i].reset();
 				updateScore(1);
 			}

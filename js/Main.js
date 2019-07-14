@@ -8,9 +8,6 @@ var starField = [];
 var p1 = new shipClass();
 var enemyList = [];
 var particleList = [];
-var wave1 = [0,0,0,0];
-var wave2 = [2,2,2,2,2,2,2,2,2];
-var wave3 = [2,2,2,1,2,2,2,2,2];
 
 document.onvisibilitychange = function() {
 	lastFrame = performance.now() - UPDATE_INTERVAL;
@@ -41,6 +38,7 @@ function update() {
   lastFrame = currentFrame;
   
   if (gameStart) {
+    removeDead();
     moveAll();
   }
   

@@ -1,17 +1,15 @@
 // tuning constants
 const DRIFT_RATE = 1;
-const DRIFT_RADIUS = 30;
+const DRIFT_RADIUS = 40;
 
 drifterClass.prototype = new movingWrapPositionClass();
 
 function drifterClass() {
-	var picAngOffset = Math.PI/2;
 	this.polyPoints = [];
 	this.radius = DRIFT_RADIUS;
 	this.collisionRadius = DRIFT_RADIUS;
 
-	this.init = function(whichGraphic) {
-		this.myBitmap = whichGraphic;
+	this.init = function() {
 		this.reset();
 		this.generatePoly();
 	}
@@ -64,7 +62,14 @@ function drifterClass() {
 			this.xv *= 1 - 0.02 * deltaT;
 			this.yv *= 1 - 0.02 * deltaT;
 		}
-	} 
+	}
+
+	this.superClassDie = this.die;
+	this.die = function() {
+		this.superClassDie();
+		if (this.radius <= DRIFT_RADIUS/2) return;
+		divideDrifter(this);
+	}
 	
 	this.draw = function() {
 		drawPolygon(this.x, this.y, this.polyPoints, 'dimgrey', true);
@@ -88,33 +93,4 @@ function drifterClass() {
 			drawPolygon(wrapX, wrapY, this.polyPoints, 'dimgrey', true);
 		}
 	}
-
-	this.draw2 = function() {
-		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
-		
-		var wrapX = this.x;
-		var wrapY = this.y;
-
-		if (this.x < this.radius/2) {
-			wrapX = this.x + canvas.width;
-		} else if (this.x > canvas.width - this.radius/2) {
-			wrapX = this.x - canvas.width;
-		}
-
-		if (this.y < this.radius/2) {
-			wrapY = this.y + canvas.height;
-		} else if (this.y > canvas.height - this.radius/2) {
-			wrapY = this.y - canvas.height;
-		}
-
-		if (wrapX != this.x || wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
-		}
-		
-		//For testing turning behavior
-		//drawLine(this.x, this.y, this.x + Math.cos(this.ang) * 100, this.y + Math.sin(this.ang) * 100, 'yellow');
-		//drawLine(this.x, this.y, this.x + Math.cos(this.targetAng) * 100, this.y + Math.sin(this.targetAng) * 100, 'green');
-
-	}
-
 } // end of class
