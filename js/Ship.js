@@ -18,6 +18,7 @@ function shipClass() {
 	this.yv = 0;
 	this.collisionRadius = SHIP_RADIUS;
 	  
+	this.name = 'player';
 	this.shotList = [];
 	this.canShoot = true;
 	this.thrust = THRUST_MAX;

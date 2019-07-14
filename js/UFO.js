@@ -7,9 +7,10 @@ const UFO_TURN_PRECISION = 0.05;
 ufoClass.prototype = new movingWrapPositionClass();
 
 function ufoClass() {
+	this.name = 'ufo';
+	this.myBitmap = UFOPic;
 	this.collisionRadius = UFO_COLLISION_RADIUS;
-	this.init = function(whichGraphic) {
-		this.myBitmap = whichGraphic;
+	this.init = function() {
 		this.reset();
 	}
 	

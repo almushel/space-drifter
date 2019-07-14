@@ -5,6 +5,7 @@ const DRIFT_RADIUS = 40;
 drifterClass.prototype = new movingWrapPositionClass();
 
 function drifterClass() {
+	this.name = 'drifter';
 	this.polyPoints = [];
 	this.radius = DRIFT_RADIUS;
 	this.collisionRadius = DRIFT_RADIUS;
@@ -30,6 +31,7 @@ function drifterClass() {
 	} // end of reset
 
 	this.generatePoly = function() {
+		this.polyPoints.length = 0;
 		var sides = 5 + Math.floor(Math.random()*4);
 		var colRadius = 0;
 		for (var i=0; i<sides; i++) {
@@ -59,8 +61,8 @@ function drifterClass() {
 		var magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
 
 		if (magnitude > DRIFT_RATE) {
-			this.xv *= 1 - 0.02 * deltaT;
-			this.yv *= 1 - 0.02 * deltaT;
+			this.xv *= 1 - 0.04 * deltaT;
+			this.yv *= 1 - 0.04 * deltaT;
 		}
 	}
 

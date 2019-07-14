@@ -6,7 +6,6 @@ var canvas, canvasContext, bg, bgContext;
 var starField = [];
 
 var p1 = new shipClass();
-var enemyList = [];
 var particleList = [];
 
 document.onvisibilitychange = function() {
@@ -25,7 +24,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
   createStarField();
   p1.init(playerPic);
-  spawnWave(wave3);
+  spawnWave(wave2);
   initInput();
 
   lastFrame = performance.now();

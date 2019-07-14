@@ -10,10 +10,11 @@ trackerClass.prototype = new movingWrapPositionClass();
 function trackerClass() {
 	var picAngOffset = Math.PI/2;
 	
+	this.name = 'tracker';
+	this.myBitmap = trackerPic;
 	this.collisionRadius = TRACKER_COLLISION_RADIUS;
 
-	this.init = function(whichGraphic) {
-		this.myBitmap = whichGraphic;
+	this.init = function() {
 		this.reset();
 	}
 	
