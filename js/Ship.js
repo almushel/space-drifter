@@ -6,7 +6,7 @@ const TURN_RATE = 0.03;
 const SHOT_MAX = 8;
 const THRUST_MAX = 100;
 const HEAT_MAX = 100;
-const SHIP_RADIUS = 15;
+const SHIP_RADIUS = 13;
 
 shipClass.prototype = new movingWrapPositionClass();
 
@@ -98,7 +98,7 @@ function shipClass() {
 			this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
 			
 			var tParticle = new particleClass();
-			tParticle.randomReset(this.x - Math.cos(this.ang) * 17, this.y - Math.sin(this.ang) * 17, 'aqua', 'aqua', 'aqua');
+			tParticle.randomReset(this.x - Math.cos(this.ang) * 17, this.y - Math.sin(this.ang) * 17, '#6DC2FF', '#6DC2FF', '#6DC2FF');
 			tParticle.xv = -this.xv;
 			tParticle.yv = -this.yv;
 			particleList.push(tParticle);
@@ -111,7 +111,7 @@ function shipClass() {
 			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
 
 			var tParticle = new particleClass();
-			tParticle.randomReset(this.x - Math.cos(tAng), this.y - Math.sin(tAng), 'aqua', 'aqua', 'aqua');
+			tParticle.randomReset(this.x - Math.cos(tAng), this.y - Math.sin(tAng), '#6DC2FF', '#6DC2FF', '#6DC2FF');
 			tParticle.xv = -Math.cos(tAng) * 5;
 			tParticle.yv = -Math.sin(tAng) * 5;
 			particleList.push(tParticle);
@@ -123,7 +123,7 @@ function shipClass() {
 			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
 
 			var tParticle = new particleClass();
-			tParticle.randomReset(this.x - Math.cos(tAng), this.y - Math.sin(tAng), 'aqua', 'aqua', 'aqua');
+			tParticle.randomReset(this.x - Math.cos(tAng), this.y - Math.sin(tAng), '#6DC2FF', '#6DC2FF', '#6DC2FF');
 			tParticle.xv = -Math.cos(tAng) * 5;
 			tParticle.yv = -Math.sin(tAng) * 5;
 			particleList.push(tParticle);

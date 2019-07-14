@@ -7,20 +7,6 @@ var currentScore = 0,
     currentTimeCount = null,
     timerStart = null;
 
-function drawScore() {
-    updateChainTimer();
-    
-    canvasContext.save();
-	canvasContext.font = '20px Arial';
-    canvasContext.textAlign = 'left';
-    canvasContext.fillStyle = 'white';
-	canvasContext.fillText('Score: '+ currentScore, 10, 30);
-	canvasContext.fillText('x'+ currentMultiplier, 10, 60);
-	canvasContext.fillText('Chain: '+ currentChain, 10, 90);
-	canvasContext.fillText('Timer: '+ currentTimeCount, 10, 120);
-	canvasContext.restore();
-}
-
 function updateScore(baseValue) {
     if (currentTimeCount <= 0) {
         currentChain = 1;

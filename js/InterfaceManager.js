@@ -19,34 +19,56 @@ var heatInnerPoly = [{x: -42, y: 8},
                     {x: +42, y: -8}, 
                     {x: +47, y: 8}];
 
-var meterBG = [{x: -125, y: 22},
+var meterBG =   [{x: -125, y: 22},
                 {x: -113, y: -22},
                 {x: 113, y: -22},
                 {x: 125, y: 22}];
 
-var tmColorOuter = 'white';
-var tmColorInner = 'aqua';
+var livesBG =   [{x: -125, y: 32},
+                {x: -113, y: -32},
+                {x: 113, y: -32},
+                {x: 125, y: 32}];
 
-var hmColorOuter = 'white';
+var tmColorOuter = 'grey';
+var tmColorInner = '#6DC2FF';
+
+var hmColorOuter = 'grey';
 var hmColorInner = 'red';
 
 function drawHUD() {
+    //drawPlayerLives();
     canvasContext.save();
-    canvasContext.shadowColor = 'aqua';
+    canvasContext.shadowColor = '#6DC2FF';
     canvasContext.shadowBlur = 3;
     drawPolygon(canvas.width / 2, canvas.height - 22, meterBG, '#383838', true);
-    drawPolygon(canvas.width/2 + 1, canvas.height - 20, [{x: 0, y: -20}, {x: 13, y: 20}, {x: -13, y: 20}], 'aqua', true);
+    drawPolygon(canvas.width/2 + 1, canvas.height - 20, [{x: 0, y: -20}, {x: 13, y: 20}, {x: -13, y: 20}], '#6DC2FF', true);
     canvasContext.restore();
     drawThrustMeter();
     drawWeaponHeat();
     drawScore();
 }
 
+function drawPlayerLives() {
+    canvasContext.save();
+    canvasContext.shadowColor = '#6DC2FF';
+    canvasContext.shadowBlur = 3;
+    drawPolygon(canvas.width - 100, canvas.height - 30, livesBG, '#383838', true);
+    canvasContext.shadowColor = 'black';
+    for (var l=0; l<3; l++) {
+        canvasContext.save();
+        canvasContext.translate(canvas.width - 30 - (l * 30), canvas.height -5);
+        canvasContext.rotate(-Math.PI/2);
+        canvasContext.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 25, 25)
+        canvasContext.restore();
+    }
+    canvasContext.restore();
+}
+
 function drawThrustMeter() {
     if (p1.thrust > 0) {
-        tmColorOuter = 'white';
+        tmColorOuter = 'grey';
     } else {
-        tmColorOuter = 'orange';
+        tmColorOuter = 'grey';
     }
     canvasContext.save();
     canvasContext.shadowColor = 'black';
@@ -62,9 +84,44 @@ function drawThrustMeter() {
     }
 }
 
+function drawScore() {
+    updateChainTimer();
+    canvasContext.save();
+    canvasContext.shadowColor = '#6DC2FF';
+    canvasContext.shadowBlur = 3;
+    drawPolygon(100, canvas.height - 30, livesBG, '#383838', true);
+    canvasContext.restore();
+    canvasContext.save();
+    canvasContext.shadowColor = 'black';
+    canvasContext.shadowBlur = 3;
+    
+    for (var t=0; t<5; t++) {
+        
+        if (currentTimeCount > t) {
+            colorRect(8 + 32 * t, canvas.height - 56, 26, 26, '#6DC2FF');
+        } else {
+            colorRect(8 + 32 * t, canvas.height - 56, 26, 26, 'grey');
+        }
+    }
+
+    canvasContext.font = '20px Orbitron';
+    canvasContext.textAlign = 'left';
+    canvasContext.fillStyle = 'white';
+    canvasContext.fillText('Score: '+ currentScore, 8, canvas.height - 8);
+    canvasContext.textAlign = 'center';
+	canvasContext.fillText('x'+ currentMultiplier, 186, canvas.height - 36);
+
+    //Testing values
+    canvasContext.textAlign = 'left';
+    canvasContext.fillText('Chain: '+ currentChain, 10, 30);
+    canvasContext.fillText('Timer: '+ currentTimeCount, 10, 50);
+    
+    canvasContext.restore();
+}
+
 function drawWeaponHeat() {
     if (p1.weaponHeat < 100) {
-        hmColorOuter = 'white';
+        hmColorOuter = 'grey';
     } else {
         hmColorOuter = 'orange';
     }
@@ -86,7 +143,7 @@ function drawWeaponHeat() {
 function drawTitleScreen() {
     var yOffset = canvas.height/2.5;
     
-    colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', 'aqua', 'Space Drifter');
+    colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
     colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'white',
                      'Press FIRE to start!');
 
