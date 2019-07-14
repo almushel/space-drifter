@@ -67,16 +67,19 @@ function removeDead() {
 }
 
 function divideDrifter(whichDrifter) {
+    var randAng = Math.random() * (Math.PI*2);
     for (var s=0; s<3; s++) {
         var childDrifter = new drifterClass();
+        randAng += (Math.PI/1.5);
+
         childDrifter.radius = whichDrifter.radius/2;
-        childDrifter.x = whichDrifter.x + Math.random() * whichDrifter.radius;
-        childDrifter.y = whichDrifter.y + Math.random() * whichDrifter.radius;
+        childDrifter.generatePoly();
+
+        childDrifter.x = whichDrifter.x + Math.cos(randAng) * childDrifter.radius;
+        childDrifter.y = whichDrifter.y + Math.sin(randAng) * childDrifter.radius;
         
-        var randAng = Math.random() * (Math.PI*2);
         childDrifter.xv = Math.cos(randAng)*DRIFT_RATE;
         childDrifter.yv = Math.sin(randAng)*DRIFT_RATE;
-        childDrifter.generatePoly();
 
         enemyList.push(childDrifter);
     }
