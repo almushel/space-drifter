@@ -82,7 +82,13 @@ function ufoClass() {
 			wrapY = this.y - canvas.height;
 		}
 
-		if (wrapX != this.x || wrapY != this.y) {
+		if (wrapX != this.x) {
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(this.y), 0);
+		}
+		if (wrapY != this.y) {
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(wrapY), 0);
+		}
+		if (wrapX != this.x && wrapY != this.y) {
 			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), 0);
 		}
 		

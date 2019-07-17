@@ -4,8 +4,9 @@ const THRUST_POWER = 0.15;
 const LATERAL_THRUST = 0.2;
 const TURN_RATE = 0.03;
 const SHOT_MAX = 8;
-const THRUST_MAX = 100;
 const HEAT_MAX = 100;
+const THRUST_MAX = 100;
+const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
 
 shipClass.prototype = new movingWrapPositionClass();
@@ -93,7 +94,7 @@ function shipClass() {
 		}
 		
 		if(this.keyHeld_Gas && this.thrust > 0) {
-			this.thrust -= 0.5 * deltaT;
+			this.thrust -= THRUST_CONSUMPTION * deltaT;
 			this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
 			this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
 			
@@ -105,7 +106,7 @@ function shipClass() {
 		} 
 		
 		if (this.keyHeld_ThrustLeft && this.thrust > 0) {
-			this.thrust -= 1 * deltaT;
+			this.thrust -= THRUST_CONSUMPTION * deltaT;
 			var tAng = this.ang - Math.PI/2
 			this.xv += Math.cos(tAng) * (LATERAL_THRUST * deltaT);
 			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
@@ -117,7 +118,7 @@ function shipClass() {
 			particleList.push(tParticle);
 		}
 		if (this.keyHeld_ThrustRight && this.thrust > 0) {
-			this.thrust -= 1 * deltaT;
+			this.thrust -= THRUST_CONSUMPTION * deltaT;
 			var tAng = this.ang + Math.PI/2
 			this.xv += Math.cos(tAng) * (LATERAL_THRUST * deltaT);
 			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
@@ -182,19 +183,25 @@ function shipClass() {
 		var wrapX = this.x;
 		var wrapY = this.y;
 
-		if (this.x < this.myBitmap.width/2) {
+		if (this.x < this.myBitmap.width) {
 			wrapX = this.x + canvas.width;
-		} else if (this.x > canvas.width - this.myBitmap.width/2) {
+		} else if (this.x > canvas.width - this.myBitmap.width) {
 			wrapX = this.x - canvas.width;
 		}
 
-		if (this.y < this.myBitmap.height/2) {
+		if (this.y < this.myBitmap.height) {
 			wrapY = this.y + canvas.height;
-		} else if (this.y > canvas.height - this.myBitmap.height/2) {
+		} else if (this.y > canvas.height - this.myBitmap.height) {
 			wrapY = this.y - canvas.height;
 		}
 
-		if (wrapX != this.x || wrapY != this.y) {
+		if (wrapX != this.x) {
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(this.y), this.ang);
+		}
+		if (wrapY != this.y) {
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(wrapY), this.ang);
+		}
+		if (wrapX != this.x && wrapY != this.y) {
 			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang);
 		}
 	}
