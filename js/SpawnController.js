@@ -1,12 +1,14 @@
 const ENEMY_UFO = 0;
 const ENEMY_TRACKER = 1;
 const ENEMY_DRIFTER = 2;
+const ENEMY_TURRET = 3;
 
 var enemyList = [];
 var enemyPool = [];
 var wave1 = [0,0,0,0];
 var wave2 = [2,2,2,2,2,2,2,2,2];
 var wave3 = [2,2,2,1,2,2,2,2,2];
+var wave3 = [3,3,3,3,3,3];
 
 function spawnWave(waveList) {
     for (var i=0; i< waveList.length; i++) {
@@ -37,7 +39,9 @@ function getName(type) {
         case ENEMY_TRACKER:
             return 'tracker';
         case ENEMY_DRIFTER:
-            return 'drifter'
+            return 'drifter';
+        case ENEMY_TURRET:
+            return 'turret';
         default:
             return '';
     }
@@ -58,6 +62,10 @@ function enemySelect(type) {
             var whichEnemy = new drifterClass();
             whichEnemy.init();
             break;
+        case ENEMY_TURRET:
+             var whichEnemy = new turretClass();
+                whichEnemy.init();
+                 break;
         default:
             var whichEnemy = new ufoClass();
             whichEnemy.init();

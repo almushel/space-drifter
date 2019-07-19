@@ -2,8 +2,13 @@
 function movingWrapPositionClass() {
 	this.collisionRadius = 20;  
 
+	this.init = function() {
+		this.reset();
+	}
+	
 	this.reset = function() {
-		this.xv = this.yv = 0;
+		this.xv = 0;
+		this.yv = 0;
 		this.x = canvas.width/2;
 		this.y = canvas.height/2;
 		this.isDead = false;

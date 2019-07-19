@@ -1,5 +1,6 @@
 // tuning constants
-const SHOT_SPEED = 7.0;
+const PLAYER_SHOT_SPEED = 7.0;
+const TURRET_SHOT_SPEED = 3;
 const SHOT_LIFE = 80;
 const SHOT_DISPLAY_RADIUS = 2.5;
 
@@ -8,11 +9,12 @@ shotClass.prototype = new movingWrapPositionClass();
 function shotClass() {
 	this.collisionRadius = SHOT_DISPLAY_RADIUS;
 
-
 	this.superClassReset = this.reset;
-	this.reset = function() {
+	this.reset = function(speed, color) {
 		this.superClassReset();
 		this.shotLife = 0;
+		this.shotSpeed = speed;
+		this.color = color;
 	} // end of reset
 	  
 	this.isReadyToFire = function() {
@@ -23,8 +25,8 @@ function shotClass() {
 		this.x = shipFiring.x;
 		this.y = shipFiring.y;
 			
-		this.xv = Math.cos(shipFiring.ang) * SHOT_SPEED + shipFiring.xv;
-		this.yv = Math.sin(shipFiring.ang) * SHOT_SPEED + shipFiring.yv;
+		this.xv = Math.cos(shipFiring.ang) * this.shotSpeed + shipFiring.xv;
+		this.yv = Math.sin(shipFiring.ang) * this.shotSpeed + shipFiring.yv;
 			
 		this.shotLife = SHOT_LIFE;
 	}
@@ -47,7 +49,7 @@ function shotClass() {
 	  
 	this.draw = function() {
 		if(this.shotLife > 0) {
-			colorCircle(this.x, this.y, SHOT_DISPLAY_RADIUS, '#6DC2FF');
+			colorCircle(this.x, this.y, SHOT_DISPLAY_RADIUS, this.color);
 		}
 	}
 

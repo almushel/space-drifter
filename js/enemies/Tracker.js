@@ -13,10 +13,6 @@ function trackerClass() {
 	this.name = 'tracker';
 	this.myBitmap = trackerPic;
 	this.collisionRadius = TRACKER_COLLISION_RADIUS;
-
-	this.init = function() {
-		this.reset();
-	}
 	
 	this.superClassReset = this.reset;
 	this.reset = function() {

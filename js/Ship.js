@@ -55,7 +55,7 @@ function shipClass() {
 		if (this.shotList.length < SHOT_MAX) {
 			for (var i=0; i < SHOT_MAX; i++) {
 				var newShot = new shotClass();
-				newShot.reset();
+				newShot.reset(PLAYER_SHOT_SPEED, '#6DC2FF');
 				this.shotList.push(newShot);
 			}
 		}
@@ -69,7 +69,7 @@ function shipClass() {
 		for (var i=0; i < this.shotList.length; i++) {
 			if(this.shotList[i].hitTest(thisEnemy)) {
 				thisEnemy.die();
-				this.shotList[i].reset();
+				this.shotList[i].reset(PLAYER_SHOT_SPEED, '#6DC2FF');
 				updateScore(1);
 			}
 		}
