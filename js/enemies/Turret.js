@@ -114,10 +114,28 @@ function turretClass() {
             this.shotList[s].draw();
         }
         
-        colorCircle(this.x, this.y, TURRET_RADIUS, '#a09800');
         var cannonOffsetX = -(Math.cos(this.ang) * TURRET_RADIUS*2) + Math.cos(this.ang) * (TURRET_RADIUS * this.fireOffset),
             cannonOffsetY = -(Math.sin(this.ang) * TURRET_RADIUS*2) + Math.sin(this.ang) * (TURRET_RADIUS * this.fireOffset),
             halfRad = TURRET_RADIUS/2;
+        
+
+        colorCircle(this.x, this.y, TURRET_RADIUS, 'dimgrey');
+
+        canvasContext.save();
+        canvasContext.translate(this.x, this.y);
+        canvasContext.rotate(this.ang)
+        colorRect(-TURRET_RADIUS/2, -TURRET_RADIUS, TURRET_RADIUS/2, TURRET_RADIUS*2, '#494949');
+        canvasContext.restore();
+
+        canvasContext.save();
+        canvasContext.translate(this.x + cannonOffsetX, this.y + cannonOffsetY);
+        canvasContext.rotate(this.ang)
+        colorRect(-TURRET_RADIUS/3, -TURRET_RADIUS/2, TURRET_RADIUS*1.5, TURRET_RADIUS, '#494949');
+        canvasContext.restore();
+
+        colorCircle(this.x, this.y, TURRET_RADIUS-5, '#d87300');
+        colorCircle(this.x, this.y, TURRET_RADIUS-9, 'orange');
+        colorCircle(this.x, this.y, TURRET_RADIUS-12, 'white');
 
         drawPolygon(this.x + cannonOffsetX + Math.cos(this.ang+Math.PI/2) * (halfRad * this.fireOffset), 
                     this.y + cannonOffsetY + Math.sin(this.ang+Math.PI/2) * (halfRad * this.fireOffset),
