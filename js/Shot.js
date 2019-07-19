@@ -6,9 +6,10 @@ const SHOT_DISPLAY_RADIUS = 2.5;
 shotClass.prototype = new movingWrapPositionClass();
 
 function shotClass() {
+	this.collisionRadius = SHOT_DISPLAY_RADIUS;
+
 
 	this.superClassReset = this.reset;
-	  
 	this.reset = function() {
 		this.superClassReset();
 		this.shotLife = 0;
@@ -31,12 +32,12 @@ function shotClass() {
 	this.hitTest = function(thisEnemy) {
 		if (this.shotLife <= 0) {
 			return false;
+		} else {
+			return thisEnemy.isCollidingCircle(this);
 		}
-		return thisEnemy.isOverlappingPoint(this.x, this.y);
 	}
 	  
 	this.superClassMove = this.move;
-	  
 	this.move = function() {
 		if(this.shotLife > 0) {
 			this.shotLife -= deltaT;

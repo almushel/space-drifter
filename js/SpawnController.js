@@ -90,6 +90,11 @@ function getClearSpawn(spawner) {
 function removeDead() {
     for (var i=enemyList.length-1; i>=0; i--) {
         if (enemyList[i].isDead) {
+            var newSplode = new explosionClass();
+            newSplode.reset('white', 'dimgrey', 'lightblue');
+            newSplode.explodeNow(enemyList[i].x, enemyList[i].y);
+            particleList.push(newSplode);
+
             enemyPool.push(enemyList[i]);
             enemyList.splice(i, 1);
         }

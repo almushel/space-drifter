@@ -31,34 +31,23 @@ function movingWrapPositionClass() {
 		this.handleScreenWrap();
 	}
 
-	this.bumpCollision = function(whichEntity) {
+	this.isCollidingCircle = function(whichEntity) {
 		var deltaX = whichEntity.x - this.x,
 			deltaY = whichEntity.y - this.y,
-			distTo = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+			deltaR = deltaX * deltaX + deltaY * deltaY;
 									   
-		if (distTo < this.collisionRadius + whichEntity.collisionRadius) {
-			var yBump = 0,
-				xBump = 0;
-					
+		if (deltaR <= Math.pow(this.collisionRadius + whichEntity.collisionRadius, 2)) {
+			var hitAng = Math.atan2(deltaY, deltaX);
+			
+			this.xv += Math.cos(hitAng + Math.PI) * deltaT;
+			this.yv += Math.sin(hitAng + Math.PI) * deltaT;
 
-			if (deltaX != 0) {
-				xBump = (deltaX/distTo)/3;
+			whichEntity.xv += Math.cos(hitAng) * deltaT;
+			whichEntity.yv += Math.sin(hitAng) * deltaT;
 
-			}
-			if (deltaY != 0) {
-				yBump = (deltaY/distTo)/3;
-			}
-
-			if (xBump != 0) {
-				this.xv -= xBump * deltaT;
-				whichEntity.xv += xBump * deltaT;
-			}
-				
-			if (yBump != 0) {
-				this.yv -= yBump;
-				whichEntity.yv += yBump * deltaT;		
-			}
+			return true;
 		}
+		return false;
 	}
 
 	this.die = function() {

@@ -26,14 +26,6 @@ function ufoClass() {
 		this.y = newPos.y;
 	} // end of reset
 	  
-	this.isOverlappingPoint = function(pointX, pointY){
-		var deltaX = pointX-this.x;
-		var deltaY = pointY-this.y;
-		var dist = Math.sqrt((deltaX*deltaX) + (deltaY*deltaY));
-		
-		return (dist <= UFO_COLLISION_RADIUS);
-	}
-	  
 	this.superClassMove = this.move; 
 	this.move = function() {
 		this.superClassMove();
@@ -62,7 +54,7 @@ function ufoClass() {
 			this.xv *= 1 - 0.02 * deltaT;
 			this.yv *= 1 - 0.02 * deltaT;
 		}
-	  }
+	}
 	  
 	this.draw = function() {
 		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), 0);

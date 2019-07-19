@@ -51,11 +51,11 @@ function moveAll() {
     enemyList[i].move();
 
     for(var e=i+1; e<enemyList.length; e++) {
-      enemyList[i].bumpCollision(enemyList[e]);
+      enemyList[i].isCollidingCircle(enemyList[e]);
     }
     
     p1.checkShipAndShotCollisionAgainst(enemyList[i]);
-    p1.bumpCollision(enemyList[i]);
+    p1.isCollidingCircle(enemyList[i]);
   }
 
   for (var n=0; n<particleList.length; n++) {

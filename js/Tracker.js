@@ -29,14 +29,6 @@ function trackerClass() {
 		this.y = newPos.y;
 	} // end of reset
 	  
-	this.isOverlappingPoint = function(pointX, pointY){
-		var deltaX = pointX-this.x;
-		var deltaY = pointY-this.y;
-		var dist = Math.sqrt((deltaX*deltaX) + (deltaY*deltaY));
-		
-		return (dist <= UFO_COLLISION_RADIUS);
-	}
-	  
 	this.superClassMove = this.move; 
 	this.move = function() {
 		this.superClassMove();

@@ -62,20 +62,12 @@ function shipClass() {
 	} // end of reset
 	  
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
-		if(thisEnemy.isOverlappingPoint(this.x, this.y)) {
-			//this.reset();
-			//thisEnemy.reset();
-			thisEnemy.die();
+		if(thisEnemy.isCollidingCircle(this)) {
+			//thisEnemy.die();
 		}
 		
 		for (var i=0; i < this.shotList.length; i++) {
 			if(this.shotList[i].hitTest(thisEnemy)) {
-				var newSplode = new explosionClass();
-				newSplode.reset('white', 'dimgrey', 'lightblue');
-				newSplode.explodeNow(thisEnemy.x, thisEnemy.y);
-				particleList.push(newSplode);
-				
-				//thisEnemy.reset();
 				thisEnemy.die();
 				this.shotList[i].reset();
 				updateScore(1);
