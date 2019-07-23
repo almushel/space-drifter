@@ -50,6 +50,14 @@ function startChainTimer() {
 }
 
 function endGame() {
+    if (localStorage.sdHighScore == undefined) {
+        localStorage.sdHighScore = 0;
+    }
+    console.log(localStorage.sdHighScore);
+
+    if (currentScore > Number(localStorage.sdHighScore)) {
+        localStorage.sdHighScore = currentScore;
+    }
     gameStart = false;
     gameOver = true;
 }

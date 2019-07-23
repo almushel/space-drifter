@@ -177,8 +177,15 @@ function drawTitleScreen() {
 
 function drawGameOver() {
     var yOffset = canvas.height/2.5;
+    var highScore = Number(localStorage.sdHighScore);
     
     colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', 'orange', 'GAME OVER');
     colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'white',
                      'Score: '+currentScore);
+    if (currentScore == highScore) {
+        colorAlignedText(canvas.width/2, yOffset + 80, 'center', 'bold 20px Orbitron', 'white', 'NEW HIGH SCORE!!');
+    } else {
+        colorAlignedText(canvas.width/2, yOffset + 80, 'center', 'bold 20px Orbitron', 'white', 
+                        'High Score: ' + highScore);
+    }
 }
