@@ -8,6 +8,7 @@ const HEAT_MAX = 100;
 const THRUST_MAX = 100;
 const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
+const PLAYER_STARTING_LIVES = 3;
 
 shipClass.prototype = new movingWrapPositionClass();
 
@@ -18,6 +19,7 @@ function shipClass() {
 	this.xv = 0;
 	this.yv = 0;
 	this.collisionRadius = SHIP_RADIUS;
+	this.lives = PLAYER_STARTING_LIVES;
 	  
 	this.name = 'player';
 	this.shotList = [];
@@ -45,13 +47,16 @@ function shipClass() {
 
 	this.init = function(whichGraphic) {
 		this.myBitmap = whichGraphic;
+		this.lives = PLAYER_STARTING_LIVES;
 		this.reset();
 	}
+
 	this.superClassReset = this.reset;
-	  
 	this.reset = function() {
 		this.superClassReset();
+		this.resetKeysHeld();
 		this.ang = -0.5 * Math.PI;
+		this.thrust = THRUST_MAX;
 		if (this.shotList.length < SHOT_MAX) {
 			for (var i=0; i < SHOT_MAX; i++) {
 				var newShot = new shotClass();
@@ -60,10 +65,24 @@ function shipClass() {
 			}
 		}
 	} // end of reset
+
+	this.resetKeysHeld = function() {
+		this.keyHeld_Gas = false;
+		this.keyHeld_TurnLeft = false;
+		this.keyHeld_TurnRight = false;
+		this.heyHeld_ThrustLeft = false;
+		this.heyHeld_ThrustRight = false;
+		this.keyHeld_Fire = false;
+	}
 	  
 	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
 		if(thisEnemy.isCollidingCircle(this)) {
-			//thisEnemy.die();
+			this.lives--;
+			this.reset();
+			if (this.lives <= 0) {
+				endGame();
+			}
+			thisEnemy.die();
 		}
 		
 		for (var i=0; i < this.shotList.length; i++) {

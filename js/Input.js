@@ -20,6 +20,10 @@ function initInput() {
 }
 
 function setKeyHoldState(thisKey, thisShip, setTo) {
+  if (!gameStart) {
+    titleKeys(thisKey, setTo);
+    return;
+  }
   if(thisKey == thisShip.controlKeyForTurnLeft) {
     thisShip.keyHeld_TurnLeft = setTo;
   }
@@ -41,13 +45,20 @@ function setKeyHoldState(thisKey, thisShip, setTo) {
   }
 
   if(thisKey == thisShip.controlKeyForCannonFire) {
-    if (!gameStart) {
-      gameStart = true;
-    } else {
       thisShip.keyHeld_Fire = setTo;
   }
+
 }
 
+function titleKeys(key, setTo) {
+  if (key == KEY_SPACEBAR && setTo == false) {
+    if (gameOver) {
+      gameOver = false;
+    } else {
+      resetGame();
+      gameStart = true;
+    }
+  }
 }
 
 function keyPressed(evt) {

@@ -1,4 +1,5 @@
 var gameStart = false;
+var gameOver = false;
 var meterOuterPoly = [{x: -50, y: 10}, 
                     {x: -44, y: -10}, 
                     {x: +52, y: -10}, 
@@ -36,7 +37,7 @@ var hmColorOuter = 'grey';
 var hmColorInner = 'red';
 
 function drawHUD() {
-    //drawPlayerLives();
+    drawPlayerLives();
     canvasContext.save();
     canvasContext.shadowColor = '#6DC2FF';
     canvasContext.shadowBlur = 3;
@@ -54,7 +55,7 @@ function drawPlayerLives() {
     canvasContext.shadowBlur = 3;
     drawPolygon(canvas.width - 100, canvas.height - 30, livesBG, '#383838', true);
     canvasContext.shadowColor = 'black';
-    for (var l=0; l<3; l++) {
+    for (var l=0; l<p1.lives; l++) {
         canvasContext.save();
         canvasContext.translate(canvas.width - 30 - (l * 30), canvas.height -5);
         canvasContext.rotate(-Math.PI/2);
@@ -141,26 +142,43 @@ function drawWeaponHeat() {
 }
 
 function drawTitleScreen() {
+    if (gameOver) {
+        drawGameOver();
+    } else {
+        var yOffset = canvas.height/2.5;
+        canvasContext.save();
+        canvasContext.shadowBlur = 4;
+        canvasContext.shadowColor = '#6DC2FF';
+        colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
+        canvasContext.shadowBlur = 2;
+        canvasContext.shadowColor = 'white';
+        colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'white',
+                         'Press FIRE to start!');
+    
+        canvasContext.save();
+        canvasContext.globalAlpha = 0.4;
+        colorRect(canvas.width/2-130, yOffset+75, 260, 115, 'dimgrey');
+        canvasContext.restore();
+    
+        colorAlignedText(canvas.width/2-110, yOffset+100, 'left', '15px Orbitron', 'white', '<');
+        colorAlignedText(canvas.width/2+110, yOffset+100, 'right', '15px Orbitron', 'white', 'Rotate Left');
+    
+        colorAlignedText(canvas.width/2-110, yOffset+120, 'left', '15px Orbitron', 'white', '>');
+        colorAlignedText(canvas.width/2+110, yOffset+120, 'right', '15px Orbitron', 'white', 'Rotate Right');
+    
+        colorAlignedText(canvas.width/2-110, yOffset+140, 'left', '15px Orbitron', 'white', '^');
+        colorAlignedText(canvas.width/2+110, yOffset+140, 'right', '15px Orbitron', 'white', 'Accelerate');
+    
+        colorAlignedText(canvas.width/2-110, yOffset+160, 'left', '15px Orbitron', 'white', 'Spacebar');
+        colorAlignedText(canvas.width/2+110, yOffset+160, 'right', '15px Orbitron', 'white', 'Fire');
+        canvasContext.restore();
+    }
+}
+
+function drawGameOver() {
     var yOffset = canvas.height/2.5;
     
-    colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
+    colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', 'orange', 'GAME OVER');
     colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'white',
-                     'Press FIRE to start!');
-
-    canvasContext.save();
-    canvasContext.globalAlpha = 0.4;
-    colorRect(canvas.width/2-130, yOffset+75, 260, 115, 'dimgrey');
-    canvasContext.restore();
-
-    colorAlignedText(canvas.width/2-110, yOffset+100, 'left', '15px Orbitron', 'white', '<');
-    colorAlignedText(canvas.width/2+110, yOffset+100, 'right', '15px Orbitron', 'white', 'Rotate Left');
-
-    colorAlignedText(canvas.width/2-110, yOffset+120, 'left', '15px Orbitron', 'white', '>');
-    colorAlignedText(canvas.width/2+110, yOffset+120, 'right', '15px Orbitron', 'white', 'Rotate Right');
-
-    colorAlignedText(canvas.width/2-110, yOffset+140, 'left', '15px Orbitron', 'white', '^');
-    colorAlignedText(canvas.width/2+110, yOffset+140, 'right', '15px Orbitron', 'white', 'Accelerate');
-
-    colorAlignedText(canvas.width/2-110, yOffset+160, 'left', '15px Orbitron', 'white', 'Spacebar');
-    colorAlignedText(canvas.width/2+110, yOffset+160, 'right', '15px Orbitron', 'white', 'Fire');
+                     'Score: '+currentScore);
 }

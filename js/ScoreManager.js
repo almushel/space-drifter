@@ -48,3 +48,8 @@ function startChainTimer() {
     timerStart = performance.now();
     currentTimeCount = Math.round((SCORE_CHAIN_TIME - (performance.now() - timerStart))/1000);
 }
+
+function endGame() {
+    gameStart = false;
+    gameOver = true;
+}

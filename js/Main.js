@@ -23,8 +23,6 @@ window.onload = function() {
 
 function loadingDoneSoStartGame() {
   createStarField();
-  p1.init(playerPic);
-  spawnWave(wave3);
   initInput();
 
   lastFrame = performance.now();
@@ -79,6 +77,13 @@ function drawAll() {
     drawTitleScreen();
   }
   
+}
+
+function resetGame() {
+  particleList.length = 0;
+  enemyList.length = 0;
+  p1.init(playerPic);
+  spawnWave(wave3);
 }
 
 function doCirclesOverlap(firstX, firstY, firstR, secondX, secondY, secondR) {
