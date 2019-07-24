@@ -149,10 +149,16 @@ function drawTitleScreen() {
         drawScoreTable();
     } else {
         var yOffset = canvas.height/2.5;
+        drawLine(0, yOffset-21, canvas.width, yOffset-21, 3, 'orange');
+        drawLine(0, yOffset-9, canvas.width, yOffset-9, 3, 'orange');
+        drawLine(0, yOffset-15, canvas.width, yOffset-15, 3, '#6DC2FF');
+        canvasContext.save();
+        canvasContext.shadowBlur = 10;
+        canvasContext.shadowColor = 'black';   
         colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
-        colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'white',
+        colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'orange',
                          'Press FIRE to start!');
-    
+        canvasContext.restore();
         canvasContext.save();
         canvasContext.globalAlpha = 0.4;
         colorRect(canvas.width/2-130, yOffset+75, 260, 115, 'dimgrey');
@@ -174,20 +180,23 @@ function drawTitleScreen() {
 }
 
 function drawGameOver() {
-    var yOffset = canvas.height/2.5;
+    var yOffset = canvas.height/4;
     
     colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', 'orange', 'GAME OVER');
-    colorAlignedText(canvas.width/2, yOffset + 120, 'center', 'bold 30px Orbitron', 'white',
+    drawLine(0, canvas.height/2, canvas.width, canvas.height/2, 2, 'white');
+    colorAlignedText(canvas.width/2, canvas.height/2 + canvas.height/4, 'center', 'bold 30px Orbitron', 'white',
                      'Final Score: '+currentScore);
+    colorAlignedText(canvas.width/2, canvas.height/2 + canvas.height/2.7, 'center', 'bold 20px Orbitron', 'orange',
+                         'Press FIRE to view high scores.');
 }
 
 function drawScoreTable() {
-    var yOffset = canvas.height/3;
+    var yOffset = canvas.height/4;
     colorAlignedText(canvas.width/2, yOffset, 'center', 'bold 30px Orbitron', 'white', 'HIGH SCORES');
     drawLine(0, yOffset + 20, canvas.width, yOffset + 15, 2, 'white');
 
     hsTable = JSON.parse(localStorage.sdHighScoreTable);
-
+    
     for (var h=0; h<HIGH_SCORE_TABLE_LENGTH; h++) {
         colorAlignedText(canvas.width/2 - canvas.width/10, yOffset + 50 + (25 * h), 'left', 'bold 20px Orbitron', 'white', (h+1));
         colorAlignedText(canvas.width/2 + canvas.width/10, yOffset + 50 + (25 * h), 'right', 'bold 20px Orbitron', 'white', hsTable[h]);
@@ -196,4 +205,7 @@ function drawScoreTable() {
     if (newHighScoreIndex >= 0) {
         colorAlignedText(canvas.width/2 + canvas.width/8, yOffset + 50 + (25 * newHighScoreIndex), 'left', 'bold 16px Orbitron', 'white', 'NEW HIGH SCORE!');
     }
+
+    colorAlignedText(canvas.width/2, yOffset + 325, 'center', 'bold 20px Orbitron', 'orange',
+                         'Press FIRE to return to title screen.');
 }
