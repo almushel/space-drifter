@@ -1,5 +1,6 @@
 var gameStart = false;
 var gameOver = false;
+var showHighScores = false;
 var meterOuterPoly = [{x: -50, y: 10}, 
                     {x: -44, y: -10}, 
                     {x: +52, y: -10}, 
@@ -144,14 +145,11 @@ function drawWeaponHeat() {
 function drawTitleScreen() {
     if (gameOver) {
         drawGameOver();
+    } else if (showHighScores) {
+        drawScoreTable();
     } else {
         var yOffset = canvas.height/2.5;
-        canvasContext.save();
-        canvasContext.shadowBlur = 4;
-        canvasContext.shadowColor = '#6DC2FF';
         colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
-        canvasContext.shadowBlur = 2;
-        canvasContext.shadowColor = 'white';
         colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'white',
                          'Press FIRE to start!');
     
@@ -177,15 +175,25 @@ function drawTitleScreen() {
 
 function drawGameOver() {
     var yOffset = canvas.height/2.5;
-    var highScore = Number(localStorage.sdHighScore);
     
     colorAlignedText(canvas.width/2, yOffset, 'center', '50px Orbitron', 'orange', 'GAME OVER');
-    colorAlignedText(canvas.width/2, yOffset + 40, 'center', 'bold 20px Orbitron', 'white',
-                     'Score: '+currentScore);
-    if (currentScore == highScore) {
-        colorAlignedText(canvas.width/2, yOffset + 80, 'center', 'bold 20px Orbitron', 'white', 'NEW HIGH SCORE!!');
-    } else {
-        colorAlignedText(canvas.width/2, yOffset + 80, 'center', 'bold 20px Orbitron', 'white', 
-                        'High Score: ' + highScore);
+    colorAlignedText(canvas.width/2, yOffset + 120, 'center', 'bold 30px Orbitron', 'white',
+                     'Final Score: '+currentScore);
+}
+
+function drawScoreTable() {
+    var yOffset = canvas.height/3;
+    colorAlignedText(canvas.width/2, yOffset, 'center', 'bold 30px Orbitron', 'white', 'HIGH SCORES');
+    drawLine(0, yOffset + 20, canvas.width, yOffset + 15, 2, 'white');
+
+    hsTable = JSON.parse(localStorage.sdHighScoreTable);
+
+    for (var h=0; h<HIGH_SCORE_TABLE_LENGTH; h++) {
+        colorAlignedText(canvas.width/2 - canvas.width/10, yOffset + 50 + (25 * h), 'left', 'bold 20px Orbitron', 'white', (h+1));
+        colorAlignedText(canvas.width/2 + canvas.width/10, yOffset + 50 + (25 * h), 'right', 'bold 20px Orbitron', 'white', hsTable[h]);
+    }
+
+    if (newHighScoreIndex >= 0) {
+        colorAlignedText(canvas.width/2 + canvas.width/8, yOffset + 50 + (25 * newHighScoreIndex), 'left', 'bold 16px Orbitron', 'white', 'NEW HIGH SCORE!');
     }
 }

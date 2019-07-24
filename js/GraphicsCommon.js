@@ -27,9 +27,10 @@ function colorAlignedText(textX, textY, textAlign, textFont, textColor, textStri
 	canvasContext.restore();
 }
 
-function drawLine(startX, startY, endX, endY, strokeColor) {
+function drawLine(startX, startY, endX, endY, width, color) {
 	canvasContext.save();
-	canvasContext.strokeStyle = strokeColor;
+	canvasContext.lineWidth = width;
+	canvasContext.strokeStyle = color;
 	canvasContext.beginPath();
 	canvasContext.moveTo(startX, startY);
 	canvasContext.lineTo(endX, endY);

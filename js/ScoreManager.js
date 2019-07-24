@@ -1,11 +1,13 @@
 const SCORE_CHAIN_TIME = 5000;
 const SCORE_MULTI_MILESTONES = [10, 25, 50, 100]
+const HIGH_SCORE_TABLE_LENGTH = 10;
 
 var currentScore = 0,
     currentChain = 0,
     currentMultiplier = 1,
     currentTimeCount = null,
     timerStart = null;
+    newHighScoreIndex = -1;
 
 function updateScore(baseValue) {
     if (currentTimeCount <= 0) {
@@ -14,7 +16,7 @@ function updateScore(baseValue) {
         currentChain++;
         updateMultiplier();
     }
-    currentScore += baseValue * currentMultiplier;
+    currentScore += baseValue * 10 * currentMultiplier;
     startChainTimer();
 }
 
@@ -50,14 +52,41 @@ function startChainTimer() {
 }
 
 function endGame() {
+    updateScoreTable();
     if (localStorage.sdHighScore == undefined) {
         localStorage.sdHighScore = 0;
     }
-    console.log(localStorage.sdHighScore);
 
     if (currentScore > Number(localStorage.sdHighScore)) {
         localStorage.sdHighScore = currentScore;
     }
     gameStart = false;
     gameOver = true;
+}
+
+function updateScoreTable() {
+    var hsTable;
+    if (localStorage.sdHighScoreTable == undefined || 
+        JSON.parse(localStorage.sdHighScoreTable).length < HIGH_SCORE_TABLE_LENGTH) {
+        hsTable = [];
+        hsTable.length = HIGH_SCORE_TABLE_LENGTH;
+        hsTable.fill(0);
+    } else {
+        hsTable = JSON.parse(localStorage.sdHighScoreTable);
+    }
+    
+    for (var h=0; h<hsTable.length; h++) {
+        if (currentScore > hsTable[h]) {
+            hsTable.splice(h, 0, currentScore);
+            hsTable.pop();
+            newHighScoreIndex = h;
+            break;
+        }
+    }
+
+/*  hsTable.push(currentScore);
+    hsTable.sort(function(a, b) {return b-a});
+    hsTable.pop();
+*/
+    localStorage.sdHighScoreTable = JSON.stringify(hsTable);
 }

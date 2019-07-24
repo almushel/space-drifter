@@ -54,6 +54,9 @@ function titleKeys(key, setTo) {
   if (key == KEY_SPACEBAR && setTo == false) {
     if (gameOver) {
       gameOver = false;
+      showHighScores = true;
+    } else if (showHighScores) {
+      showHighScores = false;
     } else {
       resetGame();
       gameStart = true;

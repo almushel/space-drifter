@@ -80,6 +80,8 @@ function drawAll() {
 }
 
 function resetGame() {
+  currentScore = 0;
+  newHighScoreIndex = -1;
   particleList.length = 0;
   enemyList.length = 0;
   p1.init(playerPic);
