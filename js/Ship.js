@@ -2,13 +2,14 @@
 const SPACE_FRICTION = 0.02;
 const THRUST_POWER = 0.15;
 const LATERAL_THRUST = 0.2;
-const TURN_RATE = 0.03;
+const TURN_RATE = 0.02;
 const SHOT_MAX = 8;
 const HEAT_MAX = 100;
 const THRUST_MAX = 100;
 const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
 const PLAYER_STARTING_LIVES = 3;
+const LASER_RANGE = 400;
 
 shipClass.prototype = new movingWrapPositionClass();
 
@@ -24,6 +25,8 @@ function shipClass() {
 	this.name = 'player';
 	this.shotList = [];
 	this.canShoot = true;
+	this.laserAnim = 0;
+	this.laserFiring = false;
 	this.thrust = THRUST_MAX;
 	this.weaponHeat = 0;
 
@@ -84,7 +87,13 @@ function shipClass() {
 			}
 			thisEnemy.die();
 		}
-		
+		if (this.laserFiring && 
+			circleRotRectIntersect(this.x, this.y, LASER_RANGE, 
+									32, this.ang, thisEnemy.x, thisEnemy.y,
+									thisEnemy.collisionRadius)) {
+			thisEnemy.die();
+		}
+
 		for (var i=0; i < this.shotList.length; i++) {
 			if(this.shotList[i].hitTest(thisEnemy)) {
 				thisEnemy.die();
@@ -146,7 +155,8 @@ function shipClass() {
 		}
 
 		if (this.keyHeld_Fire) {
-			this.fireCannon();
+			//this.fireCannon();
+			this.fireLaser();
 		}
 			
 		this.superClassMove();
@@ -182,12 +192,49 @@ function shipClass() {
 				setTimeout(function (self) {self.canShoot = true}, 200, this);
 				break;
 			}
-		}  
+		}
+	}
+
+	this.fireLaser = function() {
+		if (this.laserFiring) {
+			if (this.laserAnim <= 100) {
+				this.laserAnim += 10 + deltaT;
+			} else {
+				this.laseranim = 100;
+			}
+		}
+		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
+			return;
+		}
+		this.weaponHeat += 25;
+		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
+				
+		this.laserFiring = true;
+		this.canShoot = false;
+		setTimeout(function (self) {self.canShoot = true;}, 250, this);
+		setTimeout(function (self) {self.laserFiring = false; self.laserAnim = 0;}, 150, this);
+	}
+
+	this.drawLaser = function() {
+		var laserWidth = 2;
+		var laserLength = (this.laserAnim /100) * LASER_RANGE;
+		canvasContext.save();
+		canvasContext.shadowBlur = 3;
+		canvasContext.shadowColor = '#6DC2FF';
+		canvasContext.translate(this.x, this.y);
+		canvasContext.rotate(this.ang);
+		colorRect(18, -5, laserLength, laserWidth, '#6DC2FF');
+		colorRect(18, 3, laserLength, laserWidth, '#6DC2FF');
+		canvasContext.restore();
 	}
 	  
 	this.draw = function() {
 		for (var i=0; i<this.shotList.length; i++) {
 			this.shotList[i].draw();
+		}
+
+		if (this.laserFiring) {
+			this.drawLaser();
 		}
 		drawBitmapCenteredWithRotation( this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang );
 
