@@ -2,7 +2,7 @@
 const SPACE_FRICTION = 0.02;
 const THRUST_POWER = 0.15;
 const LATERAL_THRUST = 0.2;
-const TURN_RATE = 0.02;
+const TURN_RATE = 0.025;
 const SHOT_MAX = 8;
 const HEAT_MAX = 100;
 const THRUST_MAX = 100;
@@ -34,8 +34,8 @@ function shipClass() {
 	this.keyHeld_Gas = false;
 	this.keyHeld_TurnLeft = false;
 	this.keyHeld_TurnRight = false;
-	this.heyHeld_ThrustLeft = false;
-	this.heyHeld_ThrustRight = false;
+	this.keyHeld_ThrustLeft = false;
+	this.keyHeld_ThrustRight = false;
 	this.keyHeld_Fire = false;
 
 	// key controls used for this
@@ -60,6 +60,9 @@ function shipClass() {
 		this.resetKeysHeld();
 		this.ang = -0.5 * Math.PI;
 		this.thrust = THRUST_MAX;
+		this.weaponHeat = 0;
+		this.laserAnim = 0;
+		this.laserFiring = false;
 		if (this.shotList.length < SHOT_MAX) {
 			for (var i=0; i < SHOT_MAX; i++) {
 				var newShot = new shotClass();
@@ -73,8 +76,8 @@ function shipClass() {
 		this.keyHeld_Gas = false;
 		this.keyHeld_TurnLeft = false;
 		this.keyHeld_TurnRight = false;
-		this.heyHeld_ThrustLeft = false;
-		this.heyHeld_ThrustRight = false;
+		this.keyHeld_ThrustLeft = false;
+		this.keyHeld_ThrustRight = false;
 		this.keyHeld_Fire = false;
 	}
 	  
@@ -87,11 +90,14 @@ function shipClass() {
 			}
 			thisEnemy.die();
 		}
-		if (this.laserFiring && 
-			circleRotRectIntersect(this.x, this.y, LASER_RANGE, 
-									32, this.ang, thisEnemy.x, thisEnemy.y,
-									thisEnemy.collisionRadius)) {
-			thisEnemy.die();
+		if (this.laserFiring) {
+			var xOffset = (Math.cos(this.ang) * 18) + (Math.cos(this.ang+Math.PI/2) * 4)
+			var xOffset = (Math.sin(this.ang) * 18) + (Math.sin(this.ang+Math.PI/2) * 4)
+			
+			if (circleRotRectIntersect(this.x + xOffset, this.y + xOffset, LASER_RANGE * (this.laserAnim/100), 32, this.ang, 
+										thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
+				thisEnemy.die();
+			}
 		}
 
 		for (var i=0; i < this.shotList.length; i++) {
@@ -158,6 +164,14 @@ function shipClass() {
 			//this.fireCannon();
 			this.fireLaser();
 		}
+
+		if (this.laserFiring) {
+			if (this.laserAnim <= 100) {
+				this.laserAnim += 10 + deltaT;
+			} else {
+				this.laseranim = 100;
+			}
+		}
 			
 		this.superClassMove();
 			
@@ -196,13 +210,6 @@ function shipClass() {
 	}
 
 	this.fireLaser = function() {
-		if (this.laserFiring) {
-			if (this.laserAnim <= 100) {
-				this.laserAnim += 10 + deltaT;
-			} else {
-				this.laseranim = 100;
-			}
-		}
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
@@ -212,19 +219,21 @@ function shipClass() {
 		this.laserFiring = true;
 		this.canShoot = false;
 		setTimeout(function (self) {self.canShoot = true;}, 250, this);
-		setTimeout(function (self) {self.laserFiring = false; self.laserAnim = 0;}, 150, this);
+		setTimeout(function (self) {self.laserFiring = false; self.laserAnim = 0;}, 200, this);
 	}
 
 	this.drawLaser = function() {
-		var laserWidth = 2;
-		var laserLength = (this.laserAnim /100) * LASER_RANGE;
+		var laserInterp = this.laserAnim/100;
+		var laserLength = laserInterp * LASER_RANGE;
+		var laserWidth = laserInterp * 3;
 		canvasContext.save();
 		canvasContext.shadowBlur = 3;
 		canvasContext.shadowColor = '#6DC2FF';
 		canvasContext.translate(this.x, this.y);
 		canvasContext.rotate(this.ang);
-		colorRect(18, -5, laserLength, laserWidth, '#6DC2FF');
-		colorRect(18, 3, laserLength, laserWidth, '#6DC2FF');
+		//drawLine(startX, startY, endX, endY, width, color)
+		drawLine(18, -4, laserLength, -4, laserWidth, '#6DC2FF');
+		drawLine(18, 3, laserLength, 3, laserWidth, '#6DC2FF');
 		canvasContext.restore();
 	}
 	  

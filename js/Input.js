@@ -36,11 +36,11 @@ function setKeyHoldState(thisKey, thisShip, setTo) {
     thisShip.keyHeld_Gas = setTo;
   }
 
-  if(thisKey == thisShip.controlKeyForThrustLeft && !thisShip.heyHeld_ThrustRight) {
+  if(thisKey == thisShip.controlKeyForThrustLeft) {
     thisShip.keyHeld_ThrustLeft = setTo;
   }
 
-  if(thisKey == thisShip.controlKeyForThrustRight && !thisShip.heyHeld_ThrustLeft) {
+  if(thisKey == thisShip.controlKeyForThrustRight) {
     thisShip.keyHeld_ThrustRight = setTo;
   }
 
