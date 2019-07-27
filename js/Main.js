@@ -6,7 +6,6 @@ var canvas, canvasContext, bg, bgContext;
 var starField = [];
 
 var p1 = new shipClass();
-var particleList = [];
 
 document.onvisibilitychange = function() {
 	lastFrame = performance.now() - UPDATE_INTERVAL;
@@ -56,6 +55,7 @@ function moveAll() {
     p1.isCollidingCircle(enemyList[i]);
   }
 
+  removeDeadParticles();
   for (var n=0; n<particleList.length; n++) {
     particleList[n].move();
   }
@@ -82,8 +82,12 @@ function drawAll() {
 function resetGame() {
   currentScore = 0;
   newHighScoreIndex = -1;
+
   particleList.length = 0;
+  particlePool.length = 0;
+
   enemyList.length = 0;
+  enemyPool.length = 0;
   p1.init(playerPic);
   spawnWave(wave3);
 }

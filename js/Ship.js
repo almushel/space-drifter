@@ -38,6 +38,9 @@ function shipClass() {
 	this.keyHeld_ThrustRight = false;
 	this.keyHeld_Fire = false;
 
+	this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
+	this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
+
 	// key controls used for this
 	this.setupControls = function(forwardKey, leftKey, rightKey, leftThrust, rightThrust, fireKey) {
 		this.controlKeyForGas = forwardKey;
@@ -124,36 +127,26 @@ function shipClass() {
 			this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
 			this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
 			
-			var tParticle = new particleClass();
-			tParticle.randomReset(this.x - Math.cos(this.ang) * 17, this.y - Math.sin(this.ang) * 17, '#6DC2FF', '#6DC2FF', '#6DC2FF');
-			tParticle.xv = -this.xv;
-			tParticle.yv = -this.yv;
-			particleList.push(tParticle);
-		} 
+			this.rearThrustEmitter.emitDirection(-this.xv, -this.yv);
+		}
 		
 		if (this.keyHeld_ThrustLeft && this.thrust > 0) {
 			this.thrust -= THRUST_CONSUMPTION * deltaT;
-			var tAng = this.ang - Math.PI/2
+			
+			let tAng = this.ang - Math.PI/2
 			this.xv += Math.cos(tAng) * (LATERAL_THRUST * deltaT);
 			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
 
-			var tParticle = new particleClass();
-			tParticle.randomReset(this.x - Math.cos(tAng), this.y - Math.sin(tAng), '#6DC2FF', '#6DC2FF', '#6DC2FF');
-			tParticle.xv = -Math.cos(tAng) * 5;
-			tParticle.yv = -Math.sin(tAng) * 5;
-			particleList.push(tParticle);
+			this.lateralThrustEmitter.emitDirection(-Math.cos(tAng) * 5, -Math.sin(tAng) * 5)	
 		}
 		if (this.keyHeld_ThrustRight && this.thrust > 0) {
 			this.thrust -= THRUST_CONSUMPTION * deltaT;
-			var tAng = this.ang + Math.PI/2
+			
+			let tAng = this.ang + Math.PI/2
 			this.xv += Math.cos(tAng) * (LATERAL_THRUST * deltaT);
 			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
 
-			var tParticle = new particleClass();
-			tParticle.randomReset(this.x - Math.cos(tAng), this.y - Math.sin(tAng), '#6DC2FF', '#6DC2FF', '#6DC2FF');
-			tParticle.xv = -Math.cos(tAng) * 5;
-			tParticle.yv = -Math.sin(tAng) * 5;
-			particleList.push(tParticle);
+			this.lateralThrustEmitter.emitDirection(-Math.cos(tAng) * 5, -Math.sin(tAng) * 5)	
 		}
 		
 		if (!this.keyHeld_Gas && !this.keyHeld_ThrustLeft && !this.keyHeld_ThrustRight && this.thrust < 100) {

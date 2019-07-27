@@ -1,58 +1,3 @@
-const EXPLOSION_STARTING_PARTICLES = 12;
-const PARTICLE_MAX_START_RADIUS = 6;
-const PARTICLE_MIN_START_RADIUS = 3;
-const PARTICLE_SPEED = 10;
-const PARTICLE_SHRINK_RATE = 1;
-
-function explosionClass() {
-	this.splodeParticles = [];
-	
-	this.reset = function(color1, color2, color3) {
-		this.x = canvas.width/2;
-		this.y = canvas.height/1.5;
-		
-		this.firstColor = color1;
-		this.secondColor = color2;
-		this.thirdColor = color3;
-		
-		this.isDead = false;
-	}
-	
-	this.explodeNow = function(splodeX, splodeY){
-		for (i=0; i<EXPLOSION_STARTING_PARTICLES; i++){
-			var spawnParticle = new particleClass();
-			this.splodeParticles.push(spawnParticle);
-			this.splodeParticles[i].randomReset(splodeX, splodeY, this.firstColor, this.secondColor, this.thirdColor);
-		}
-	}
-
-	this.move = function() {
-		for (i=0; i<this.splodeParticles.length; i++)
-		{
-			this.splodeParticles[i].move();
-		}
-	}
-	
-	this.draw = function() {
-		for (i=0; i<this.splodeParticles.length; i++)
-		{
-			this.splodeParticles[i].draw();
-		}
-	}
-	
-	this.removeDeadParticles = function() {
-		if(this.splodeParticles.length > 0){
-			for (i=this.splodeParticles.length-1; i >= 0; i--) {
-				if (this.splodeParticles[i].isDead){
-					this.splodeParticles.splice(i, 1);
-				}
-			}
-		} else {
-			this.isDead = true;
-		}
-	}
-}
-
 function particleClass(){
 
 	this.randomReset = function(startX, startY, color1, color2, color3) {
@@ -105,7 +50,12 @@ function particleClass(){
 	
 	this.randomAngle = function() {
 		return Math.random() * 180/Math.PI
-	}
+    }
+    
+    this.setVelocity = function(xVel, yVel) {
+        this.xv = xVel;
+        this.yv = yVel;
+    }
 	
 	this.move = function() {
 		this.x += this.xv * deltaT;
