@@ -94,16 +94,16 @@ function shipClass() {
 			thisEnemy.die();
 		}
 		if (this.laserFiring) {
-			var xOffset = (Math.cos(this.ang) * 18) + (Math.cos(this.ang+Math.PI/2) * 4)
-			var xOffset = (Math.sin(this.ang) * 18) + (Math.sin(this.ang+Math.PI/2) * 4)
+			let xOffset = (Math.cos(this.ang) * 18) + (Math.cos(this.ang+Math.PI/2) * 4)
+			let yOffset = (Math.sin(this.ang) * 18) + (Math.sin(this.ang+Math.PI/2) * 4)
 			
-			if (circleRotRectIntersect(this.x + xOffset, this.y + xOffset, LASER_RANGE * (this.laserAnim/100), 32, this.ang, 
+			if (circleRotRectIntersect(this.x + xOffset, this.y + yOffset, LASER_RANGE * (this.laserAnim/100), 32, this.ang, 
 										thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
 				thisEnemy.die();
 			}
 		}
 
-		for (var i=0; i < this.shotList.length; i++) {
+		for (let i=0; i < this.shotList.length; i++) {
 			if(this.shotList[i].hitTest(thisEnemy)) {
 				thisEnemy.die();
 				this.shotList[i].reset(PLAYER_SHOT_SPEED, '#6DC2FF');
@@ -179,7 +179,7 @@ function shipClass() {
 			}
 		}
 			
-		for (var i=0; i < this.shotList.length; i++) {
+		for (let i=0; i < this.shotList.length; i++) {
 			this.shotList[i].move();
 		}
 	}
@@ -189,7 +189,7 @@ function shipClass() {
 			return;
 		}
 
-		for(var i=0; i < this.shotList.length; i++) {
+		for(let i=0; i < this.shotList.length; i++) {
 			if (this.shotList[i].isReadyToFire()){
 				this.weaponHeat += 20;
 				if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
@@ -224,14 +224,13 @@ function shipClass() {
 		canvasContext.shadowColor = '#6DC2FF';
 		canvasContext.translate(this.x, this.y);
 		canvasContext.rotate(this.ang);
-		//drawLine(startX, startY, endX, endY, width, color)
 		drawLine(18, -4, laserLength, -4, laserWidth, '#6DC2FF');
 		drawLine(18, 3, laserLength, 3, laserWidth, '#6DC2FF');
 		canvasContext.restore();
 	}
 	  
 	this.draw = function() {
-		for (var i=0; i<this.shotList.length; i++) {
+		for (let i=0; i<this.shotList.length; i++) {
 			this.shotList[i].draw();
 		}
 

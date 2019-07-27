@@ -11,15 +11,15 @@ var wave3 = [2,2,2,1,2,2,2,2,2];
 var wave3 = [3,3,3,3,3,3];
 
 function spawnWave(waveList) {
-    for (var i=0; i< waveList.length; i++) {
-        var newEnemy = spawnEnemy(waveList[i])
+    for (let i=0; i< waveList.length; i++) {
+        let newEnemy = spawnEnemy(waveList[i])
         newEnemy.init();
     }
 }
 
 function spawnEnemy(type) {
     //Check for enemy of same type in object pool
-    for (var p=enemyPool.length-1; p>=0; p--) {
+    for (let p=enemyPool.length-1; p>=0; p--) {
         if (enemyPool[p].name == getName(type)) {
             enemyList.push(enemyPool[p]);
             enemyPool.splice(p, 1);
@@ -27,7 +27,7 @@ function spawnEnemy(type) {
         }
     }
 
-    var newEnemy = enemySelect(type);
+    let newEnemy = enemySelect(type);
     enemyList.push(newEnemy);
     return newEnemy;
 }
@@ -51,23 +51,23 @@ function enemySelect(type) {
     var whichEnemy;
     switch (type) {
         case ENEMY_UFO:
-            var whichEnemy = new ufoClass();
+            whichEnemy = new ufoClass();
             whichEnemy.init();
             break;
         case ENEMY_TRACKER:
-            var whichEnemy = new trackerClass();
+            whichEnemy = new trackerClass();
             whichEnemy.init();
             break;
         case ENEMY_DRIFTER:
-            var whichEnemy = new drifterClass();
+            whichEnemy = new drifterClass();
             whichEnemy.init();
             break;
         case ENEMY_TURRET:
-             var whichEnemy = new turretClass();
-                whichEnemy.init();
+            whichEnemy = new turretClass();
+            whichEnemy.init();
                  break;
         default:
-            var whichEnemy = new ufoClass();
+            whichEnemy = new ufoClass();
             whichEnemy.init();
             break;
     }
@@ -79,7 +79,7 @@ function getClearSpawn(spawner) {
     var checkX = Math.random() * canvas.width,
         checkY = Math.random() * canvas.height;
 
-    for (var i = 0; i<enemyList.length; i++) {
+    for (let i = 0; i<enemyList.length; i++) {
         if (doCirclesOverlap(checkX, checkY, spawner.collisionRadius, 
                                 enemyList[i].x, enemyList[i].y, enemyList[i].collisionRadius)) {
             checkX -= enemyList[i].x - checkX;
@@ -96,7 +96,7 @@ function getClearSpawn(spawner) {
 }
 
 function removeDead() {
-    for (var i=enemyList.length-1; i>=0; i--) {
+    for (let i=enemyList.length-1; i>=0; i--) {
         if (enemyList[i].isDead) {
             let newSplode = new explosionClass();
             newSplode.reset('white', 'dimgrey', 'lightblue');
@@ -110,8 +110,8 @@ function removeDead() {
 
 function divideDrifter(whichDrifter) {
     var randAng = Math.random() * (Math.PI*2);
-    for (var s=0; s<3; s++) {
-        var childDrifter = spawnEnemy(ENEMY_DRIFTER);
+    for (let s=0; s<3; s++) {
+        let childDrifter = spawnEnemy(ENEMY_DRIFTER);
         childDrifter.reset();
         randAng += (Math.PI/1.5);
 

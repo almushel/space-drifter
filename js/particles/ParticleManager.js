@@ -22,12 +22,11 @@ function instantiateParticle() {
 
 function removeDeadParticles() {
 	if(particleList.length > 0) {
-		for (i=particleList.length-1; i >= 0; i--) {
+		for (let i=particleList.length-1; i >= 0; i--) {
 			if (particleList[i].isDead){
 				particlePool.push(particleList[i])
 				particleList.splice(i, 1);
 			}
 		}
     }
-    console.log(particlePool.length);
 }

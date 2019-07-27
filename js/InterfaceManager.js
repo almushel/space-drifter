@@ -56,7 +56,7 @@ function drawPlayerLives() {
     canvasContext.shadowBlur = 3;
     drawPolygon(canvas.width - 100, canvas.height - 30, livesBG, '#383838', true);
     canvasContext.shadowColor = 'black';
-    for (var l=0; l<p1.lives; l++) {
+    for (let l=0; l<p1.lives; l++) {
         canvasContext.save();
         canvasContext.translate(canvas.width - 30 - (l * 30), canvas.height -5);
         canvasContext.rotate(-Math.PI/2);
@@ -70,7 +70,7 @@ function drawThrustMeter() {
     if (p1.thrust > 0) {
         tmColorOuter = 'grey';
     } else {
-        tmColorOuter = 'grey';
+        tmColorOuter = 'orange';
     }
     canvasContext.save();
     canvasContext.shadowColor = 'black';
@@ -197,7 +197,7 @@ function drawScoreTable() {
 
     hsTable = JSON.parse(localStorage.sdHighScoreTable);
     
-    for (var h=0; h<HIGH_SCORE_TABLE_LENGTH; h++) {
+    for (let h=0; h<HIGH_SCORE_TABLE_LENGTH; h++) {
         colorAlignedText(canvas.width/2 - canvas.width/10, yOffset + 50 + (25 * h), 'left', 'bold 20px Orbitron', 'white', (h+1));
         colorAlignedText(canvas.width/2 + canvas.width/10, yOffset + 50 + (25 * h), 'right', 'bold 20px Orbitron', 'white', hsTable[h]);
     }

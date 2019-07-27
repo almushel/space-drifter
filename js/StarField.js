@@ -7,7 +7,7 @@ var twinkles = [];
 function createStarField() {
     starField.length = canvas.width * canvas.height;
   
-    for (var i=0; i<starField.length; i++) {
+    for (let i=0; i<starField.length; i++) {
       var randNum = Math.random() * 300
       if (randNum < 1) {
         starField[i] = Math.floor(randNum * 10); 
@@ -20,7 +20,7 @@ function createStarField() {
 }
 
 function generateTwinkles() {
-  for (var i=0; i<200; i++) {
+  for (let i=0; i<200; i++) {
     var randX = Math.floor(Math.random() * bg.width);
     var randY = Math.floor(Math.random() * bg.height);
     if (starField[randX * bg.height + randY] == 0) {
@@ -74,8 +74,8 @@ function getStarColor(value) {
 
 function drawStarField() {
   bgColorRect(0,0, bg.width, bg.height, '#000a30');
-    for (var x=0; x<bg.width; x++) {
-      for (var y=0; y<bg.height; y++) {
+    for (let x=0; x<bg.width; x++) {
+      for (let y=0; y<bg.height; y++) {
         if (starField[x*bg.height + y] != 0) {
           bgColorRect(x, y, 1, 1, getStarColor(starField[x*bg.height + y]));
         }//End of if

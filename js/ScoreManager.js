@@ -83,10 +83,5 @@ function updateScoreTable() {
             break;
         }
     }
-
-/*  hsTable.push(currentScore);
-    hsTable.sort(function(a, b) {return b-a});
-    hsTable.pop();
-*/
     localStorage.sdHighScoreTable = JSON.stringify(hsTable);
 }

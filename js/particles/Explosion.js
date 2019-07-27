@@ -14,7 +14,7 @@ function explosionClass() {
 	}
 	
 	this.explodeNow = function(splodeX, splodeY){
-		for (i=0; i<EXPLOSION_STARTING_PARTICLES; i++){
+		for (let p=0; p<EXPLOSION_STARTING_PARTICLES; p++){
 			let spawnParticle = instantiateParticle();
 			spawnParticle.randomReset(splodeX, splodeY, this.firstColor, this.secondColor, this.thirdColor);
 		}

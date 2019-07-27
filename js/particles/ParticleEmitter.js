@@ -5,7 +5,6 @@ function particleEmitter(myParent, offsetAng, offsetDist, density, color1, color
         this.y = 0;
         this.ang = 0;
         parent = this;
-        console.log(parent);
     } else {
         parent = myParent;
     }
