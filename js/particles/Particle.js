@@ -11,8 +11,8 @@ function particleClass(){
 		this.x = startX;
 		this.y = startY;
 		
-		this.xv = PARTICLE_SPEED - Math.random() * 20;
-		this.yv = PARTICLE_SPEED - Math.random() * 20;
+		this.xv = Math.cos(this.ang) * PARTICLE_SPEED;
+		this.yv = Math.sin(this.ang) * PARTICLE_SPEED;
 	}
 	
 	this.reset = function(startX, startY) {
@@ -50,7 +50,15 @@ function particleClass(){
 	
 	this.randomAngle = function() {
 		return Math.random() * 180/Math.PI
-    }
+	}
+	
+	this.getAng = function() {
+		return this.ang;
+	}
+
+	this.setAng = function(newAng) {
+		this.ang = newAng;
+	}
     
     this.setVelocity = function(xVel, yVel) {
         this.xv = xVel;

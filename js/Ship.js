@@ -162,7 +162,7 @@ function shipClass() {
 			if (this.laserAnim <= 100) {
 				this.laserAnim += 10 + deltaT;
 			} else {
-				this.laseranim = 100;
+				this.laserAnim = 100;
 			}
 		}
 			
