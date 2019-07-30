@@ -1,7 +1,4 @@
-const PARTICLE_MAX_START_RADIUS = 6;
-const PARTICLE_MIN_START_RADIUS = 3;
-const PARTICLE_SPEED = 10;
-const PARTICLE_SHRINK_RATE = 1;
+const EXPLOSION_STARTING_PARTICLES = 12;
 
 var particleList = [];
 var particlePool = [];
@@ -18,6 +15,13 @@ function instantiateParticle() {
 	}
 	
 	return particle;
+}
+
+function explodeAtPoint(splodeX, splodeY, color1, color2, color3){
+	for (let p=0; p<EXPLOSION_STARTING_PARTICLES; p++){
+		let spawnParticle = instantiateParticle();
+		spawnParticle.randomReset(splodeX, splodeY, color1, color2, color3);
+	}
 }
 
 function removeDeadParticles() {

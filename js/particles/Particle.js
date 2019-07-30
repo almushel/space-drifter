@@ -1,3 +1,8 @@
+const PARTICLE_MAX_START_RADIUS = 6;
+const PARTICLE_MIN_START_RADIUS = 3;
+const PARTICLE_SPEED = 10;
+const PARTICLE_SHRINK_RATE = 1;
+
 function particleClass(){
 
 	this.randomReset = function(startX, startY, color1, color2, color3) {
@@ -77,7 +82,7 @@ function particleClass(){
 		} else {
 			colorCircle(this.x, this.y, this.radius, this.color);
 			if (Math.random() * 100 > 50){
-				this.radius -= 1 * deltaT;
+				this.radius -= PARTICLE_SHRINK_RATE * deltaT;
 			}
 		}
 	}

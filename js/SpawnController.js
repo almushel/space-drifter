@@ -98,10 +98,7 @@ function getClearSpawn(spawner) {
 function removeDead() {
     for (let i=enemyList.length-1; i>=0; i--) {
         if (enemyList[i].isDead) {
-            let newSplode = new explosionClass();
-            newSplode.reset('white', 'dimgrey', 'lightblue');
-            newSplode.explodeNow(enemyList[i].x, enemyList[i].y);
-
+            explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'dimgrey', 'lightblue')
             enemyPool.push(enemyList[i]);
             enemyList.splice(i, 1);
         }
