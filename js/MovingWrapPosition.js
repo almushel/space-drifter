@@ -2,7 +2,8 @@
 class WrapPosition {
 
 	constructor() {
-		this.collisionRadius = 20;  
+		this.collisionRadius = 20; 
+		this.isDead = false;
 	}
 	
 	reset() {

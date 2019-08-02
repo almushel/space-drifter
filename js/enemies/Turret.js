@@ -1,5 +1,8 @@
 const TURRET_RADIUS = 15;
 const TURRET_SHOT_MAX = 1;
+const TURRET_SHOT_RADIUS = 6;
+const TURRET_SHOT_SPEED = 2;
+const TURRET_SHOT_LIFE = 160;
 const TURRET_AIM_TOLERANCE = 15;
 const TURRET_TURN_SPEED = Math.PI/300;
 const TURRET_FIRE_ANIM_SPEED = 5; //1 second
@@ -18,7 +21,13 @@ class Turret extends WrapPosition {
     
         this.fTimer = 0; //Fire animation
         this.rTimer = 0; //Recovery animation
-        this.fireOffset = 2;
+        this.fireOffset = 2;//Animation offset multiplier
+
+        
+		for (var i=0; i < TURRET_SHOT_MAX; i++) {
+            let newShot = new Projectile(TURRET_SHOT_SPEED, 'red', TURRET_SHOT_RADIUS, TURRET_SHOT_LIFE);
+			this.shotList.push(newShot);
+		}
     }
 
     reset() {
@@ -29,13 +38,6 @@ class Turret extends WrapPosition {
 		this.y = newPos.y;
 
         this.aimAng = Math.random() * (Math.PI*2);
-        if (this.shotList.length < TURRET_SHOT_MAX) {
-			for (var i=0; i < TURRET_SHOT_MAX; i++) {
-                var newShot = new Projectile();
-				newShot.reset(TURRET_SHOT_SPEED, 'red');
-				this.shotList.push(newShot);
-			}
-		}
     }
 
     move() {
@@ -48,6 +50,10 @@ class Turret extends WrapPosition {
 
         for (var s=0; s<this.shotList.length; s++) {
             this.shotList[s].move();
+            if(this.shotList[s].hitTest(p1)) {
+                p1.die();
+                this.shotList[s].die();
+            }
         }
     }
 

@@ -5,7 +5,7 @@ var currentFrame, lastFrame, deltaT;
 var canvas, canvasContext, bg, bgContext;
 var starField = [];
 
-var p1 = new Ship();
+var p1 = new Ship(playerPic);
 
 document.onvisibilitychange = function() {
 	lastFrame = performance.now() - UPDATE_INTERVAL;
@@ -88,6 +88,6 @@ function resetGame() {
 
   enemyList.length = 0;
   enemyPool.length = 0;
-  p1.init(playerPic);
+  p1.reset();
   spawnWave(currentWave);
 }
