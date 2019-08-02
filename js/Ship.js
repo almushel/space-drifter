@@ -11,38 +11,39 @@ const SHIP_RADIUS = 13;
 const PLAYER_STARTING_LIVES = 3;
 const LASER_RANGE = 400;
 
-shipClass.prototype = new movingWrapPositionClass();
-
-function shipClass() {
-  // variables to keep track of position
-	this.x = 75;
-	this.y = 75;
-	this.xv = 0;
-	this.yv = 0;
-	this.collisionRadius = SHIP_RADIUS;
-	this.lives = PLAYER_STARTING_LIVES;
-	  
-	this.name = 'player';
-	this.shotList = [];
-	this.canShoot = true;
-	this.laserAnim = 0;
-	this.laserFiring = false;
-	this.thrust = THRUST_MAX;
-	this.weaponHeat = 0;
-
-	// keyboard hold state variables, to use keys more like buttons
-	this.keyHeld_Gas = false;
-	this.keyHeld_TurnLeft = false;
-	this.keyHeld_TurnRight = false;
-	this.keyHeld_ThrustLeft = false;
-	this.keyHeld_ThrustRight = false;
-	this.keyHeld_Fire = false;
-
-	this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
-	this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
+class Ship extends WrapPosition {
+	constructor() {
+		super();
+		
+		this.x = 75;
+		this.y = 75;
+		this.xv = 0;
+		this.yv = 0;
+		this.collisionRadius = SHIP_RADIUS;
+		this.lives = PLAYER_STARTING_LIVES;
+		  
+		this.name = 'player';
+		this.shotList = [];
+		this.canShoot = true;
+		this.laserAnim = 0;
+		this.laserFiring = false;
+		this.thrust = THRUST_MAX;
+		this.weaponHeat = 0;
+	
+		// keyboard hold state variables, to use keys more like buttons
+		this.keyHeld_Gas = false;
+		this.keyHeld_TurnLeft = false;
+		this.keyHeld_TurnRight = false;
+		this.keyHeld_ThrustLeft = false;
+		this.keyHeld_ThrustRight = false;
+		this.keyHeld_Fire = false;
+	
+		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
+		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
+	}
 
 	// key controls used for this
-	this.setupControls = function(forwardKey, leftKey, rightKey, leftThrust, rightThrust, fireKey) {
+	setupControls(forwardKey, leftKey, rightKey, leftThrust, rightThrust, fireKey) {
 		this.controlKeyForGas = forwardKey;
 		this.controlKeyForTurnLeft = leftKey;
 		this.controlKeyForTurnRight = rightKey;
@@ -51,15 +52,14 @@ function shipClass() {
 		this.controlKeyForCannonFire = fireKey;
 	}
 
-	this.init = function(whichGraphic) {
+	init(whichGraphic) {
 		this.myBitmap = whichGraphic;
 		this.lives = PLAYER_STARTING_LIVES;
 		this.reset();
 	}
 
-	this.superClassReset = this.reset;
-	this.reset = function() {
-		this.superClassReset();
+	reset() {
+		super.reset();
 		this.resetKeysHeld();
 		this.ang = -0.5 * Math.PI;
 		this.thrust = THRUST_MAX;
@@ -68,14 +68,14 @@ function shipClass() {
 		this.laserFiring = false;
 		if (this.shotList.length < SHOT_MAX) {
 			for (var i=0; i < SHOT_MAX; i++) {
-				var newShot = new shotClass();
+				var newShot = new Projectile();
 				newShot.reset(PLAYER_SHOT_SPEED, '#6DC2FF');
 				this.shotList.push(newShot);
 			}
 		}
 	} // end of reset
 
-	this.resetKeysHeld = function() {
+	resetKeysHeld() {
 		this.keyHeld_Gas = false;
 		this.keyHeld_TurnLeft = false;
 		this.keyHeld_TurnRight = false;
@@ -84,9 +84,10 @@ function shipClass() {
 		this.keyHeld_Fire = false;
 	}
 	  
-	this.checkShipAndShotCollisionAgainst = function(thisEnemy) {
-		if(thisEnemy.isCollidingCircle(this)) {
+	checkShipAndShotCollisionAgainst(thisEnemy) {
+		if(thisEnemy.bumpCollision(this)) {
 			this.lives--;
+			explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF');
 			this.reset();
 			if (this.lives <= 0) {
 				endGame();
@@ -112,8 +113,7 @@ function shipClass() {
 		}
 	}
 	  
-	this.superClassMove = this.move;
-	this.move = function() {
+	move() {
 		if(this.keyHeld_TurnLeft) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;
 		}
@@ -154,8 +154,8 @@ function shipClass() {
 		}
 
 		if (this.keyHeld_Fire) {
-			//this.fireCannon();
-			this.fireLaser();
+			this.fireCannon();
+			//this.fireLaser();
 		}
 
 		if (this.laserFiring) {
@@ -166,7 +166,7 @@ function shipClass() {
 			}
 		}
 			
-		this.superClassMove();
+		super.move();
 			
 		this.xv *= 1 - SPACE_FRICTION * deltaT;
 		this.yv *= 1 - SPACE_FRICTION * deltaT;
@@ -184,7 +184,7 @@ function shipClass() {
 		}
 	}
 	  
-	this.fireCannon = function() {
+	fireCannon() {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
@@ -202,7 +202,7 @@ function shipClass() {
 		}
 	}
 
-	this.fireLaser = function() {
+	fireLaser() {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
@@ -215,7 +215,7 @@ function shipClass() {
 		setTimeout(function (self) {self.laserFiring = false; self.laserAnim = 0;}, 200, this);
 	}
 
-	this.drawLaser = function() {
+	drawLaser() {
 		var laserInterp = this.laserAnim/100;
 		var laserLength = laserInterp * LASER_RANGE;
 		var laserWidth = laserInterp * 3;
@@ -229,7 +229,7 @@ function shipClass() {
 		canvasContext.restore();
 	}
 	  
-	this.draw = function() {
+	draw() {
 		for (let i=0; i<this.shotList.length; i++) {
 			this.shotList[i].draw();
 		}

@@ -5,7 +5,8 @@ var currentFrame, lastFrame, deltaT;
 var canvas, canvasContext, bg, bgContext;
 var starField = [];
 
-var p1 = new shipClass();
+var p1 = new Ship();
+var currentWave = wave2;
 
 document.onvisibilitychange = function() {
 	lastFrame = performance.now() - UPDATE_INTERVAL;
@@ -48,11 +49,11 @@ function moveAll() {
     enemyList[i].move();
 
     for(var e=i+1; e<enemyList.length; e++) {
-      enemyList[i].isCollidingCircle(enemyList[e]);
+      enemyList[i].bumpCollision(enemyList[e]);
     }
     
     p1.checkShipAndShotCollisionAgainst(enemyList[i]);
-    p1.isCollidingCircle(enemyList[i]);
+    p1.bumpCollision(enemyList[i]);
   }
 
   removeDeadParticles();
@@ -89,5 +90,5 @@ function resetGame() {
   enemyList.length = 0;
   enemyPool.length = 0;
   p1.init(playerPic);
-  spawnWave(wave3);
+  spawnWave(currentWave);
 }

@@ -4,24 +4,24 @@ const TURRET_SHOT_SPEED = 3;
 const SHOT_LIFE = 80;
 const SHOT_DISPLAY_RADIUS = 2.5;
 
-shotClass.prototype = new movingWrapPositionClass();
+class Projectile extends WrapPosition {
+	constructor() {
+		super();
+		this.collisionRadius = SHOT_DISPLAY_RADIUS;
+	}
 
-function shotClass() {
-	this.collisionRadius = SHOT_DISPLAY_RADIUS;
-
-	this.superClassReset = this.reset;
-	this.reset = function(speed, color) {
-		this.superClassReset();
+	reset(speed, color) {
+		super.reset();
 		this.shotLife = 0;
 		this.shotSpeed = speed;
 		this.color = color;
 	} // end of reset
 	  
-	this.isReadyToFire = function() {
+	isReadyToFire() {
 		return (this.shotLife <= 0);
 	}
 	  
-	this.shootFrom = function (shipFiring) {
+	shootFrom (shipFiring) {
 		this.x = shipFiring.x;
 		this.y = shipFiring.y;
 			
@@ -31,23 +31,22 @@ function shotClass() {
 		this.shotLife = SHOT_LIFE;
 	}
 	  
-	this.hitTest = function(thisEnemy) {
+	hitTest(thisEnemy) {
 		if (this.shotLife <= 0) {
 			return false;
 		} else {
-			return thisEnemy.isCollidingCircle(this);
+			return thisEnemy.bumpCollision(this);
 		}
 	}
 	  
-	this.superClassMove = this.move;
-	this.move = function() {
+	move() {
 		if(this.shotLife > 0) {
 			this.shotLife -= deltaT;
-			this.superClassMove();
+			super.move();
 		}
 	}
 	  
-	this.draw = function() {
+	draw() {
 		if(this.shotLife > 0) {
 			colorCircle(this.x, this.y, SHOT_DISPLAY_RADIUS, this.color);
 		}

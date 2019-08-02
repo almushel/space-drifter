@@ -3,9 +3,22 @@ const PARTICLE_MIN_START_RADIUS = 3;
 const PARTICLE_SPEED = 10;
 const PARTICLE_SHRINK_RATE = 1;
 
-function particleClass(){
+class Particle {
+	constructor() {
+		this.ang = 0;
+		this.radius = 12;
+		this.color = 'white';
+		
+		this.isDead = false;
+		
+		this.x = 400;
+		this.y = 300;
+		
+		this.xv = 0;
+		this.yv = 0;
+	}
 
-	this.randomReset = function(startX, startY, color1, color2, color3) {
+	randomReset(x, y, color1, color2, color3) {
 		
 		this.ang = this.randomAngle();
 		this.radius = this.randomRadius();
@@ -13,28 +26,14 @@ function particleClass(){
 		
 		this.isDead = false;
 		
-		this.x = startX;
-		this.y = startY;
+		this.x = x;
+		this.y = y;
 		
 		this.xv = Math.cos(this.ang) * PARTICLE_SPEED;
 		this.yv = Math.sin(this.ang) * PARTICLE_SPEED;
 	}
 	
-	this.reset = function(startX, startY) {
-		this.ang = 0;
-		this.radius = 12;
-		this.color = 'white';
-		
-		this.isDead = false;
-		
-		this.x = startX;
-		this.y = startY;
-		
-		this.xv = 0;
-		this.yv = 0;
-	}
-	
-	this.randomColor = function(firstColor, secondColor, thirdColor) {
+	randomColor(firstColor, secondColor, thirdColor) {
 		var newColor = Math.floor(Math.random() * 4);
 		if (newColor == 1){
 			return firstColor;
@@ -47,36 +46,35 @@ function particleClass(){
 		}
 	}
 	
-	this.randomRadius = function() {
+	randomRadius() {
 		var newRadius = PARTICLE_MIN_START_RADIUS + Math.floor(Math.random() * (PARTICLE_MAX_START_RADIUS - PARTICLE_MIN_START_RADIUS));
 		
 		return newRadius;
 	}
 	
-	this.randomAngle = function() {
+	randomAngle() {
 		return Math.random() * 180/Math.PI
 	}
 	
-	this.getAng = function() {
+	getAng() {
 		return this.ang;
 	}
 
-	this.setAng = function(newAng) {
+	setAng(newAng) {
 		this.ang = newAng;
 	}
     
-    this.setVelocity = function(xVel, yVel) {
+    setVelocity(xVel, yVel) {
         this.xv = xVel;
         this.yv = yVel;
     }
 	
-	this.move = function() {
+	move() {
 		this.x += this.xv * deltaT;
 		this.y += this.yv * deltaT;
 	}
 	
-	this.draw = function() {
-
+	draw() {
 		if (this.radius <= 0){
 			this.isDead = true;
 		} else {

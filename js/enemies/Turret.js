@@ -5,24 +5,24 @@ const TURRET_TURN_SPEED = Math.PI/300;
 const TURRET_FIRE_ANIM_SPEED = 5; //1 second
 const TURRET_RECOVERY_ANIM_SPEED = 30; //2 seconds
 
-turretClass.prototype = new movingWrapPositionClass();
-
-function turretClass() {
-    this.xv = 0;
-    this.yv = 0;
-    this.ang = 0;
-    this.shotList = [];
-    this.collisionRadius = TURRET_RADIUS;
-    this.firing = false;
-    this.recovering = false;
-
-    this.fTimer = 0; //Fire animation
-    this.rTimer = 0; //Recovery animation
-    this.fireOffset = 2;
+class Turret extends WrapPosition {
+    constructor() {
+        super();
+        this.xv = 0;
+        this.yv = 0;
+        this.ang = 0;
+        this.shotList = [];
+        this.collisionRadius = TURRET_RADIUS;
+        this.firing = false;
+        this.recovering = false;
     
-    this.superClassReset = this.reset;
-    this.reset = function() {
-        this.superClassReset();
+        this.fTimer = 0; //Fire animation
+        this.rTimer = 0; //Recovery animation
+        this.fireOffset = 2;
+    }
+
+    reset() {
+        super.reset();
 
 		var newPos = getClearSpawn(this);
 		this.x = newPos.x;
@@ -31,16 +31,15 @@ function turretClass() {
         this.aimAng = Math.random() * (Math.PI*2);
         if (this.shotList.length < TURRET_SHOT_MAX) {
 			for (var i=0; i < TURRET_SHOT_MAX; i++) {
-                var newShot = new shotClass();
+                var newShot = new Projectile();
 				newShot.reset(TURRET_SHOT_SPEED, 'red');
 				this.shotList.push(newShot);
 			}
 		}
     }
 
-    this.superClassMove = this.move;
-    this.move = function() {
-        this.superClassMove();
+    move() {
+        super.move();
         this.updateAim(p1);
         this.animate();
 
@@ -52,7 +51,7 @@ function turretClass() {
         }
     }
 
-    this.updateAim = function(target) {
+    updateAim(target) {
 		var deltaX = target.x - this.x;
 		var deltaY = target.y - this.y;
 		
@@ -69,7 +68,7 @@ function turretClass() {
 		}
     }
 
-    this.fire = function() {
+    fire() {
         for(var i=0; i < this.shotList.length; i++) {
 			if (this.shotList[i].isReadyToFire()){
 				this.shotList[i].shootFrom(this);
@@ -79,7 +78,7 @@ function turretClass() {
         return false;
     }
 
-    this.prepareToFire = function() {
+    prepareToFire() {
         if (this.firing == false && this.recovering == false) {
             if (this.fire()) {
                 this.firing = true;
@@ -88,7 +87,7 @@ function turretClass() {
         }
     }
 
-    this.animate = function() {
+    animate() {
         if (this.firing == true) {
             this.fTimer -= deltaT;
             this.fireOffset = 1 + 1 * (this.fTimer / TURRET_FIRE_ANIM_SPEED);
@@ -109,7 +108,7 @@ function turretClass() {
         }
     }
 
-    this.draw = function() {
+    draw() {
         for (var s=0; s<this.shotList.length; s++) {
             this.shotList[s].draw();
         }

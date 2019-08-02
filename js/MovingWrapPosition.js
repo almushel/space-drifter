@@ -1,12 +1,11 @@
 
-function movingWrapPositionClass() {
-	this.collisionRadius = 20;  
+class WrapPosition {
 
-	this.init = function() {
-		this.reset();
+	constructor() {
+		this.collisionRadius = 20;  
 	}
 	
-	this.reset = function() {
+	reset() {
 		this.xv = 0;
 		this.yv = 0;
 		this.x = canvas.width/2;
@@ -14,7 +13,7 @@ function movingWrapPositionClass() {
 		this.isDead = false;
 	} // end of reset
 	  
-	this.handleScreenWrap = function() {
+	handleScreenWrap() {
 		if(this.y > canvas.height){
 			this.y -= canvas.height;
 		}
@@ -29,14 +28,14 @@ function movingWrapPositionClass() {
 		}
 	}
 	  
-	this.move = function() {
+	move() {
 		this.x += this.xv * deltaT;
 		this.y += this.yv * deltaT;
 				
 		this.handleScreenWrap();
 	}
 
-	this.isCollidingCircle = function(whichEntity) {
+	bumpCollision(whichEntity) {
 		var deltaX = whichEntity.x - this.x,
 			deltaY = whichEntity.y - this.y,
 			deltaR = deltaX * deltaX + deltaY * deltaY;
@@ -55,7 +54,7 @@ function movingWrapPositionClass() {
 		return false;
 	}
 
-	this.die = function() {
+	die() {
 		this.isDead = true;
 	}
 

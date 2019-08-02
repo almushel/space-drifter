@@ -2,25 +2,24 @@
 const DRIFT_RATE = 1;
 const DRIFT_RADIUS = 40;
 
-drifterClass.prototype = new movingWrapPositionClass();
-
-function drifterClass() {
-	this.name = 'drifter';
-	this.polyPoints = [];
-	this.radius = DRIFT_RADIUS;
-	this.collisionRadius = DRIFT_RADIUS;
-
-	this.init = function() {
-		this.reset();
-		this.generatePoly();
+class Drifter extends WrapPosition {
+	constructor() {
+		super();
+		this.polyPoints = [];
+		this.radius = DRIFT_RADIUS;
+		this.collisionRadius = DRIFT_RADIUS;
 	}
 	
-	this.superClassReset = this.reset;
-	this.reset = function() {
-		this.superClassReset();
+	reset(radius) {
+		super.reset();
+		if (radius == undefined || radius == null) {
+			this.radius = DRIFT_RADIUS;
+		} else {
+			this.radius = radius;
+		}
 		this.ang = 0;
 		
-		var newPos = getClearSpawn(this);
+		let newPos = getClearSpawn(this);
 		this.x = newPos.x;
 		this.y = newPos.y;
 
@@ -28,14 +27,16 @@ function drifterClass() {
 		this.xv = Math.cos(randAng)*DRIFT_RATE;
 		this.yv = Math.sin(randAng)*DRIFT_RATE;
 
+		this.generatePoly();
+
 	} // end of reset
 
-	this.generatePoly = function() {
+	generatePoly() {
 		this.polyPoints.length = 0;
 		var sides = 5 + Math.floor(Math.random()*4);
 		var colRadius = 0;
-		for (var i=0; i<sides; i++) {
-			var pointDist = this.radius/2 + Math.random() * this.radius/2,
+		for (let i=0; i<sides; i++) {
+			let pointDist = this.radius/2 + Math.random() * this.radius/2,
 				newAng = (Math.PI*2/sides)*i,
 				newX = Math.cos(newAng) * pointDist,
 				newY = Math.sin(newAng) * pointDist;
@@ -47,9 +48,8 @@ function drifterClass() {
 		this.collisionRadius = colRadius;
 	}
 	  
-	this.superClassMove = this.move; 
-	this.move = function() {
-		this.superClassMove();
+	move() {
+		super.move();
 		var magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
 
 		if (magnitude > DRIFT_RATE) {
@@ -58,14 +58,12 @@ function drifterClass() {
 		}
 	}
 
-	this.superClassDie = this.die;
-	this.die = function() {
-		this.superClassDie();
-		if (this.radius <= DRIFT_RADIUS/2) return;
-		divideDrifter(this);
+	die() {
+		if (this.radius > DRIFT_RADIUS/2) divideDrifter(this);
+		super.die();
 	}
 	
-	this.draw = function() {
+	draw() {
 		drawPolygon(this.x, this.y, this.polyPoints, 'dimgrey', true);
 
 		var wrapX = this.x;

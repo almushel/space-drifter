@@ -5,18 +5,16 @@ const TRACKER_TURN_RATE = Math.PI/90;
 const TRACKER_PRECISION = 0.05;
 const TRACKER_COLLISION_RADIUS = 18;
 
-trackerClass.prototype = new movingWrapPositionClass();
+class Tracker extends WrapPosition {
+	constructor() {
+		super();
+		picAngOffset = Math.PI/2;
+		this.myBitmap = trackerPic;
+		this.collisionRadius = TRACKER_COLLISION_RADIUS;
+	}
 
-function trackerClass() {
-	var picAngOffset = Math.PI/2;
-	
-	this.name = 'tracker';
-	this.myBitmap = trackerPic;
-	this.collisionRadius = TRACKER_COLLISION_RADIUS;
-	
-	this.superClassReset = this.reset;
-	this.reset = function() {
-		this.superClassReset();
+	reset() {
+		super.reset();
 		this.ang = 0;
 		this.targetAng = 0;
 		
@@ -25,9 +23,8 @@ function trackerClass() {
 		this.y = newPos.y;
 	} // end of reset
 	  
-	this.superClassMove = this.move; 
-	this.move = function() {
-		this.superClassMove();
+	move() {
+		super.move();
 
 		this.targetAng = Math.atan2(p1.y - this.y, p1.x - this.x);//Angle to player
 		if (this.targetAng < 0) {
@@ -54,7 +51,7 @@ function trackerClass() {
 		this.yv *= 1 - TRACKER_FRICTION * deltaT;
 	  }
 	  
-	this.draw = function() {
+	draw() {
 		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
 		
 		var wrapX = this.x;

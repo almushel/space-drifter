@@ -6,7 +6,7 @@ var particlePool = [];
 function instantiateParticle() {
 	var particle;
 	if (particlePool.length < 1) {
-		particle = new particleClass();
+		particle = new Particle();
 		particleList.push(particle)
 	} else {
 		particle = particlePool[particlePool.length-1];
