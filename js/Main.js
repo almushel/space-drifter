@@ -6,7 +6,6 @@ var canvas, canvasContext, bg, bgContext;
 var starField = [];
 
 var p1 = new Ship();
-var currentWave = wave2;
 
 document.onvisibilitychange = function() {
 	lastFrame = performance.now() - UPDATE_INTERVAL;

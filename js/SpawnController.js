@@ -8,7 +8,9 @@ var enemyPool = [];
 var wave1 = [0,0,0,0];
 var wave2 = [2,2,2,2,2,2,2,2,2];
 var wave3 = [2,2,2,1,2,2,2,2,2];
-var wave3 = [3,3,3,3,3,3];
+var wave4 = [3,3,3,3,3,3];
+
+var currentWave = wave3;
 
 function spawnWave(waveList) {
     for (let i=0; i< waveList.length; i++) {

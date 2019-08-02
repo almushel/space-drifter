@@ -8,7 +8,6 @@ const TRACKER_COLLISION_RADIUS = 18;
 class Tracker extends WrapPosition {
 	constructor() {
 		super();
-		picAngOffset = Math.PI/2;
 		this.myBitmap = trackerPic;
 		this.collisionRadius = TRACKER_COLLISION_RADIUS;
 	}
@@ -52,7 +51,7 @@ class Tracker extends WrapPosition {
 	  }
 	  
 	draw() {
-		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang+picAngOffset);
+		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), this.ang);
 		
 		var wrapX = this.x;
 		var wrapY = this.y;
@@ -70,13 +69,13 @@ class Tracker extends WrapPosition {
 		}
 
 		if (wrapX != this.x) {
-			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(this.y), this.ang + picAngOffset);
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(this.y), this.ang);
 		}
 		if (wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(wrapY), this.ang + picAngOffset);
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(wrapY), this.ang);
 		}
 		if (wrapX != this.x && wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang + picAngOffset);
+			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), this.ang);
 		}
 		
 		//For testing turning behavior
