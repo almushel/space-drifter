@@ -58,10 +58,13 @@ class Turret extends WrapPosition {
     }
 
     updateAim(target) {
-		var deltaX = target.x - this.x;
-		var deltaY = target.y - this.y;
+        if (target.isDead) {
+            return;
+        }
+        let deltaX = target.x - this.x;
+		let deltaY = target.y - this.y;
 		
-		var turnAngDelta = deltaX*Math.sin(this.ang) - deltaY*Math.cos(this.ang);
+		let turnAngDelta = deltaX*Math.sin(this.ang) - deltaY*Math.cos(this.ang);
 
 		if (turnAngDelta < 0){
 			this.ang += TURRET_TURN_SPEED * deltaT;
@@ -75,7 +78,7 @@ class Turret extends WrapPosition {
     }
 
     fire() {
-        for(var i=0; i < this.shotList.length; i++) {
+        for(let i=0; i < this.shotList.length; i++) {
 			if (this.shotList[i].isReadyToFire()){
 				this.shotList[i].shootFrom(this);
 				return true;
@@ -115,35 +118,39 @@ class Turret extends WrapPosition {
     }
 
     draw() {
-        for (var s=0; s<this.shotList.length; s++) {
+        for (let s=0; s<this.shotList.length; s++) {
             this.shotList[s].draw();
         }
-        
-        var cannonOffsetX = -(Math.cos(this.ang) * TURRET_RADIUS*2) + Math.cos(this.ang) * (TURRET_RADIUS * this.fireOffset),
+        this.drawSprite(this.x, this.y);
+        this.drawWrap();
+    }
+
+    drawSprite(x, y) {
+        let cannonOffsetX = -(Math.cos(this.ang) * TURRET_RADIUS*2) + Math.cos(this.ang) * (TURRET_RADIUS * this.fireOffset),
             cannonOffsetY = -(Math.sin(this.ang) * TURRET_RADIUS*2) + Math.sin(this.ang) * (TURRET_RADIUS * this.fireOffset),
             halfRad = TURRET_RADIUS/2;
-        
+    
 
-        colorCircle(this.x, this.y, TURRET_RADIUS, 'dimgrey');
+        colorCircle(x, y, TURRET_RADIUS, 'dimgrey');
 
         canvasContext.save();
-        canvasContext.translate(this.x, this.y);
+        canvasContext.translate(x, y);
         canvasContext.rotate(this.ang)
         colorRect(-TURRET_RADIUS/2, -TURRET_RADIUS, TURRET_RADIUS/2, TURRET_RADIUS*2, '#494949');
         canvasContext.restore();
 
         canvasContext.save();
-        canvasContext.translate(this.x + cannonOffsetX, this.y + cannonOffsetY);
+        canvasContext.translate(x + cannonOffsetX, y + cannonOffsetY);
         canvasContext.rotate(this.ang)
         colorRect(-TURRET_RADIUS/3, -TURRET_RADIUS/2, TURRET_RADIUS*1.5, TURRET_RADIUS, '#494949');
         canvasContext.restore();
 
-        colorCircle(this.x, this.y, TURRET_RADIUS-5, '#d87300');
-        colorCircle(this.x, this.y, TURRET_RADIUS-9, 'orange');
-        colorCircle(this.x, this.y, TURRET_RADIUS-12, 'white');
+        colorCircle(x, y, TURRET_RADIUS-5, '#d87300');
+        colorCircle(x, y, TURRET_RADIUS-9, 'orange');
+        colorCircle(x, y, TURRET_RADIUS-12, 'white');
 
-        drawPolygon(this.x + cannonOffsetX + Math.cos(this.ang+Math.PI/2) * (halfRad * this.fireOffset), 
-                    this.y + cannonOffsetY + Math.sin(this.ang+Math.PI/2) * (halfRad * this.fireOffset),
+        drawPolygon(x + cannonOffsetX + Math.cos(this.ang+Math.PI/2) * (halfRad * this.fireOffset), 
+                    y + cannonOffsetY + Math.sin(this.ang+Math.PI/2) * (halfRad * this.fireOffset),
 
                     [{x: Math.cos(this.ang) * TURRET_RADIUS, y: Math.sin(this.ang) * TURRET_RADIUS}, 
                     {x: Math.cos(this.ang + Math.PI/2) * halfRad, y: Math.sin(this.ang+Math.PI/2) * halfRad}, 
@@ -151,8 +158,8 @@ class Turret extends WrapPosition {
 
                     'red', true);
 
-        drawPolygon(this.x + cannonOffsetX + Math.cos(this.ang-Math.PI/2) * (halfRad * this.fireOffset), 
-                    this.y + cannonOffsetY + Math.sin(this.ang-Math.PI/2) * (halfRad * this.fireOffset),
+        drawPolygon(x + cannonOffsetX + Math.cos(this.ang-Math.PI/2) * (halfRad * this.fireOffset), 
+                    y + cannonOffsetY + Math.sin(this.ang-Math.PI/2) * (halfRad * this.fireOffset),
 
                     [{x: Math.cos(this.ang) * TURRET_RADIUS, y: Math.sin(this.ang) * TURRET_RADIUS}, 
                     {x: Math.cos(this.ang + Math.PI/2) * halfRad, y: Math.sin(this.ang+Math.PI/2) * halfRad}, 

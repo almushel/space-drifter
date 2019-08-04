@@ -154,7 +154,28 @@ class Ship extends WrapPosition {
 		if (!this.keyHeld_Gas && !this.keyHeld_ThrustLeft && !this.keyHeld_ThrustRight && this.thrustEnergy < 100) {
 			this.thrustEnergy += 1 * deltaT;
 		}
+			
+		super.move();
+			
+		this.xv *= 1 - SPACE_FRICTION * deltaT;
+		this.yv *= 1 - SPACE_FRICTION * deltaT;
 
+		this.updateWeapons();
+	}
+
+	thrust(angle, acceleration, emitter) {
+		this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
+		this.xv += Math.cos(angle) * (acceleration * deltaT);
+		this.yv += Math.sin(angle) * (acceleration * deltaT);
+
+		emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)	
+	}
+
+	updateWeapons() {
+		for (let i=0; i < this.shotList.length; i++) {
+			this.shotList[i].move();
+		}
+		
 		if (this.keyHeld_Fire) {
 			this.fireCannon();
 			//this.fireLaser();
@@ -167,12 +188,7 @@ class Ship extends WrapPosition {
 				this.laserAnim = 100;
 			}
 		}
-			
-		super.move();
-			
-		this.xv *= 1 - SPACE_FRICTION * deltaT;
-		this.yv *= 1 - SPACE_FRICTION * deltaT;
-		
+
 		if (this.weaponHeat > 0) {
 			if (this.keyHeld_Fire && this.weaponHeat >= 100) {
 
@@ -180,18 +196,6 @@ class Ship extends WrapPosition {
 				this.weaponHeat -= deltaT;
 			}
 		}
-			
-		for (let i=0; i < this.shotList.length; i++) {
-			this.shotList[i].move();
-		}
-	}
-
-	thrust(angle, acceleration, emitter) {
-		this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
-		this.xv += Math.cos(angle) * (acceleration * deltaT);
-		this.yv += Math.sin(angle) * (acceleration * deltaT);
-
-		emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)	
 	}
 	  
 	fireCannon() {
@@ -243,38 +247,19 @@ class Ship extends WrapPosition {
 		if (this.isDead) {
 			return;
 		}
+
 		for (let i=0; i<this.shotList.length; i++) {
 			this.shotList[i].draw();
 		}
-
 		if (this.laserFiring) {
 			this.drawLaser();
 		}
-		drawBitmapCenteredWithRotation( this.sprite, Math.round(this.x), Math.round(this.y), this.ang );
 
-		var wrapX = this.x;
-		var wrapY = this.y;
+		this.drawSprite(this.x, this.y);
+		this.drawWrap();
+	}
 
-		if (this.x < this.sprite.width) {
-			wrapX = this.x + canvas.width;
-		} else if (this.x > canvas.width - this.sprite.width) {
-			wrapX = this.x - canvas.width;
-		}
-
-		if (this.y < this.sprite.height) {
-			wrapY = this.y + canvas.height;
-		} else if (this.y > canvas.height - this.sprite.height) {
-			wrapY = this.y - canvas.height;
-		}
-
-		if (wrapX != this.x) {
-			drawBitmapCenteredWithRotation(this.sprite, Math.round(wrapX), Math.round(this.y), this.ang);
-		}
-		if (wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.sprite, Math.round(this.x), Math.round(wrapY), this.ang);
-		}
-		if (wrapX != this.x && wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.sprite, Math.round(wrapX), Math.round(wrapY), this.ang);
-		}
+	drawSprite(x, y) {
+		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
 	}
 } // end of class

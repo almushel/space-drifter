@@ -64,31 +64,11 @@ class Drifter extends WrapPosition {
 	}
 	
 	draw() {
-		drawPolygon(this.x, this.y, this.polyPoints, 'dimgrey', true);
+		this.drawSprite(this.x, this.y);
+		this.drawWrap();
+	}
 
-		var wrapX = this.x;
-		var wrapY = this.y;
-
-		if (this.x < this.collisionRadius) {
-			wrapX = this.x + canvas.width;
-		} else if (this.x > canvas.width - this.collisionRadius) {
-			wrapX = this.x - canvas.width;
-		}
-
-		if (this.y < this.collisionRadius) {
-			wrapY = this.y + canvas.height;
-		} else if (this.y > canvas.height - this.collisionRadius) {
-			wrapY = this.y - canvas.height;
-		}
-
-		if (wrapX != this.x) {
-			drawPolygon(wrapX, this.y, this.polyPoints, 'dimgrey', true);
-		}
-		if (wrapY != this.y) {
-			drawPolygon(this.x, wrapY, this.polyPoints, 'dimgrey', true);
-		}
-		if (wrapX != this.x && wrapY != this.y) {
-			drawPolygon(wrapX, wrapY, this.polyPoints, 'dimgrey', true);
-		}
+	drawSprite(x, y) {
+		drawPolygon(x, y, this.polyPoints, 'dimgrey', true);
 	}
 } // end of class

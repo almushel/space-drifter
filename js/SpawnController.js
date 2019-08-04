@@ -107,7 +107,7 @@ function removeDead() {
             if (enemyList[i].sprite != undefined) {
                 explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite, 6, enemyList[i].ang);
             }
-            explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'dimgrey', 'lightblue', null, 'line');
+            explodeAtPoint(enemyList[i].x, enemyList[i].y, 'grey', 'dimgrey', 'gold', null, 'circle');
             enemyPool.push(enemyList[i]);
             enemyList.splice(i, 1);
         }

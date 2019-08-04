@@ -58,37 +58,12 @@ class Tracker extends WrapPosition {
 	}
 
 	draw() {
-		drawBitmapCenteredWithRotation(this.sprite, Math.round(this.x), Math.round(this.y), this.ang);
-		
-		var wrapX = this.x;
-		var wrapY = this.y;
+		this.drawSprite(this.x, this.y);
+		this.drawWrap();
+	}
 
-		if (this.x < this.sprite.width/2) {
-			wrapX = this.x + canvas.width;
-		} else if (this.x > canvas.width - this.sprite.width/2) {
-			wrapX = this.x - canvas.width;
-		}
-
-		if (this.y < this.sprite.height/2) {
-			wrapY = this.y + canvas.height;
-		} else if (this.y > canvas.height - this.sprite.height/2) {
-			wrapY = this.y - canvas.height;
-		}
-
-		if (wrapX != this.x) {
-			drawBitmapCenteredWithRotation(this.sprite, Math.round(wrapX), Math.round(this.y), this.ang);
-		}
-		if (wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.sprite, Math.round(this.x), Math.round(wrapY), this.ang);
-		}
-		if (wrapX != this.x && wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.sprite, Math.round(wrapX), Math.round(wrapY), this.ang);
-		}
-		
-		//For testing turning behavior
-		//drawLine(this.x, this.y, this.x + Math.cos(this.ang) * 100, this.y + Math.sin(this.ang) * 100, 'yellow');
-		//drawLine(this.x, this.y, this.x + Math.cos(this.targetAng) * 100, this.y + Math.sin(this.targetAng) * 100, 'green');
-
+	drawSprite(x, y) {
+		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
 	}
 
 } // end of class

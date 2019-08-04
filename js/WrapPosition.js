@@ -58,6 +58,37 @@ class WrapPosition {
 		return false;
 	}
 
+	drawSprite(x, y) {
+		colorCircle(x, y, this.collisionRadius, 'white');
+	}
+
+	drawWrap() {
+		let wrapX = this.x;
+		let wrapY = this.y;
+
+		if (this.x < this.collisionRadius) {
+			wrapX = this.x + canvas.width;
+		} else if (this.x > canvas.width - this.collisionRadius) {
+			wrapX = this.x - canvas.width;
+		}
+
+		if (this.y < this.collisionRadius) {
+			wrapY = this.y + canvas.height;
+		} else if (this.y > canvas.height - this.collisionRadius) {
+			wrapY = this.y - canvas.height;
+		}
+
+		if (wrapX != this.x) {
+			this.drawSprite(wrapX, this.y);
+		}
+		if (wrapY != this.y) {
+			this.drawSprite(this.x, wrapY);
+		}
+		if (wrapX != this.x && wrapY != this.y) {
+			this.drawSprite(wrapX, wrapY);
+		}
+	}
+
 	die() {
 		this.isDead = true;
 	}
