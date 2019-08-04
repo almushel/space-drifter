@@ -37,6 +37,9 @@ class WrapPosition {
 	}
 
 	bumpCollision(whichEntity) {
+		if (this.isDead) {
+			return false;
+		}
 		var deltaX = whichEntity.x - this.x,
 			deltaY = whichEntity.y - this.y,
 			deltaR = deltaX * deltaX + deltaY * deltaY;

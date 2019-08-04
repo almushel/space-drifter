@@ -27,7 +27,7 @@ class Ship extends WrapPosition {
 		this.canShoot = true;
 		this.laserAnim = 0;
 		this.laserFiring = false;
-		this.thrust = THRUST_MAX;
+		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
 
 		for (var i=0; i < PLAYER_SHOT_MAX; i++) {
@@ -43,8 +43,8 @@ class Ship extends WrapPosition {
 		this.keyHeld_ThrustRight = false;
 		this.keyHeld_Fire = false;
 	
-		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
-		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 4, '#6DC2FF', '#6DC2FF', '#6DC2FF');
+		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
+		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 4, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 	}
 
 	// key controls used for this
@@ -58,7 +58,6 @@ class Ship extends WrapPosition {
 	}
 
 	reset() {
-		//super.reset();
 		this.lives = PLAYER_STARTING_LIVES;
 		this.respawn();
 	} // end of reset
@@ -66,8 +65,10 @@ class Ship extends WrapPosition {
 	respawn() {
 		super.reset();
 		this.resetKeysHeld();
+		let spawnMarker = instantiateParticle(null, 'circle');
+		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, 'white', null, 'circle');
 		this.ang = -0.5 * Math.PI;
-		this.thrust = THRUST_MAX;
+		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
 		this.laserAnim = 0;
 		this.laserFiring = false;
@@ -83,6 +84,9 @@ class Ship extends WrapPosition {
 	}
 	  
 	checkShipAndShotCollisionAgainst(thisEnemy) {
+		if (this.isDead) {
+			return;
+		}
 		if(thisEnemy.bumpCollision(this)) {
 			thisEnemy.die();
 			this.die();
@@ -108,54 +112,47 @@ class Ship extends WrapPosition {
 	}
 
 	die() {
-		//this.isDead = true;
-		explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF');
+		this.isDead = true;
+		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
+		explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF', null, 'circle');
+		explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF', null, 'rectangle');
+		
 		this.lives--;
 		if (this.lives < 0) {
 			endGame();
-		} else {
-			this.respawn();
 		}
 	}
 	  
 	move() {
+		if (this.isDead) {
+			if (this.keyHeld_Fire) {
+				this.respawn();
+			}
+			return;
+		}
+		//Turning
 		if(this.keyHeld_TurnLeft) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;
 		}
-		
 		if(this.keyHeld_TurnRight) {
 			this.ang += (TURN_RATE * deltaT) * Math.PI;
 		}
 		
-		if(this.keyHeld_Gas && this.thrust > 0) {
-			this.thrust -= THRUST_CONSUMPTION * deltaT;
-			this.xv += Math.cos(this.ang) * (THRUST_POWER * deltaT);
-			this.yv += Math.sin(this.ang) * (THRUST_POWER * deltaT);
-			
-			this.rearThrustEmitter.emitDirection(-this.xv, -this.yv);
+		//Thrust
+		if(this.keyHeld_Gas && this.thrustEnergy > 0) {
+			this.thrust(this.ang, THRUST_POWER, this.rearThrustEmitter);
 		}
-		
-		if (this.keyHeld_ThrustLeft && this.thrust > 0) {
-			this.thrust -= THRUST_CONSUMPTION * deltaT;
-			
-			let tAng = this.ang - Math.PI/2
-			this.xv += Math.cos(tAng) * (LATERAL_THRUST * deltaT);
-			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
-
-			this.lateralThrustEmitter.emitDirection(-Math.cos(tAng) * 5, -Math.sin(tAng) * 5)	
+		if (this.keyHeld_ThrustLeft && this.thrustEnergy > 0) {
+			let tAng = this.ang - Math.PI/2;
+			this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 		}
-		if (this.keyHeld_ThrustRight && this.thrust > 0) {
-			this.thrust -= THRUST_CONSUMPTION * deltaT;
-			
-			let tAng = this.ang + Math.PI/2
-			this.xv += Math.cos(tAng) * (LATERAL_THRUST * deltaT);
-			this.yv += Math.sin(tAng) * (LATERAL_THRUST * deltaT);
-
-			this.lateralThrustEmitter.emitDirection(-Math.cos(tAng) * 5, -Math.sin(tAng) * 5)	
+		if (this.keyHeld_ThrustRight && this.thrustEnergy > 0) {
+			let tAng = this.ang + Math.PI/2;;
+			this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 		}
-		
-		if (!this.keyHeld_Gas && !this.keyHeld_ThrustLeft && !this.keyHeld_ThrustRight && this.thrust < 100) {
-			this.thrust += 1 * deltaT;
+		//Engine power regeneration
+		if (!this.keyHeld_Gas && !this.keyHeld_ThrustLeft && !this.keyHeld_ThrustRight && this.thrustEnergy < 100) {
+			this.thrustEnergy += 1 * deltaT;
 		}
 
 		if (this.keyHeld_Fire) {
@@ -187,6 +184,14 @@ class Ship extends WrapPosition {
 		for (let i=0; i < this.shotList.length; i++) {
 			this.shotList[i].move();
 		}
+	}
+
+	thrust(angle, acceleration, emitter) {
+		this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
+		this.xv += Math.cos(angle) * (acceleration * deltaT);
+		this.yv += Math.sin(angle) * (acceleration * deltaT);
+
+		emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)	
 	}
 	  
 	fireCannon() {
@@ -235,6 +240,9 @@ class Ship extends WrapPosition {
 	}
 	  
 	draw() {
+		if (this.isDead) {
+			return;
+		}
 		for (let i=0; i<this.shotList.length; i++) {
 			this.shotList[i].draw();
 		}

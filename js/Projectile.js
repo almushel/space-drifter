@@ -40,7 +40,7 @@ class Projectile extends WrapPosition {
 
 	die() {
 		this.isDead = true;
-		explodeAtPoint(this.x, this.y, 'dimgrey', 'white', 'gold');
+		//explodeAtPoint(this.x, this.y, 'dimgrey', 'white', 'gold', null, 'line');
 	}
 	  
 	move() {

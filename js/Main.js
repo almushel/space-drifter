@@ -23,7 +23,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
   createStarField();
   initInput();
-
+  
   lastFrame = performance.now();
   requestAnimationFrame(update);
 }

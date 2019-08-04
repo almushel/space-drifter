@@ -7,15 +7,19 @@ var enemyList = [];
 var enemyPool = [];
 var wave1 = [0,0,0,0];
 var wave2 = [2,2,2,2,2,2,2,2,2];
-var wave3 = [2,2,2,1,2,2,2,2,2];
+var wave3 = [1,1,1,1];
 var wave4 = [3,3,3,3,3,3];
 
-var currentWave = wave4;
+var currentWave = wave3;
+var spawnFinished = false;
 
 function spawnWave(waveList) {
     for (let i=0; i< waveList.length; i++) {
         let newEnemy = spawnEnemy(waveList[i])
         newEnemy.reset();
+        let spawnMarker = instantiateParticle(null, 'circle');
+        spawnMarker.reset(newEnemy.x, newEnemy.y, 0, newEnemy.collisionRadius, 'orange', null, 'circle');
+        spawnFinished = true;
     }
 }
 
@@ -23,7 +27,6 @@ function spawnEnemy(type) {
     //Check for enemy of same type in object pool
     for (let p=enemyPool.length-1; p>=0; p--) {
         if (enemyPool[p].constructor.name == getName(type)) {
-            console.log(enemyPool[p].constructor.name+' from pool.');
             enemyList.push(enemyPool[p]);
             enemyPool.splice(p, 1);
             return enemyList[enemyList.length-1];
@@ -38,13 +41,13 @@ function spawnEnemy(type) {
 function getName(type) {
     switch (type) {
         case ENEMY_UFO:
-            return 'UFO';
+            return UFO.constructor.name;
         case ENEMY_TRACKER:
-            return 'Tracker';
+            return Tracker.constructor.name;
         case ENEMY_DRIFTER:
-            return 'Drifter';
+            return Drifter.constructor.name;
         case ENEMY_TURRET:
-            return 'Turret';
+            return Turret.constructor.name;
         default:
             return '';
     }
@@ -101,13 +104,17 @@ function getClearSpawn(spawner) {
 function removeDead() {
     for (let i=enemyList.length-1; i>=0; i--) {
         if (enemyList[i].isDead) {
-            explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'dimgrey', 'lightblue')
+            if (enemyList[i].sprite != undefined) {
+                explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite, 6, enemyList[i].ang);
+            }
+            explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'dimgrey', 'lightblue', null, 'line');
             enemyPool.push(enemyList[i]);
             enemyList.splice(i, 1);
         }
     }
-    if (enemyList.length < 1) {
-        spawnWave(currentWave);
+    if (enemyList.length < 1 && spawnFinished) {
+        spawnFinished = false;
+        setTimeout(spawnWave, 1000, currentWave);
     }
 }
 

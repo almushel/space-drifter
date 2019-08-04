@@ -7,7 +7,7 @@ const UFO_TURN_PRECISION = 0.05;
 class UFO extends WrapPosition {
 	constructor() {
 		super();
-		this.myBitmap = UFOPic;
+		this.sprite = UFOPic;
 		this.collisionRadius = UFO_COLLISION_RADIUS;
 	}
 	
@@ -52,31 +52,31 @@ class UFO extends WrapPosition {
 	}
 	  
 	draw() {
-		drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(this.y), 0);
+		drawBitmapCenteredWithRotation(this.sprite, Math.round(this.x), Math.round(this.y), 0);
 		
 		var wrapX = this.x;
 		var wrapY = this.y;
 
-		if (this.x < this.myBitmap.width/2) {
+		if (this.x < this.sprite.width/2) {
 			wrapX = this.x + canvas.width;
-		} else if (this.x > canvas.width - this.myBitmap.width/2) {
+		} else if (this.x > canvas.width - this.sprite.width/2) {
 			wrapX = this.x - canvas.width;
 		}
 
-		if (this.y < this.myBitmap.height/2) {
+		if (this.y < this.sprite.height/2) {
 			wrapY = this.y + canvas.height;
-		} else if (this.y > canvas.height - this.myBitmap.height/2) {
+		} else if (this.y > canvas.height - this.sprite.height/2) {
 			wrapY = this.y - canvas.height;
 		}
 
 		if (wrapX != this.x) {
-			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(this.y), 0);
+			drawBitmapCenteredWithRotation(this.sprite, Math.round(wrapX), Math.round(this.y), 0);
 		}
 		if (wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(this.x), Math.round(wrapY), 0);
+			drawBitmapCenteredWithRotation(this.sprite, Math.round(this.x), Math.round(wrapY), 0);
 		}
 		if (wrapX != this.x && wrapY != this.y) {
-			drawBitmapCenteredWithRotation(this.myBitmap, Math.round(wrapX), Math.round(wrapY), 0);
+			drawBitmapCenteredWithRotation(this.sprite, Math.round(wrapX), Math.round(wrapY), 0);
 		}
 		
 		//For testing turning behavior

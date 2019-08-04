@@ -67,7 +67,7 @@ function drawPlayerLives() {
 }
 
 function drawThrustMeter() {
-    if (p1.thrust > 0) {
+    if (p1.thrustEnergy > 0) {
         tmColorOuter = 'grey';
     } else {
         tmColorOuter = 'orange';
@@ -78,8 +78,8 @@ function drawThrustMeter() {
     colorAlignedText(canvas.width/2 -  56, canvas.height - 30, 'center', '10px Orbitron', 'white', 'Thrust Power');
     drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterOuterPoly, tmColorOuter, true);
     canvasContext.restore();
-    if (p1.thrust >= 1) {
-        var thrustDelta = p1.thrust/100;
+    if (p1.thrustEnergy >= 1) {
+        var thrustDelta = p1.thrustEnergy/100;
         meterInnerPoly[2].x = -41 + Math.floor(thrustDelta * 90);
         meterInnerPoly[3].x = -41 + Math.floor(thrustDelta * 90) - 5;
         drawPolygon(canvas.width/2 - 60, canvas.height - 16, meterInnerPoly, tmColorInner, true);

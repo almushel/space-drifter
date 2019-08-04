@@ -10,7 +10,7 @@ function colorCircle(centerX, centerY, radius, fillColor) {
 	canvasContext.fill();
 }
   
-function drawBitmapCenteredWithRotation(graphic, atX, atY,withAngle) {
+function drawBitmapCenteredWithRotation(graphic, atX, atY, withAngle) {
 	canvasContext.save(); // allows us to undo translate movement and rotate spin
 	canvasContext.translate(atX,atY); // sets the point where our graphic will go
 	canvasContext.rotate(withAngle); // sets the rotation
