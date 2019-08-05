@@ -40,7 +40,6 @@ class Projectile extends WrapPosition {
 
 	die() {
 		this.isDead = true;
-		//explodeAtPoint(this.x, this.y, 'dimgrey', 'white', 'gold', null, 'line');
 	}
 	  
 	move() {
@@ -48,6 +47,8 @@ class Projectile extends WrapPosition {
 			this.lifeLeft -= deltaT;
 			super.move();
 			if (this.lifeLeft <= 0) {
+				let particle = instantiateParticle();
+				particle.reset(this.x, this.y, 0, this.collisionRadius, this.color, null, 'circle');
 				this.die();
 			}
 		}
