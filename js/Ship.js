@@ -59,12 +59,16 @@ class Ship extends WrapPosition {
 
 	reset() {
 		this.lives = PLAYER_STARTING_LIVES;
+		for (let i = 0; i < this.shotList.length; i++) {
+			this.shotList[i].reset();
+		}
 		this.respawn();
 	} // end of reset
 
 	respawn() {
 		super.reset();
 		this.resetKeysHeld();
+		forceCircle(this.x, this.y, canvas.width/4, 6);
 		let spawnMarker = instantiateParticle(null, 'circle');
 		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, 'white', null, 'circle');
 		this.ang = -0.5 * Math.PI;

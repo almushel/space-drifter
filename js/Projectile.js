@@ -14,22 +14,22 @@ class Projectile extends WrapPosition {
 		this.isDead = true;
 		this.lifeLeft = 0;
 	} // end of reset
-	  
+
 	isReadyToFire() {
 		return (this.isDead);
 	}
-	  
-	shootFrom (shipFiring) {
+
+	shootFrom(shipFiring) {
 		this.x = shipFiring.x;
 		this.y = shipFiring.y;
-			
+
 		this.xv = Math.cos(shipFiring.ang) * this.speed + shipFiring.xv;
 		this.yv = Math.sin(shipFiring.ang) * this.speed + shipFiring.yv;
-		
+
 		this.isDead = false;
 		this.lifeLeft = this.lifeSpan;
 	}
-	  
+
 	hitTest(thisEnemy) {
 		if (this.isDead) {
 			return false;
@@ -41,9 +41,9 @@ class Projectile extends WrapPosition {
 	die() {
 		this.isDead = true;
 	}
-	  
+
 	move() {
-		if(this.isDead == false) {
+		if (this.isDead == false) {
 			this.lifeLeft -= deltaT;
 			super.move();
 			if (this.lifeLeft <= 0) {
@@ -53,9 +53,9 @@ class Projectile extends WrapPosition {
 			}
 		}
 	}
-	  
+
 	draw() {
-		if(this.isDead == false) {
+		if (this.isDead == false) {
 			colorCircle(this.x, this.y, this.collisionRadius, this.color);
 		}
 	}

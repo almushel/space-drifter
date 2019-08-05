@@ -10,7 +10,7 @@ var wave2 = [2,2,2,2,2,2,2,2,2];
 var wave3 = [1,1,1,1];
 var wave4 = [3,3,3,3,3,3];
 
-var currentWave = wave3;
+var currentWave = wave2;
 var spawnFinished = false;
 
 function spawnWave(waveList) {
@@ -81,6 +81,20 @@ function enemySelect(type) {
     return whichEnemy;
 }
 
+function forceCircle(x, y, radius, force) {
+    for (let i=0; i<enemyList.length; i++) {
+        if (doCirclesOverlap(x, y, radius, enemyList[i].x, enemyList[i]. y, enemyList[i].collisionRadius)) {
+            let deltaX = x - enemyList[i].x,
+                deltaY = y - enemyList[i].y;
+            let deltaAng = Math.atan2(deltaY, deltaX);
+
+            //enemyList[i].ang = Math.atan2(-deltaY, -deltaX);
+            enemyList[i].xv -= Math.cos(deltaAng) * force;
+            enemyList[i].yv -= Math.sin(deltaAng) * force;
+        }
+    }
+}
+
 function getClearSpawn(spawner) {
     var checkX = Math.random() * canvas.width,
         checkY = Math.random() * canvas.height;
@@ -115,21 +129,5 @@ function removeDead() {
     if (enemyList.length < 1 && spawnFinished) {
         spawnFinished = false;
         setTimeout(spawnWave, 1000, currentWave);
-    }
-}
-
-function divideDrifter(whichDrifter) {
-    var randAng = Math.random() * (Math.PI*2);
-    for (let s=0; s<3; s++) {
-        let childDrifter = spawnEnemy(ENEMY_DRIFTER);
-        childDrifter.reset(whichDrifter.radius/2);
-        childDrifter.generatePoly();
-
-        randAng += (Math.PI/1.5);
-        childDrifter.x = whichDrifter.x + Math.cos(randAng) * childDrifter.radius;
-        childDrifter.y = whichDrifter.y + Math.sin(randAng) * childDrifter.radius;
-        
-        childDrifter.xv = Math.cos(randAng)*DRIFT_RATE;
-        childDrifter.yv = Math.sin(randAng)*DRIFT_RATE;
     }
 }
