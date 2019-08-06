@@ -68,14 +68,16 @@ class Ship extends WrapPosition {
 	respawn() {
 		super.reset();
 		this.resetKeysHeld();
-		forceCircle(this.x, this.y, canvas.width/4, 6);
-		let spawnMarker = instantiateParticle(null, 'circle');
-		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, 'white', null, 'circle');
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
 		this.laserAnim = 0;
 		this.laserFiring = false;
+
+		forceCircle(this.x, this.y, canvas.width/6, 5);
+		explodeAtPoint(this.x, this.y, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'line');
+		let spawnMarker = instantiateParticle(null, 'circle');
+		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, '#6DC2FF', null, 'circle');
 	}
 
 	resetKeysHeld() {
@@ -117,8 +119,9 @@ class Ship extends WrapPosition {
 
 	die() {
 		this.isDead = true;
+		screenShake();
 		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
-		explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF', null, 'circle');
+		explodeAtPoint(this.x, this.y, 'white', 'orange', '#6DC2FF', null, 'circle');
 		explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF', null, 'rectangle');
 		
 		this.lives--;

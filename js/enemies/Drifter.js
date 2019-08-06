@@ -43,9 +43,9 @@ class Drifter extends WrapPosition {
 
 			this.polyPoints.push({ x: newX, y: newY });
 
-			if (pointDist > colRadius) colRadius = pointDist;
+			colRadius += pointDist;
 		}
-		this.collisionRadius = colRadius;
+		this.collisionRadius = colRadius/sides;
 	}
 
 	move() {

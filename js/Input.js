@@ -13,62 +13,62 @@ const KEY_CTRL = 17;
 const KEY_SPACEBAR = 32;
 
 function initInput() {
-  document.addEventListener("keydown", keyPressed);
-  document.addEventListener("keyup", keyReleased);
-  
-  p1.setupControls(KEY_UP_ARROW, KEY_LEFT_ARROW, KEY_RIGHT_ARROW, KEY_LETTER_Q, KEY_LETTER_E, KEY_SPACEBAR);
+	document.addEventListener("keydown", keyPressed);
+	document.addEventListener("keyup", keyReleased);
+
+	p1.setupControls(KEY_UP_ARROW, KEY_LEFT_ARROW, KEY_RIGHT_ARROW, KEY_LETTER_Q, KEY_LETTER_E, KEY_SPACEBAR);
 }
 
 function setKeyHoldState(thisKey, thisShip, setTo) {
-  if (!gameStart) {
-    titleKeys(thisKey, setTo);
-    return;
-  }
-  if(thisKey == thisShip.controlKeyForTurnLeft) {
-    thisShip.keyHeld_TurnLeft = setTo;
-  }
+	if (!gameStart) {
+		titleKeys(thisKey, setTo);
+		return;
+	}
+	if (thisKey == thisShip.controlKeyForTurnLeft) {
+		thisShip.keyHeld_TurnLeft = setTo;
+	}
 
-  if(thisKey == thisShip.controlKeyForTurnRight) {
-    thisShip.keyHeld_TurnRight = setTo;
-  }
+	if (thisKey == thisShip.controlKeyForTurnRight) {
+		thisShip.keyHeld_TurnRight = setTo;
+	}
 
-  if(thisKey == thisShip.controlKeyForGas) {
-    thisShip.keyHeld_Gas = setTo;
-  }
+	if (thisKey == thisShip.controlKeyForGas) {
+		thisShip.keyHeld_Gas = setTo;
+	}
 
-  if(thisKey == thisShip.controlKeyForThrustLeft) {
-    thisShip.keyHeld_ThrustLeft = setTo;
-  }
+	if (thisKey == thisShip.controlKeyForThrustLeft) {
+		thisShip.keyHeld_ThrustLeft = setTo;
+	}
 
-  if(thisKey == thisShip.controlKeyForThrustRight) {
-    thisShip.keyHeld_ThrustRight = setTo;
-  }
+	if (thisKey == thisShip.controlKeyForThrustRight) {
+		thisShip.keyHeld_ThrustRight = setTo;
+	}
 
-  if(thisKey == thisShip.controlKeyForCannonFire) {
-      thisShip.keyHeld_Fire = setTo;
-  }
+	if (thisKey == thisShip.controlKeyForCannonFire) {
+		thisShip.keyHeld_Fire = setTo;
+	}
 
 }
 
 function titleKeys(key, setTo) {
-  if (key == KEY_SPACEBAR && setTo == false) {
-    if (gameOver) {
-      gameOver = false;
-      showHighScores = true;
-    } else if (showHighScores) {
-      showHighScores = false;
-    } else {
-      resetGame();
-      gameStart = true;
-    }
-  }
+	if (key == KEY_SPACEBAR && setTo == false) {
+		if (gameOver) {
+			gameOver = false;
+			showHighScores = true;
+		} else if (showHighScores) {
+			showHighScores = false;
+		} else {
+			resetGame();
+			gameStart = true;
+		}
+	}
 }
 
 function keyPressed(evt) {
-  setKeyHoldState(evt.keyCode, p1, true);
-  evt.preventDefault(); // without this, arrow keys scroll the browser
+	setKeyHoldState(evt.keyCode, p1, true);
+	evt.preventDefault(); // without this, arrow keys scroll the browser
 }
 
 function keyReleased(evt) {
-  setKeyHoldState(evt.keyCode, p1, false);
+	setKeyHoldState(evt.keyCode, p1, false);
 }

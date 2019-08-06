@@ -8,8 +8,10 @@
 <style>
     @import url('https://fonts.googleapis.com/css?family=Orbitron');
 </style>
-<canvas id="bg" width="800" height="600" style="position: absolute; z-index: 0; left: 50%; margin-left: -400px"></canvas>
-<canvas id="gameCanvas" width="800" height="600" style="position: absolute; z-index: 1; left: 50%; margin-left: -400px"></canvas>
+<div style="width: 800px; height: 600px; background-color: #000a30;position: absolute; z-index: 0; top: 0%; left: 50%; margin-left: -400px; overflow: hidden;">
+<canvas id="bg" width="800" height="600" style="position: absolute; z-index: 1; top: 0%; left: 50%; margin-left: -400px"></canvas>
+<canvas id="gameCanvas" width="800" height="600" style="position: absolute; z-index: 2; top: 0%; left: 50%; margin-left: -400px"></canvas>
+</div>
 
 <script src="js/GraphicsCommon.js"></script>
 <script src="js/Collision.js"></script>

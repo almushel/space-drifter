@@ -118,10 +118,11 @@ function getClearSpawn(spawner) {
 function removeDead() {
     for (let i=enemyList.length-1; i>=0; i--) {
         if (enemyList[i].isDead) {
+            screenShake();
             if (enemyList[i].sprite != undefined) {
                 explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite, 6, enemyList[i].ang);
             }
-            explodeAtPoint(enemyList[i].x, enemyList[i].y, 'grey', 'dimgrey', 'gold', null, 'circle');
+            explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'white', 'white', null, 'circle');
             enemyPool.push(enemyList[i]);
             enemyList.splice(i, 1);
         }
