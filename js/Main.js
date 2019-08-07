@@ -93,34 +93,42 @@ function resetGame() {
 }
 
 function screenShake() {
-
-	if (canvas.style.top == '0%' && canvas.style.left == '50%') {
+	if (canvas.style.top == '0px' && canvas.style.left == '0px') {
 		setTimeout(function() {
-			canvas.style.top = '0%';
-			canvas.style.left = '50%';
+			canvas.style.top = '0px';
+			canvas.style.left = '0px';
 			// canvas.style.transform = 'scale(1, 1)';
-			bg.style.top = '0%';
-			bg.style.left = '50%';
+			bg.style.top = '0px';
+			bg.style.left = '0px';
 			// bg.style.transform = 'scale(1, 1)';
 		}, 150);
 	}
 
-	let left = parseFloat(canvas.style.left);
-	let top = parseFloat(canvas.style.top);
+	let left = parseInt(canvas.style.left);
+	let top = parseInt(canvas.style.top);
 	let xOffset = (5 - Math.ceil(Math.random() * 10));
 	let yOffset = (5 - Math.ceil(Math.random() * 10));
 
-	xOffset /= 20;
-	yOffset /= 10;
+	if (xOffset < 0) {
+		xOffset -= 1;
+	} else {
+		xOffset += 1;
+	}
+
+	if (yOffset < 0) {
+		yOffset -= 1;
+	} else {
+		yOffset += 1;
+	}
 	
 	left += xOffset;
 	top += yOffset;
 
-	canvas.style.left = left + '%';
-	canvas.style.top = top + '%';
+	canvas.style.left = left + 'px';
+	canvas.style.top = top + 'px';
 
-	bg.style.left = left + '%';
-	bg.style.top = top + '%';
+	bg.style.left = left + 'px';
+	bg.style.top = top + 'px';
 
 	// xOffset = Math.abs(xOffset/10);
 	// yOffset = Math.abs(yOffset/10);
