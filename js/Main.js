@@ -80,6 +80,8 @@ function drawAll() {
 }
 
 function resetGame() {
+	currentWave = 1;
+	pointMax = 1;
 	currentScore = 0;
 	newHighScoreIndex = -1;
 
@@ -89,7 +91,7 @@ function resetGame() {
 	enemyList.length = 0;
 	enemyPool.length = 0;
 	p1.reset();
-	spawnWave(currentWave);
+	spawnWave(generateWave(currentWave, pointMax));
 }
 
 function screenShake() {
