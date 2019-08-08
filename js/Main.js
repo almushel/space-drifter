@@ -33,6 +33,7 @@ function update() {
 	deltaT = (currentFrame - lastFrame) / UPDATE_INTERVAL;//Ratio of current frametime to target update interval
 	lastFrame = currentFrame;
 
+	pollGamepads();
 	if (gameStart) {
 		removeDead();
 		moveAll();
