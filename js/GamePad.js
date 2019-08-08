@@ -1,3 +1,5 @@
+var padButtonsHeld = [];
+var padAxes = [];
 
 var controllerEnabled = false;
 var lastPadUpdate = null;
@@ -24,34 +26,39 @@ function pollGamepads() {
 
         if (gp != null) {
             //Only update control values if the controller data has been updated
-            if (lastPadUpdate >= gp.timestamp) {
-                continue;
-            } else {
+            if (gp.timestamp >= lastPadUpdate) {
                 lastPadUpdate = gp.timestamp;
+            } else {
+                continue;
             }
-            p1.keyHeld_ThrustLeft = gp.buttons[4].pressed;
-            p1.keyHeld_ThrustRight = gp.buttons[5].pressed;
-            p1.keyHeld_Fire = gp.buttons[0].pressed;
+
+            if (!gameStart) {
+                titlePad(gp);
+            }
+
+            padButtonsHeld[p1.buttonThrustLeft] = gp.buttons[p1.buttonThrustLeft].pressed;
+            padButtonsHeld[p1.buttonThrustRight] = gp.buttons[p1.buttonThrustRight].pressed;
+            padButtonsHeld[p1.buttonCannonFire] = gp.buttons[p1.buttonCannonFire].pressed;
 
             //Left 
-            if (gp.axes[0] < -0.2) {
-                p1.keyHeld_TurnLeft = true;
+            if (gp.axes[p1.turnAxis] < -0.2) {
+                padButtonsHeld[p1.buttonTurnLeft] = true;
             } else {
-                p1.keyHeld_TurnLeft = gp.buttons[14].pressed;
+                padButtonsHeld[p1.buttonTurnLeft] = gp.buttons[p1.buttonTurnLeft].pressed;
             }
             
             //Right
-            if (gp.axes[0] > 0.2) {
-                p1.keyHeld_TurnRight = true;
+            if (gp.axes[p1.turnAxis] > 0.2) {
+                padButtonsHeld[p1.buttonTurnRight] = true;
             } else {
-                p1.keyHeld_TurnRight = gp.buttons[15].pressed;
+                padButtonsHeld[p1.buttonTurnRight] = gp.buttons[p1.buttonTurnRight].pressed;
             }
             
             //Up
-            if (gp.axes[1] < -0.2) {
-                p1.keyHeld_Gas = true;
+            if (gp.axes[p1.accelAxis] < -0.2) {
+                padButtonsHeld[p1.buttonGas] = true;
             } else {
-                p1.keyHeld_Gas = gp.buttons[12].pressed;
+                padButtonsHeld[p1.buttonGas] = gp.buttons[p1.buttonGas].pressed;
             }
 
             
@@ -59,6 +66,19 @@ function pollGamepads() {
     }
 }
 
+function titlePad(pad) {
+	if (pad.buttons[0].pressed && padButtonsHeld[0] == false) {
+		if (gameOver) {
+			gameOver = false;
+			showHighScores = true;
+		} else if (showHighScores) {
+			showHighScores = false;
+		} else {
+			resetGame();
+			gameStart = true;
+		}
+	}
+}
 
 function gamepadButtonToString(index) {
     switch(index) {

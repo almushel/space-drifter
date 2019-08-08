@@ -35,26 +35,29 @@ class Ship extends WrapPosition {
 			this.shotList.push(newShot);
 		}
 	
-		// keyboard hold state variables, to use keys more like buttons
-		this.keyHeld_Gas = false;
-		this.keyHeld_TurnLeft = false;
-		this.keyHeld_TurnRight = false;
-		this.keyHeld_ThrustLeft = false;
-		this.keyHeld_ThrustRight = false;
-		this.keyHeld_Fire = false;
-	
 		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 4, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 	}
 
 	// key controls used for this
-	setupControls(forwardKey, leftKey, rightKey, leftThrust, rightThrust, fireKey) {
-		this.controlKeyForGas = forwardKey;
-		this.controlKeyForTurnLeft = leftKey;
-		this.controlKeyForTurnRight = rightKey;
-		this.controlKeyForThrustLeft = leftThrust;
-		this.controlKeyForThrustRight = rightThrust;
-		this.controlKeyForCannonFire = fireKey;
+	setupKeys(forwardKey, leftKey, rightKey, leftThrust, rightThrust, fireKey) {
+		this.keyGas = forwardKey;
+		this.keyTurnLeft = leftKey;
+		this.keyTurnRight = rightKey;
+		this.keyThrustLeft = leftThrust;
+		this.keyThrustRight = rightThrust;
+		this.keyCannonFire = fireKey;
+	}
+
+	setupPad(forwardButton, leftButton, rightButton, leftThrust, rightThrust, fire, turnAxis, accelAxis) {
+		this.buttonGas = forwardButton;
+		this.buttonTurnLeft = leftButton;
+		this.buttonTurnRight = rightButton;
+		this.buttonThrustLeft = leftThrust;
+		this.buttonThrustRight = rightThrust;
+		this.buttonCannonFire = fire;
+		this.turnAxis = turnAxis;
+		this.accelAxis = accelAxis;
 	}
 
 	reset() {
@@ -132,33 +135,36 @@ class Ship extends WrapPosition {
 	  
 	move() {
 		if (this.isDead) {
-			if (this.keyHeld_Fire) {
+			if (keysHeld[this.keyCannonFire] || padButtonsHeld[this.buttonCannonFire]) {
 				this.respawn();
 			}
 			return;
 		}
 		//Turning
-		if(this.keyHeld_TurnLeft) {
+		if(keysHeld[this.keyTurnLeft] || padButtonsHeld[this.buttonTurnLeft]) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;
 		}
-		if(this.keyHeld_TurnRight) {
+		if(keysHeld[this.keyTurnRight] || padButtonsHeld[this.buttonTurnRight]) {
 			this.ang += (TURN_RATE * deltaT) * Math.PI;
 		}
 		
 		//Thrust
-		if(this.keyHeld_Gas && this.thrustEnergy > 0) {
-			this.thrust(this.ang, THRUST_POWER, this.rearThrustEmitter);
+		if (this.thrustEnergy > 0) {
+			if((keysHeld[this.keyGas] || padButtonsHeld[this.buttonGas])) {
+				this.thrust(this.ang, THRUST_POWER, this.rearThrustEmitter);
+			}
+			if ((keysHeld[this.keyThrustLeft] || padButtonsHeld[this.buttonThrustLeft])) {
+				let tAng = this.ang - Math.PI/2;
+				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
+			}
+			if ((keysHeld[this.keyThrustRight] || padButtonsHeld[this.buttonThrustRight])) {
+				let tAng = this.ang + Math.PI/2;;
+				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
+			}
 		}
-		if (this.keyHeld_ThrustLeft && this.thrustEnergy > 0) {
-			let tAng = this.ang - Math.PI/2;
-			this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
-		}
-		if (this.keyHeld_ThrustRight && this.thrustEnergy > 0) {
-			let tAng = this.ang + Math.PI/2;;
-			this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
-		}
+
 		//Engine power regeneration
-		if (!this.keyHeld_Gas && !this.keyHeld_ThrustLeft && !this.keyHeld_ThrustRight && this.thrustEnergy < 100) {
+		if (!keysHeld[this.keyGas] && !keysHeld[this.keyThrustLeft] && !keysHeld[this.keyThrustRight] && this.thrustEnergy < 100) {
 			this.thrustEnergy += 1 * deltaT;
 		}
 			
@@ -183,7 +189,7 @@ class Ship extends WrapPosition {
 			this.shotList[i].move();
 		}
 		
-		if (this.keyHeld_Fire) {
+		if (keysHeld[this.keyCannonFire] || padButtonsHeld[this.buttonCannonFire]) {
 			this.fireCannon();
 			//this.fireLaser();
 		}
@@ -197,7 +203,7 @@ class Ship extends WrapPosition {
 		}
 
 		if (this.weaponHeat > 0) {
-			if (this.keyHeld_Fire && this.weaponHeat >= 100) {
+			if (keysHeld[this.keyCannonFire] && this.weaponHeat >= 100) {
 
 			} else {
 				this.weaponHeat -= deltaT;
