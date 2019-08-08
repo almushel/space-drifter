@@ -15,7 +15,7 @@ function spawnWave(waveList) {
         let newEnemy = spawnEnemy(waveList[i])
         newEnemy.reset();
         let spawnMarker = instantiateParticle(null, 'circle');
-        spawnMarker.reset(newEnemy.x, newEnemy.y, 0, newEnemy.collisionRadius, 'orange', null, 'circle');
+        spawnMarker.reset(newEnemy.x, newEnemy.y, 0, newEnemy.collisionRadius/2, 'white', null, 'circle');
         spawnFinished = true;
     }
 }
@@ -39,7 +39,7 @@ function generateWave(waveNum, maxPoints) {
         let spawner = Math.floor(Math.random() * (maxValue + 1));
         newWave.push(spawner);
         pointsRemain -= spawner + 1;
-        
+
     }
 
     //Return wave array
@@ -131,7 +131,7 @@ function getClearSpawn(spawner) {
     }
 
     if (doCirclesOverlap(checkX, checkY, spawner.collisionRadius,
-        p1.x, p1.y, p1.collisionRadius)) {
+        p1.x, p1.y, p1.collisionRadius * 2)) {
         checkX -= p1.x - checkX;
         checkY -= p1.y - checkY;
     }

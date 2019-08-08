@@ -168,7 +168,7 @@ class Ship extends WrapPosition {
 			this.shotList[i].move();
 		}
 		
-		if (this.controlCannonFire.isPressed()) {
+		if (this.controlCannonFire.isPressed() && this.weaponHeat < 100) {
 			this.fireCannon();
 			//this.fireLaser();
 		}
@@ -182,7 +182,7 @@ class Ship extends WrapPosition {
 		}
 
 		if (this.weaponHeat > 0) {
-			if (keysHeld[this.controlCannonFire] && this.weaponHeat >= 100) {
+			if (this.controlCannonFire.isPressed() && this.weaponHeat >= 100) {
 
 			} else {
 				this.weaponHeat -= deltaT;
