@@ -51,6 +51,11 @@ function startChainTimer() {
     currentTimeCount = Math.round((SCORE_CHAIN_TIME - (performance.now() - timerStart))/1000);
 }
 
+function endChaintimer() {
+    timerStart -= 5000;
+    currentMultiplier = 1;
+}
+
 function endGame() {
     updateScoreTable();
     if (localStorage.sdHighScore == undefined) {

@@ -101,7 +101,12 @@ class Ship extends WrapPosition {
 
 	die() {
 		this.isDead = true;
+		endChaintimer();
 		screenShake();
+
+		let splodeOrigin = instantiateParticle(null, 'circle');
+		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
+		
 		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
 		explodeAtPoint(this.x, this.y, 'white', 'orange', '#6DC2FF', null, 'circle');
 		explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF', null, 'rectangle');

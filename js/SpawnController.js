@@ -142,6 +142,10 @@ function removeDead() {
     for (let i = enemyList.length - 1; i >= 0; i--) {
         if (enemyList[i].isDead) {
             screenShake();
+            
+            let splodeOrigin = instantiateParticle(null, 'circle');
+            splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius/2, 'orange', null, 'circle');
+            
             if (enemyList[i].sprite != undefined) {
                 explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite, 6, enemyList[i].ang);
             }
@@ -150,6 +154,7 @@ function removeDead() {
             enemyList.splice(i, 1);
         }
     }
+    //Spawn next wave when everything is dead
     if (enemyList.length < 1 && spawnFinished) {
         spawnFinished = false;
         currentWave++;
