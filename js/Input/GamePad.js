@@ -1,3 +1,28 @@
+//Gamepad button indexes, assuming Xbox layout
+const PAD_A = 0;
+const PAD_B = 1;
+const PAD_X = 2;
+const PAD_Y = 3;
+const PAD_LB = 4;
+const PAD_RB = 5;
+const PAD_LT = 6;
+const PAD_RT = 7;
+const PAD_BACK = 8;
+const PAD_START = 9;
+const PAD_L3 = 10;
+const PAD_R3 = 11;
+const PAD_UP = 12;
+const PAD_DOWN = 13;
+const PAD_LEFT = 14;
+const PAD_RIGHT = 15;
+
+//Gamepad analogue stick axis indexes
+const PAD_AXIS_LH = 0;
+const PAD_AXIS_LV = 1;
+const PAD_AXIS_RH = 2;
+const PAD_AXIS_RV = 3;
+
+//Arrays of most recent button and axis values
 var padButtonsHeld = [];
 var padAxes = [];
 
@@ -35,33 +60,16 @@ function pollGamepads() {
             if (!gameStart) {
                 titlePad(gp);
             }
-
-            padButtonsHeld[p1.buttonThrustLeft] = gp.buttons[p1.buttonThrustLeft].pressed;
-            padButtonsHeld[p1.buttonThrustRight] = gp.buttons[p1.buttonThrustRight].pressed;
-            padButtonsHeld[p1.buttonCannonFire] = gp.buttons[p1.buttonCannonFire].pressed;
-
-            //Left 
-            if (gp.axes[p1.turnAxis] < -0.2) {
-                padButtonsHeld[p1.buttonTurnLeft] = true;
-            } else {
-                padButtonsHeld[p1.buttonTurnLeft] = gp.buttons[p1.buttonTurnLeft].pressed;
-            }
             
-            //Right
-            if (gp.axes[p1.turnAxis] > 0.2) {
-                padButtonsHeld[p1.buttonTurnRight] = true;
-            } else {
-                padButtonsHeld[p1.buttonTurnRight] = gp.buttons[p1.buttonTurnRight].pressed;
-            }
-            
-            //Up
-            if (gp.axes[p1.accelAxis] < -0.2) {
-                padButtonsHeld[p1.buttonGas] = true;
-            } else {
-                padButtonsHeld[p1.buttonGas] = gp.buttons[p1.buttonGas].pressed;
+            //Update all gamepad buttons
+            for (let b = 0; b < gp.buttons.length; b++) {
+                padButtonsHeld[b] = gp.buttons[b].pressed;
             }
 
-            
+            //Update all gamepad axes
+            for (let a = 0; a < gp.axes.length; a++) {
+                padAxes[a] = gp.axes[a];
+            }
         }
     }
 }
@@ -133,6 +141,6 @@ function gamepadAxesToString(index) {
         case 2:
             return 'RS Horizontal';
         case 3:
-            return 'LS Vertical';
+            return 'RS Vertical';
     }
 }

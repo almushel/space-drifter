@@ -27,8 +27,7 @@ function initInput() {
 	document.addEventListener("keydown", keyPressed);
 	document.addEventListener("keyup", keyReleased);
 
-	p1.setupKeys(KEY_UP_ARROW, KEY_LEFT_ARROW, KEY_RIGHT_ARROW, KEY_LETTER_Q, KEY_LETTER_E, KEY_SPACEBAR);
-	p1.setupPad(12, 14, 15, 4, 5, 0, 0, 1);
+	p1.setupControls();
 }
 
 function setKeyHoldState(thisKey, setTo) {

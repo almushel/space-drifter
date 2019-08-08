@@ -40,24 +40,13 @@ class Ship extends WrapPosition {
 	}
 
 	// key controls used for this
-	setupKeys(forwardKey, leftKey, rightKey, leftThrust, rightThrust, fireKey) {
-		this.keyGas = forwardKey;
-		this.keyTurnLeft = leftKey;
-		this.keyTurnRight = rightKey;
-		this.keyThrustLeft = leftThrust;
-		this.keyThrustRight = rightThrust;
-		this.keyCannonFire = fireKey;
-	}
-
-	setupPad(forwardButton, leftButton, rightButton, leftThrust, rightThrust, fire, turnAxis, accelAxis) {
-		this.buttonGas = forwardButton;
-		this.buttonTurnLeft = leftButton;
-		this.buttonTurnRight = rightButton;
-		this.buttonThrustLeft = leftThrust;
-		this.buttonThrustRight = rightThrust;
-		this.buttonCannonFire = fire;
-		this.turnAxis = turnAxis;
-		this.accelAxis = accelAxis;
+	setupControls() {
+		this.controlGas = new Control (KEY_LETTER_W, PAD_UP, PAD_AXIS_LV, 1);
+		this.controlTurnLeft = new Control (KEY_LETTER_A, PAD_LEFT, PAD_AXIS_LH, -1);
+		this.controlTurnRight = new Control (KEY_LETTER_D, PAD_RIGHT, PAD_AXIS_LH, 1);
+		this.controlThrustLeft = new Control (KEY_LETTER_Q, PAD_LB, null, null);
+		this.controlThrustRight = new Control (KEY_LETTER_E, PAD_RB, null, null);
+		this.controlCannonFire = new Control (KEY_SPACEBAR, PAD_A, null, null);
 	}
 
 	reset() {
@@ -70,7 +59,6 @@ class Ship extends WrapPosition {
 
 	respawn() {
 		super.reset();
-		this.resetKeysHeld();
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
@@ -81,15 +69,6 @@ class Ship extends WrapPosition {
 		explodeAtPoint(this.x, this.y, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'line');
 		let spawnMarker = instantiateParticle(null, 'circle');
 		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, '#6DC2FF', null, 'circle');
-	}
-
-	resetKeysHeld() {
-		this.keyHeld_Gas = false;
-		this.keyHeld_TurnLeft = false;
-		this.keyHeld_TurnRight = false;
-		this.keyHeld_ThrustLeft = false;
-		this.keyHeld_ThrustRight = false;
-		this.keyHeld_Fire = false;
 	}
 	  
 	checkShipAndShotCollisionAgainst(thisEnemy) {
@@ -135,36 +114,36 @@ class Ship extends WrapPosition {
 	  
 	move() {
 		if (this.isDead) {
-			if (keysHeld[this.keyCannonFire] || padButtonsHeld[this.buttonCannonFire]) {
+			if (this.controlCannonFire.isPressed()) {
 				this.respawn();
 			}
 			return;
 		}
 		//Turning
-		if(keysHeld[this.keyTurnLeft] || padButtonsHeld[this.buttonTurnLeft]) {
+		if(this.controlTurnLeft.isPressed()) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;
 		}
-		if(keysHeld[this.keyTurnRight] || padButtonsHeld[this.buttonTurnRight]) {
+		if(this.controlTurnRight.isPressed()) {
 			this.ang += (TURN_RATE * deltaT) * Math.PI;
 		}
 		
 		//Thrust
 		if (this.thrustEnergy > 0) {
-			if((keysHeld[this.keyGas] || padButtonsHeld[this.buttonGas])) {
+			if(this.controlGas.isPressed()) {
 				this.thrust(this.ang, THRUST_POWER, this.rearThrustEmitter);
 			}
-			if ((keysHeld[this.keyThrustLeft] || padButtonsHeld[this.buttonThrustLeft])) {
+			if (this.controlThrustLeft.isPressed()) {
 				let tAng = this.ang - Math.PI/2;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
-			if ((keysHeld[this.keyThrustRight] || padButtonsHeld[this.buttonThrustRight])) {
+			if (this.controlThrustRight.isPressed()) {
 				let tAng = this.ang + Math.PI/2;;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
 		}
 
 		//Engine power regeneration
-		if (!keysHeld[this.keyGas] && !keysHeld[this.keyThrustLeft] && !keysHeld[this.keyThrustRight] && this.thrustEnergy < 100) {
+		if (!this.controlGas.isPressed() && !this.controlThrustLeft.isPressed() && !this.controlThrustRight.isPressed() && this.thrustEnergy < 100) {
 			this.thrustEnergy += 1 * deltaT;
 		}
 			
@@ -189,7 +168,7 @@ class Ship extends WrapPosition {
 			this.shotList[i].move();
 		}
 		
-		if (keysHeld[this.keyCannonFire] || padButtonsHeld[this.buttonCannonFire]) {
+		if (this.controlCannonFire.isPressed()) {
 			this.fireCannon();
 			//this.fireLaser();
 		}
@@ -203,7 +182,7 @@ class Ship extends WrapPosition {
 		}
 
 		if (this.weaponHeat > 0) {
-			if (keysHeld[this.keyCannonFire] && this.weaponHeat >= 100) {
+			if (keysHeld[this.controlCannonFire] && this.weaponHeat >= 100) {
 
 			} else {
 				this.weaponHeat -= deltaT;
