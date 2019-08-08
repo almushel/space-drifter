@@ -41,9 +41,9 @@ class Ship extends WrapPosition {
 
 	// key controls used for this
 	setupControls() {
-		this.controlGas = new Control (KEY_LETTER_W, PAD_UP, PAD_AXIS_LV, 1);
-		this.controlTurnLeft = new Control (KEY_LETTER_A, PAD_LEFT, PAD_AXIS_LH, -1);
-		this.controlTurnRight = new Control (KEY_LETTER_D, PAD_RIGHT, PAD_AXIS_LH, 1);
+		this.controlGas = new Control (KEY_LETTER_W, PAD_UP, PAD_AXIS_LV, -1, 0.2);
+		this.controlTurnLeft = new Control (KEY_LETTER_A, PAD_LEFT, PAD_AXIS_LH, -1, 0.2);
+		this.controlTurnRight = new Control (KEY_LETTER_D, PAD_RIGHT, PAD_AXIS_LH, 1, 0.2);
 		this.controlThrustLeft = new Control (KEY_LETTER_Q, PAD_LB, null, null);
 		this.controlThrustRight = new Control (KEY_LETTER_E, PAD_RB, null, null);
 		this.controlCannonFire = new Control (KEY_SPACEBAR, PAD_A, null, null);

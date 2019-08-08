@@ -1,5 +1,5 @@
 class Control {
-    constructor (key, padButton, axis, axisDir) {
+    constructor (key, padButton, axis, axisDir, deadzone) {
         //keysHeld[key]
         if (key != undefined & key != null) {
             this.key = key;
@@ -18,6 +18,10 @@ class Control {
         if (axisDir != undefined & axisDir != null) {
             this.axisDir = axisDir;
         }
+
+        if (deadzone != undefined & deadzone != null) {
+            this.deadzone = deadzone;
+        }
     }
 
     isPressed () {
@@ -25,12 +29,20 @@ class Control {
     }
 
     axisTouched() {
-        if (this.direction == 1) {
-            return padAxes[this.axis] > 0;
-        } else if (this.direction == -1) {
-            return padAxes[this.axis] < 0;
+        if (this.axisDir == 1) {
+            return padAxes[this.axis] > this.deadzone;
+        } else if (this.axisDir == -1) {
+            return padAxes[this.axis] < -this.deadzone;
         } else {
             return false;
         }
+    }
+
+    getAxisValue() {
+        return padAxes[this.axis];
+    }
+
+    getButtonValue() {
+        //TO DO
     }
 }
