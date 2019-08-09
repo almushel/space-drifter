@@ -35,7 +35,14 @@ window.addEventListener('gamepadconnected', function(e){
 })
 
 window.addEventListener('gamepaddisconnected', function(e){
-    if (navigator.getGamepads().length < 2) {
+    let padsConnected = 0;
+    let gamepads = navigator.getGamepads;
+    for (let i = 0; i < gamepads.length; i++) {
+        if (gamepads[i] != null) {
+            padsConnected++;
+        }
+    }
+    if (padsConnected <= 0) {
         controllerEnabled = false;
     }
 })
