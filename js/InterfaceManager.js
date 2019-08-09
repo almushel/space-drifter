@@ -65,6 +65,7 @@ function drawPlayerLives() {
     canvasContext.textAlign = 'center';
     canvasContext.fillStyle = 'white';
     canvasContext.strokeStyle = 'black';
+    canvasContext.lineWidth = 2;
     canvasContext.strokeText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
     canvasContext.fillText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
     canvasContext.restore();
