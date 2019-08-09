@@ -1,41 +1,41 @@
-var gameStart = false;
-var gameOver = false;
-var showHighScores = false;
-var meterOuterPoly = [{ x: -50, y: 10 },
+let gameStart = false;
+let gameOver = false;
+let showHighScores = false;
+let meterOuterPoly = [{ x: -50, y: 10 },
 { x: -44, y: -10 },
 { x: +52, y: -10 },
 { x: +46, y: 10 }];
 
-var meterInnerPoly = [{ x: -47, y: 8 },
+let meterInnerPoly = [{ x: -47, y: 8 },
 { x: -42, y: -8 },
 { x: +49, y: -8 },
 { x: +44, y: 8 }];
 
-var heatOuterPoly = [{ x: -44, y: 10 },
+let heatOuterPoly = [{ x: -44, y: 10 },
 { x: -50, y: -10 },
 { x: +46, y: -10 },
 { x: +52, y: 10 }];
 
-var heatInnerPoly = [{ x: -42, y: 8 },
+let heatInnerPoly = [{ x: -42, y: 8 },
 { x: -47, y: -8 },
 { x: +42, y: -8 },
 { x: +47, y: 8 }];
 
-var meterBG = [{ x: -125, y: 22 },
+let meterBG = [{ x: -125, y: 22 },
 { x: -113, y: -22 },
 { x: 113, y: -22 },
 { x: 125, y: 22 }];
 
-var livesBG = [{ x: -125, y: 32 },
+let livesBG = [{ x: -125, y: 32 },
 { x: -113, y: -32 },
 { x: 113, y: -32 },
 { x: 125, y: 32 }];
 
-var tmColorOuter = '#111111';
-var tmColorInner = '#6DC2FF';
+let tmColorOuter = '#111111';
+let tmColorInner = '#6DC2FF';
 
-var hmColorOuter = 'grey';
-var hmColorInner = 'red';
+let hmColorOuter = 'grey';
+let hmColorInner = 'red';
 
 function drawHUD() {
     drawPlayerLives();
@@ -78,7 +78,7 @@ function drawThrustMeter() {
     if (p1.thrustEnergy >= 1) {
         //canvasContext.shadowColor = tmColorInner;
         //canvasContext.shadowBlur = 4;
-        var thrustDelta = p1.thrustEnergy / 100;
+        let thrustDelta = p1.thrustEnergy / 100;
         meterInnerPoly[2].x = -41 + Math.floor(thrustDelta * 90);
         meterInnerPoly[3].x = -41 + Math.floor(thrustDelta * 90) - 5;
         drawPolygon(canvas.width / 2 - 60, canvas.height - 16, meterInnerPoly, tmColorInner, true);
@@ -97,7 +97,7 @@ function drawScore() {
     canvasContext.shadowColor = 'black';
     canvasContext.shadowBlur = 3;
 
-    for (var t = 0; t < 5; t++) {
+    for (let t = 0; t < 5; t++) {
 
         if (currentTimeCount > t) {
             colorRect(8 + 32 * t, canvas.height - 56, 26, 26, '#6DC2FF');
@@ -138,7 +138,7 @@ function drawWeaponHeat() {
     if (p1.weaponHeat >= 1) {
         //canvasContext.shadowColor = hmColorInner;
         //canvasContext.shadowBlur = 4;
-        var heatDelta = p1.weaponHeat / 100;
+        let heatDelta = p1.weaponHeat / 100;
         heatInnerPoly[2].x = -41 + Math.floor(heatDelta * 90) - 5;
         heatInnerPoly[3].x = -41 + Math.floor(heatDelta * 90);
         drawPolygon(canvas.width / 2 + 60, canvas.height - 16, heatInnerPoly, hmColorInner, true);
@@ -153,7 +153,7 @@ function drawTitleScreen() {
     } else if (showHighScores) {
         drawScoreTable();
     } else {
-        var yOffset = canvas.height / 2.5;
+        let yOffset = canvas.height / 2.5;
         drawLine(0, yOffset - 21, canvas.width, yOffset - 21, 3, 'orange');
         drawLine(0, yOffset - 9, canvas.width, yOffset - 9, 3, 'orange');
         drawLine(0, yOffset - 15, canvas.width, yOffset - 15, 3, '#6DC2FF');
@@ -166,26 +166,36 @@ function drawTitleScreen() {
         canvasContext.restore();
         canvasContext.save();
         canvasContext.globalAlpha = 0.4;
-        colorRect(canvas.width / 2 - 130, yOffset + 75, 260, 115, 'dimgrey');
+        colorRect(canvas.width / 2 - 130, yOffset + 75, 260, 145, 'dimgrey');
         canvasContext.restore();
 
         colorAlignedText(canvas.width / 2 - 110, yOffset + 100, 'left', '15px Orbitron', 'white', '<');
-        colorAlignedText(canvas.width / 2 + 110, yOffset + 100, 'right', '15px Orbitron', 'white', 'Rotate Left');
-
         colorAlignedText(canvas.width / 2 - 110, yOffset + 120, 'left', '15px Orbitron', 'white', '>');
-        colorAlignedText(canvas.width / 2 + 110, yOffset + 120, 'right', '15px Orbitron', 'white', 'Rotate Right');
-
         colorAlignedText(canvas.width / 2 - 110, yOffset + 140, 'left', '15px Orbitron', 'white', '^');
-        colorAlignedText(canvas.width / 2 + 110, yOffset + 140, 'right', '15px Orbitron', 'white', 'Accelerate');
 
-        colorAlignedText(canvas.width / 2 - 110, yOffset + 160, 'left', '15px Orbitron', 'white', 'Spacebar');
+        if (controllerEnabled) {
+            colorAlignedText(canvas.width / 2 - 110, yOffset + 160, 'left', '15px Orbitron', 'white', 'A');
+            colorAlignedText(canvas.width / 2 - 110, yOffset + 180, 'left', '15px Orbitron', 'white', 'LB');
+            colorAlignedText(canvas.width / 2 - 110, yOffset + 200, 'left', '15px Orbitron', 'white', 'RB');
+        
+        } else {
+            colorAlignedText(canvas.width / 2 - 110, yOffset + 160, 'left', '15px Orbitron', 'white', 'Spacebar');
+            colorAlignedText(canvas.width / 2 - 110, yOffset + 180, 'left', '15px Orbitron', 'white', 'Q');
+            colorAlignedText(canvas.width / 2 - 110, yOffset + 200, 'left', '15px Orbitron', 'white', 'E');
+    
+        }
+        colorAlignedText(canvas.width / 2 + 110, yOffset + 100, 'right', '15px Orbitron', 'white', 'Rotate Left');
+        colorAlignedText(canvas.width / 2 + 110, yOffset + 120, 'right', '15px Orbitron', 'white', 'Rotate Right');
+        colorAlignedText(canvas.width / 2 + 110, yOffset + 140, 'right', '15px Orbitron', 'white', 'Accelerate');
         colorAlignedText(canvas.width / 2 + 110, yOffset + 160, 'right', '15px Orbitron', 'white', 'Fire');
+        colorAlignedText(canvas.width / 2 + 110, yOffset + 180, 'right', '15px Orbitron', 'white', 'Thrust Left');
+        colorAlignedText(canvas.width / 2 + 110, yOffset + 200, 'right', '15px Orbitron', 'white', 'Thrust Right');
         canvasContext.restore();
     }
 }
 
 function drawGameOver() {
-    var yOffset = canvas.height / 4;
+    let yOffset = canvas.height / 4;
 
     colorAlignedText(canvas.width / 2, yOffset, 'center', '50px Orbitron', 'orange', 'GAME OVER');
     drawLine(0, canvas.height / 2, canvas.width, canvas.height / 2, 2, 'white');
@@ -196,7 +206,7 @@ function drawGameOver() {
 }
 
 function drawScoreTable() {
-    var yOffset = canvas.height / 4;
+    let yOffset = canvas.height / 4;
     colorAlignedText(canvas.width / 2, yOffset, 'center', 'bold 30px Orbitron', 'white', 'HIGH SCORES');
     drawLine(0, yOffset + 20, canvas.width, yOffset + 15, 2, 'white');
 
