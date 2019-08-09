@@ -1,4 +1,4 @@
-function doCirclesOverlap(firstX, firstY, firstR, secondX, secondY, secondR) {
+function circleIntersect(firstX, firstY, firstR, secondX, secondY, secondR) {
 	if (Math.pow((firstX - secondX), 2) + Math.pow((firstY - secondY), 2) <= Math.pow(firstR + secondR, 2)) {
 		return true;
 	}

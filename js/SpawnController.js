@@ -10,6 +10,21 @@ var currentWave = 1;
 var pointMax = 1;
 var spawnFinished = false;
 
+function resetGame() {
+	currentWave = 1;
+	pointMax = 1;
+	currentScore = 0;
+	newHighScoreIndex = -1;
+
+	particleList.length = 0;
+	particlePool.length = 0;
+
+	enemyList.length = 0;
+	enemyPool.length = 0;
+	p1.reset();
+	spawnWave(generateWave(currentWave, pointMax));
+}
+
 function spawnWave(waveList) {
     for (let i = 0; i < waveList.length; i++) {
         let newEnemy = spawnEnemy(waveList[i])
@@ -121,7 +136,7 @@ function enemySelect(type) {
 
 function forceCircle(x, y, radius, force) {
     for (let i = 0; i < enemyList.length; i++) {
-        if (doCirclesOverlap(x, y, radius, enemyList[i].x, enemyList[i].y, enemyList[i].collisionRadius)) {
+        if (circleIntersect(x, y, radius, enemyList[i].x, enemyList[i].y, enemyList[i].collisionRadius)) {
             let deltaX = x - enemyList[i].x,
                 deltaY = y - enemyList[i].y;
             let deltaAng = Math.atan2(deltaY, deltaX);
@@ -138,14 +153,14 @@ function getClearSpawn(spawner) {
         checkY = Math.random() * canvas.height;
 
     for (let i = 0; i < enemyList.length; i++) {
-        if (doCirclesOverlap(checkX, checkY, spawner.collisionRadius,
+        if (circleIntersect(checkX, checkY, spawner.collisionRadius,
             enemyList[i].x, enemyList[i].y, enemyList[i].collisionRadius)) {
             checkX -= enemyList[i].x - checkX;
             checkY -= enemyList[i].y - checkY;
         }
     }
 
-    if (doCirclesOverlap(checkX, checkY, spawner.collisionRadius,
+    if (circleIntersect(checkX, checkY, spawner.collisionRadius,
         p1.x, p1.y, p1.collisionRadius * 2)) {
         checkX -= p1.x - checkX;
         checkY -= p1.y - checkY;
@@ -175,15 +190,5 @@ function removeDead() {
         currentWave++;
         pointMax++;
         setTimeout(spawnWave, 1000, generateWave(currentWave, pointMax));
-    }
-}
-
-function clamp(value, min, max) {
-    if (value < min) {
-        return min;
-    } else if (value > max) {
-        return max;
-    } else {
-        return value;
     }
 }

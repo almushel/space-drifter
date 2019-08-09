@@ -1,5 +1,6 @@
 const TWINKLE_INTERVAL = 180;
 
+var starField = [];
 var twinkleTimer = 0;
 var twinkleTimers = [];
 var twinkles = [];
