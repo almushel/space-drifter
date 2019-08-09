@@ -86,15 +86,17 @@ class Ship extends WrapPosition {
 			if (circleRotRectIntersect(this.x + xOffset, this.y + yOffset, LASER_RANGE * (this.laserAnim/100), 32, this.ang, 
 										thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
 				thisEnemy.die();
-				updateScore(1);
+				let scorePoints = getEnemyValue(thisEnemy.constructor.name);
+				updateScore(scorePoints);
 			}
 		}
 
 		for (let i=0; i < this.shotList.length; i++) {
 			if(this.shotList[i].hitTest(thisEnemy)) {
-				thisEnemy.die();
 				this.shotList[i].reset();
-				updateScore(1);
+				thisEnemy.die();
+				let scorePoints = getEnemyValue(thisEnemy.constructor.name);
+				updateScore(scorePoints);
 			}
 		}
 	}

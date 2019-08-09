@@ -16,7 +16,7 @@ function updateScore(baseValue) {
         currentChain++;
         updateMultiplier();
     }
-    currentScore += baseValue * 10 * currentMultiplier;
+    currentScore += Math.round(baseValue * 10 * currentMultiplier);
     startChainTimer();
 }
 

@@ -49,7 +49,7 @@ function generateWave(waveNum, maxPoints) {
 function spawnEnemy(type) {
     //Check for enemy of same type in object pool
     for (let p = enemyPool.length - 1; p >= 0; p--) {
-        if (enemyPool[p].constructor.name == getName(type)) {
+        if (enemyPool[p].constructor.name == getEnemyName(type)) {
             enemyList.push(enemyPool[p]);
             enemyPool.splice(p, 1);
             return enemyList[enemyList.length - 1];
@@ -61,18 +61,33 @@ function spawnEnemy(type) {
     return newEnemy;
 }
 
-function getName(type) {
+function getEnemyName(type) {
     switch (type) {
         case ENEMY_UFO:
-            return UFO.constructor.name;
+            return UFO.name;
         case ENEMY_TRACKER:
-            return Tracker.constructor.name;
+            return Tracker.name;
         case ENEMY_DRIFTER:
-            return Drifter.constructor.name;
+            return Drifter.name;
         case ENEMY_TURRET:
-            return Turret.constructor.name;
+            return Turret.name;
         default:
             return '';
+    }
+}
+
+function getEnemyValue(name) {
+    switch(name) {
+        case UFO.name:
+            return ENEMY_UFO + 1;
+        case Tracker.name:
+            return ENEMY_TRACKER + 1;
+        case Drifter.name:
+            return ENEMY_DRIFTER + 1;
+        case Turret.name:
+            return ENEMY_TURRET + 1;
+        default:
+            return 0;
     }
 }
 
