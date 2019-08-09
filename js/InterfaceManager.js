@@ -54,7 +54,6 @@ function drawHUD() {
 function drawPlayerLives() {
     canvasContext.save();
     canvasContext.shadowBlur = 5;
-    //drawPolygon(canvas.width - 100, canvas.height - 30, livesBG, '#383838', true);
     canvasContext.shadowColor = 'black';
     canvasContext.save();
     canvasContext.translate(canvas.width/2 - 15.5, canvas.height+1);
@@ -119,9 +118,9 @@ function drawScore() {
     canvasContext.fillText('x' + currentMultiplier, 186, canvas.height - 36);
 
     //Testing values
-    canvasContext.textAlign = 'left';
-    canvasContext.fillText('Chain: ' + currentChain, 10, 30);
-    canvasContext.fillText('Timer: ' + currentTimeCount, 10, 50);
+    // canvasContext.textAlign = 'left';
+    // canvasContext.fillText('Chain: ' + currentChain, 10, 30);
+    // canvasContext.fillText('Timer: ' + currentTimeCount, 10, 50);
 
     canvasContext.restore();
 }
@@ -159,9 +158,21 @@ function drawTitleScreen() {
         drawScoreTable();
     } else {
         let yOffset = canvas.height / 2.5;
-        drawLine(0, yOffset - 21, canvas.width, yOffset - 21, 3, 'orange');
-        drawLine(0, yOffset - 9, canvas.width, yOffset - 9, 3, 'orange');
-        drawLine(0, yOffset - 15, canvas.width, yOffset - 15, 3, '#6DC2FF');
+        canvasContext.lineWidth = 4;
+        colorArc(canvas.width/2, canvas.height+canvas.height/3, canvas.width/1.1, 0, Math.PI*2, false, 'orange');
+        drawLine(0, yOffset + 12, canvas.width, yOffset + 12, 2, 'white');
+        drawLine(0, yOffset + 14, canvas.width, yOffset + 14, 3, '#6DC2FF');
+        drawLine(0, yOffset + 16, canvas.width, yOffset + 16, 2, 'white');
+
+        drawBitmapCenteredWithRotation(playerPic, canvas.width/1.25 + 40, yOffset + 14, 0);
+        canvasContext.save();
+        canvasContext.lineWidth = 2;
+        canvasContext.strokeStyle = 'white'
+        colorCircle(canvas.width/1.25, yOffset + 14, canvas.width/35, '#6DC2FF')
+        canvasContext.stroke();
+        colorCircle(canvas.width/1.25 + canvas.width/140, yOffset + 14, canvas.width/70, 'white')
+        drawLine(canvas.width/1.25 + canvas.width/140, 0, canvas.width/1.25 + canvas.width/140, canvas.height, 3, 'white');
+
         canvasContext.save();
         canvasContext.shadowBlur = 10;
         canvasContext.shadowColor = 'black';
@@ -170,7 +181,7 @@ function drawTitleScreen() {
             'Press FIRE to start!');
         canvasContext.restore();
         canvasContext.save();
-        canvasContext.globalAlpha = 0.4;
+        canvasContext.globalAlpha = 0.5;
         colorRect(canvas.width / 2 - 130, yOffset + 75, 260, 145, 'dimgrey');
         canvasContext.restore();
 
