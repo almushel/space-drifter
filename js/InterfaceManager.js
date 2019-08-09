@@ -38,13 +38,14 @@ let hmColorOuter = 'grey';
 let hmColorInner = 'red';
 
 function drawHUD() {
-    drawPlayerLives();
     canvasContext.save();
-    canvasContext.shadowColor = '#6DC2FF';
-    canvasContext.shadowBlur = 3;
+    //canvasContext.shadowColor = '#6DC2FF';
+    //canvasContext.shadowBlur = 3;
+    canvasContext.globalAlpha = 0.6;
     drawPolygon(canvas.width / 2, canvas.height - 22, meterBG, '#383838', true);
     drawPolygon(canvas.width / 2 + 1, canvas.height - 20, [{ x: 0, y: -20 }, { x: 13, y: 20 }, { x: -13, y: 20 }], '#6DC2FF', true);
     canvasContext.restore();
+    drawPlayerLives();
     drawThrustMeter();
     drawWeaponHeat();
     drawScore();
@@ -52,17 +53,22 @@ function drawHUD() {
 
 function drawPlayerLives() {
     canvasContext.save();
-    canvasContext.shadowColor = '#6DC2FF';
-    canvasContext.shadowBlur = 3;
-    drawPolygon(canvas.width - 100, canvas.height - 30, livesBG, '#383838', true);
+    canvasContext.shadowBlur = 5;
+    //drawPolygon(canvas.width - 100, canvas.height - 30, livesBG, '#383838', true);
     canvasContext.shadowColor = 'black';
-    for (let l = 0; l < p1.lives; l++) {
-        canvasContext.save();
-        canvasContext.translate(canvas.width - 30 - (l * 30), canvas.height - 5);
-        canvasContext.rotate(-Math.PI / 2);
-        canvasContext.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 25, 25)
-        canvasContext.restore();
-    }
+    canvasContext.save();
+    canvasContext.translate(canvas.width/2 - 15.5, canvas.height+1);
+    canvasContext.rotate(-Math.PI / 2);
+    canvasContext.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 33, 33)
+    canvasContext.restore();
+    canvasContext.save();
+    canvasContext.font = '15px Orbitron';
+    canvasContext.textAlign = 'center';
+    canvasContext.fillStyle = 'white';
+    canvasContext.strokeStyle = 'black';
+    canvasContext.strokeText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
+    canvasContext.fillText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
+    canvasContext.restore();
     canvasContext.restore();
 }
 
@@ -89,8 +95,7 @@ function drawThrustMeter() {
 function drawScore() {
     updateChainTimer();
     canvasContext.save();
-    canvasContext.shadowColor = '#6DC2FF';
-    canvasContext.shadowBlur = 3;
+    canvasContext.globalAlpha = 0.6;
     drawPolygon(100, canvas.height - 30, livesBG, '#383838', true);
     canvasContext.restore();
     canvasContext.save();
