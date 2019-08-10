@@ -161,9 +161,9 @@ function drawTitleScreen() {
         let yOffset = canvas.height / 2.5;
         canvasContext.lineWidth = 4;
         colorArc(canvas.width/2, canvas.height+canvas.height/3, canvas.width/1.1, 0, Math.PI*2, false, 'orange');
-        drawLine(0, yOffset + 12, canvas.width, yOffset + 12, 2, 'white');
-        drawLine(0, yOffset + 14, canvas.width, yOffset + 14, 3, '#6DC2FF');
-        drawLine(0, yOffset + 16, canvas.width, yOffset + 16, 2, 'white');
+        drawLine(0, yOffset + 12, canvas.width/1.25, yOffset + 12, 2, 'white');
+        drawLine(0, yOffset + 14, canvas.width/1.25, yOffset + 14, 3, '#6DC2FF');
+        drawLine(0, yOffset + 16, canvas.width/1.25, yOffset + 16, 2, 'white');
 
         drawBitmapCenteredWithRotation(playerPic, canvas.width/1.25 + 40, yOffset + 14, 0);
         canvasContext.save();
@@ -171,8 +171,17 @@ function drawTitleScreen() {
         canvasContext.strokeStyle = 'white'
         colorCircle(canvas.width/1.25, yOffset + 14, canvas.width/35, '#6DC2FF')
         canvasContext.stroke();
-        colorCircle(canvas.width/1.25 + canvas.width/140, yOffset + 14, canvas.width/70, 'white')
-        drawLine(canvas.width/1.25 + canvas.width/140, 0, canvas.width/1.25 + canvas.width/140, canvas.height, 3, 'white');
+        colorCircle(canvas.width/1.25 + canvas.width/60, yOffset + 14, canvas.width/70, 'white')
+        canvasContext.lineWidth = 3;
+        colorArc(-300, canvas.height/2, 300 + canvas.width/1.25 + canvas.width/60, Math.PI * 1.8, Math.PI/6, false, 'white');
+        
+        let lineAng = Math.PI/1.5;
+        drawLine(canvas.width/1.25 + canvas.width/60, yOffset +14, 
+                canvas.width/1.25 + Math.cos(lineAng) * 400, (yOffset + 14) + Math.sin(lineAng) * 400, 3, 'white');
+        lineAng += Math.PI/1.5;
+        drawLine(canvas.width/1.25 + canvas.width/60, yOffset +14, 
+                    canvas.width/1.25 + Math.cos(lineAng) * 400, (yOffset + 14) + Math.sin(lineAng) * 400, 3, 'white');
+                
 
         canvasContext.save();
         canvasContext.shadowBlur = 10;
