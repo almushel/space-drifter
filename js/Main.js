@@ -3,7 +3,10 @@ var canvas, canvasContext, bg, bgContext;
 
 var p1 = new Ship(playerPic);
 
-window.onload = function () {
+function loadGame() {
+	let startbutton = document.getElementById('startButton');
+	startbutton.style.display = "none";
+	
 	bg = document.getElementById('bg');
 	bgContext = bg.getContext('2d');
 
