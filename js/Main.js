@@ -18,6 +18,7 @@ function loadGame() {
 function loadingDoneSoStartGame() {
 	createStarField();
 	initInput();
+	setupAudio();
 	
 	initialFrame();
 	requestAnimationFrame(update);
