@@ -171,6 +171,7 @@ function getClearSpawn(spawner) {
 function removeDead() {
     for (let i = enemyList.length - 1; i >= 0; i--) {
         if (enemyList[i].isDead) {
+            enemyDeath.play();
             screenShake();
             
             let splodeOrigin = instantiateParticle(null, 'circle');

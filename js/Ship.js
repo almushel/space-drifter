@@ -105,7 +105,8 @@ class Ship extends WrapPosition {
 		this.isDead = true;
 		endChaintimer();
 		screenShake();
-
+		playerDeathSFX.play();
+		
 		let splodeOrigin = instantiateParticle(null, 'circle');
 		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
 		
@@ -206,7 +207,7 @@ class Ship extends WrapPosition {
 			if (this.shotList[i].isReadyToFire()){
 				this.weaponHeat += 20;
 				if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
-				
+				playerShotSFX.play();
 				this.shotList[i].shootFrom(this);
 				this.canShoot = false;
 				setTimeout(function (self) {self.canShoot = true}, 200, this);

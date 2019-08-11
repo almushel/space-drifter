@@ -1,12 +1,29 @@
-let musicLoop1, musicLoop2;
+let musicLoop1, musicLoop2, enemyDeath;
 let audioCtx, musicSource1, musicSource2, gainNode;
 let loop1Queued = false, 
 	loop2Queued = false;
 
+//TO DO:
+
+//Volume Control:
+	//Store default/relative volume for each audio object
+	//Set master volume multiplier from 0.0-1.0
+	//On master volume change change all audio object to objectVolume * masterVolume
+	//Group audio objects into Sound Effects and Music
+	//On Music/Sound volume change set volume to objectVolume * groupVolume * masterVolume;
+
 function setupAudio() {
 	musicLoop1 = loadMusicTrack('./audio/Space Drifter.mp3');
 	musicLoop2 = loadMusicTrack('./audio/Space Drifter.mp3');
-	
+	enemyDeath = new AudioOneShot('./audio/EnemyDeath.mp3', 3);
+	playerShotSFX = new AudioOneShot('./audio/PlayerShot.mp3', 4);
+	playerDeathSFX = new AudioOneShot('./audio/PlayerDeath.wav', 2);
+
+	musicLoop1.volume = 0.2;
+	musicLoop2.volume = 0.2;
+	playerShotSFX.volume = 0.4;
+	playerDeathSFX.volume = 0.2;
+
 	musicLoop1.oncanplay = function () {
 		musicLoop1.play();
 		musicLoop1.oncanplay = null;
