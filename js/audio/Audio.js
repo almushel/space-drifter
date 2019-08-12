@@ -1,4 +1,4 @@
-let musicLoop, enemyDeath, playerDeathSFX, playerShotSFX;
+let fadeLoop, musicLoop, enemyDeath, playerDeathSFX, playerShotSFX;
 let audioCtx, musicSource1, musicSource2, gainNode;
 let loop1Queued = false, 
 	loop2Queued = false;
@@ -13,14 +13,15 @@ let loop1Queued = false,
 	//On Music/Sound volume change set volume to objectVolume * groupVolume * masterVolume;
 
 function setupAudio() {
-	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter.mp3', 106.666)
+	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter.mp3', 106.666);
 	enemyDeath = new AudioOneShot('./audio/EnemyDeath.mp3', 3);
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot.mp3', 4);
 	playerDeathSFX = new AudioOneShot('./audio/PlayerDeath.wav', 2);
+	playerThrustSFX = new CrossFadeAudioLoop('./audio/PlayerThrust.mp3', 7, 3);
 
-	musicLoop.volume = 0.2;
+	musicLoop.volume = 0.3;
 	playerShotSFX.volume = 0.4;
-	playerDeathSFX.volume = 0.2;
+	playerDeathSFX.volume = 0.4;
 
 	musicLoop.play();
 /*

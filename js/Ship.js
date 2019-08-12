@@ -105,6 +105,7 @@ class Ship extends WrapPosition {
 		this.isDead = true;
 		endChaintimer();
 		screenShake();
+		playerThrustSFX.pause();
 		playerDeathSFX.play();
 		
 		let splodeOrigin = instantiateParticle(null, 'circle');
@@ -148,11 +149,16 @@ class Ship extends WrapPosition {
 				let tAng = this.ang + Math.PI/2;;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
+		} else {
+			playerThrustSFX.pause();
 		}
 
 		//Engine power regeneration
-		if (!this.controlGas.isPressed() && !this.controlThrustLeft.isPressed() && !this.controlThrustRight.isPressed() && this.thrustEnergy < 100) {
-			this.thrustEnergy += 1 * deltaT;
+		if (!this.controlGas.isPressed() && !this.controlThrustLeft.isPressed() && !this.controlThrustRight.isPressed()) {
+			playerThrustSFX.pause();
+			if (this.thrustEnergy < 100) {
+				this.thrustEnergy += 1 * deltaT;
+			}
 		}
 			
 		super.move();
@@ -164,6 +170,7 @@ class Ship extends WrapPosition {
 	}
 
 	thrust(angle, acceleration, emitter) {
+		playerThrustSFX.play();
 		this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
 		this.xv += Math.cos(angle) * (acceleration * deltaT);
 		this.yv += Math.sin(angle) * (acceleration * deltaT);
