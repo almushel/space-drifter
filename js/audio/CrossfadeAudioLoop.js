@@ -3,7 +3,8 @@ class CrossFadeAudioLoop {
         this.firstTrack = new Audio(path);
         this.secondTrack = new Audio(path);
 
-        this.crossfade = new Crossfade();
+        this.crossfade = new AudioFade();
+        this.fade = new AudioFade();
         
         this.loopPoint = loopPoint;
         this.fadeDuration = fadeDuration;
@@ -15,20 +16,21 @@ class CrossFadeAudioLoop {
     }
 
     play() {
-        if (!this.isPlaying) {
+        if (this.firstTrack.paused && this.secondTrack.paused) {
+            this.firstTrack.volume = 0;
+            if (this.firstTrack.currentTime >= this.loopPoint) {
+                this.firstTrack.currentTime = this.loopPoint - 2;
+            }
             this.firstTrack.play();
-            this.isPlaying = true;
-        }
-
+            this.fade.linearFade(this.firstTrack, 1, 0.1);
+            }
     }
 
     pause() {
-        if (this.isPlaying) {
-            this.firstTrack.pause();
-            this.firstTrack.currentTime = 0;
-            this.secondTrack.pause();
-            this.secondTrack.currentTime = 0;
-            this.isPlaying = false;
+        if (!this.firstTrack.paused || !this.secondTrack.paused) {
+            this.crossfade.abort();
+            this.fade.linearFade(this.firstTrack, -1, 0.1);
+            this.crossfade.linearFade(this.secondTrack, -1, 0.1);
         }
     }
 
@@ -36,7 +38,7 @@ class CrossFadeAudioLoop {
         //Queue second track while first track is playing
         this.firstTrack.ontimeupdate = function (loopPoint, nextQueued, nextTrack, crossfade, fadeDuration) {
             if (this.currentTime >= loopPoint - 1 && this.currentTime < loopPoint && nextQueued == false) {
-                crossfade.fade(this, nextTrack, fadeDuration);
+                crossfade.crossFade(this, nextTrack, fadeDuration);
                 //Need to set nextqueued to false when done;
                 nextQueued = true;
             }
@@ -54,7 +56,7 @@ class CrossFadeAudioLoop {
         //Queue first track while second track is playing
         this.secondTrack.ontimeupdate = function (loopPoint, nextQueued, nextTrack, crossfade, fadeDuration) {
             if (this.currentTime >= loopPoint - 1 && this.currentTime < loopPoint && nextQueued == false) {
-                crossfade.fade(this, nextTrack, fadeDuration);
+                crossfade.crossFade(this, nextTrack, fadeDuration);
                 nextQueued = true;
             }
         }.bind(this.secondTrack, this.loopPoint, this.firstQueued, this.firstTrack, this.crossfade, this.fadeDuration);
