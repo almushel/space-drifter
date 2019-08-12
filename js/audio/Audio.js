@@ -19,7 +19,7 @@ function setupAudio() {
 	playerDeathSFX = new AudioOneShot('./audio/PlayerDeath.wav', 2);
 	playerThrustSFX = new CrossFadeAudioLoop('./audio/PlayerThrust.mp3', 7, 3);
 
-	musicLoop.volume = 0.3;
+	musicLoop.volume = 0.4;
 	playerShotSFX.volume = 0.4;
 	playerDeathSFX.volume = 0.4;
 
