@@ -11,7 +11,8 @@ var pointMax = 1;
 var spawnFinished = false;
 
 function resetGame() {
-	currentWave = 1;
+    musicLoop.play();
+    currentWave = 1;
 	pointMax = 1;
 	currentScore = 0;
 	newHighScoreIndex = -1;

@@ -11,11 +11,17 @@ class SeamlessAudioLoop {
     }
 
     play() {
-        this.firstTrack.oncanplay = function() {
-            this.play();
-            this.oncanplay = null;
-        //Set 'this' to 'this.firstTrack' in function
-        }.bind(this.firstTrack);
+        this.firstTrack.play();
+    }
+
+    pause() {
+        if (this.firstTrack.paused == false) {
+            this.firstTrack.pause();
+            this.firstTrack.currentTime = 0;
+        } else if (this.secondTrack.paused == false) {
+            this.secondTrack.pause();
+            this.secondTrack.currentTime = 0;
+        }
     }
 
     initLoop() {

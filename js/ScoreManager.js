@@ -57,6 +57,7 @@ function endChaintimer() {
 }
 
 function endGame() {
+    musicLoop.pause();
     updateScoreTable();
     if (localStorage.sdHighScore == undefined) {
         localStorage.sdHighScore = 0;
