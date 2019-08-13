@@ -8,9 +8,10 @@ class Drifter extends WrapPosition {
 		this.polyPoints = [];
 		this.radius = DRIFT_RADIUS;
 		this.collisionRadius = DRIFT_RADIUS;
+		this.generatePoly();
 	}
 
-	reset(radius) {
+	reset(x, y, radius) {
 		super.reset();
 		if (radius == undefined || radius == null) {
 			this.radius = DRIFT_RADIUS;
@@ -19,9 +20,8 @@ class Drifter extends WrapPosition {
 		}
 		this.ang = 0;
 
-		let newPos = getClearSpawn(this);
-		this.x = newPos.x;
-		this.y = newPos.y;
+		this.x = x;
+		this.y = y;
 
 		var randAng = Math.random() * (Math.PI * 2);
 		this.xv = Math.cos(randAng) * DRIFT_RATE;
@@ -73,15 +73,17 @@ class Drifter extends WrapPosition {
 	}
 
 	static divide(whichDrifter) {
-		var randAng = Math.random() * (Math.PI * 2);
+		let randAng = Math.random() * (Math.PI * 2);
+		let childRadius = whichDrifter.radius / 2;
 		for (let s = 0; s < 3; s++) {
-			let childDrifter = spawnEnemy(ENEMY_DRIFTER);
-			childDrifter.reset(whichDrifter.radius / 2);
-			childDrifter.generatePoly();
-
 			randAng += (Math.PI / 1.5);
-			childDrifter.x = whichDrifter.x + Math.cos(randAng) * childDrifter.radius;
-			childDrifter.y = whichDrifter.y + Math.sin(randAng) * childDrifter.radius;
+			let childDrifter = spawnEnemy(ENEMY_DRIFTER);
+			enemyList.push(childDrifter);
+			let newX = whichDrifter.x + Math.cos(randAng) * childRadius;
+			let newY = whichDrifter.y + Math.sin(randAng) * childRadius;
+
+			childDrifter.reset(newX, newY, whichDrifter.radius / 2);
+			childDrifter.generatePoly();
 
 			childDrifter.xv = Math.cos(randAng) * DRIFT_RATE;
 			childDrifter.yv = Math.sin(randAng) * DRIFT_RATE;

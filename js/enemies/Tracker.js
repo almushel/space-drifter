@@ -13,14 +13,13 @@ class Tracker extends WrapPosition {
 		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, null, 'rectangle', 'red', 'red', 'red');
 	}
 
-	reset() {
-		super.reset();
+	reset(x, y) {
+		super.reset(x, y);
 		this.ang = 0;
 		this.targetAng = 0;
 		
-		var newPos = getClearSpawn(this);
-		this.x = newPos.x;
-		this.y = newPos.y;
+		this.x = x;
+		this.y = y;
 	} // end of reset
 	  
 	move() {

@@ -30,12 +30,11 @@ class Turret extends WrapPosition {
 		}
 	}
 
-	reset() {
+	reset(x, y) {
 		super.reset();
 
-		var newPos = getClearSpawn(this);
-		this.x = newPos.x;
-		this.y = newPos.y;
+		this.x = x
+		this.y = y;
 
 		this.aimAng = Math.random() * (Math.PI * 2);
 	}

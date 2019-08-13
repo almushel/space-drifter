@@ -29,9 +29,14 @@ function resetGame() {
 function spawnWave(waveList) {
     for (let i = 0; i < waveList.length; i++) {
         let newEnemy = spawnEnemy(waveList[i])
-        newEnemy.reset();
+        let enemyPos = getClearSpawn(newEnemy);
+        newEnemy.reset(enemyPos.x, enemyPos.y);
+
+        let enemyWarp = new SpawnWarp(enemyPos.x, enemyPos.y, newEnemy);
+        enemyList.push(enemyWarp);
+
         let spawnMarker = instantiateParticle(null, 'circle');
-        spawnMarker.reset(newEnemy.x, newEnemy.y, 0, newEnemy.collisionRadius/2, 'white', null, 'circle');
+        spawnMarker.reset(enemyPos.x, enemyPos.y, 0, newEnemy.collisionRadius, 'white', null, 'circle');
         spawnFinished = true;
     }
 }
@@ -66,14 +71,14 @@ function spawnEnemy(type) {
     //Check for enemy of same type in object pool
     for (let p = enemyPool.length - 1; p >= 0; p--) {
         if (enemyPool[p].constructor.name == getEnemyName(type)) {
-            enemyList.push(enemyPool[p]);
+            let enemy = enemyPool[p];
             enemyPool.splice(p, 1);
-            return enemyList[enemyList.length - 1];
+            return enemy;
         }
     }
 
     let newEnemy = enemySelect(type);
-    enemyList.push(newEnemy);
+    //enemyList.push(newEnemy);
     return newEnemy;
 }
 
@@ -162,7 +167,7 @@ function getClearSpawn(spawner) {
     }
 
     if (circleIntersect(checkX, checkY, spawner.collisionRadius,
-        p1.x, p1.y, p1.collisionRadius * 2)) {
+        p1.x, p1.y, p1.collisionRadius * 4)) {
         checkX -= p1.x - checkX;
         checkY -= p1.y - checkY;
     }
@@ -171,7 +176,9 @@ function getClearSpawn(spawner) {
 
 function removeDead() {
     for (let i = enemyList.length - 1; i >= 0; i--) {
-        if (enemyList[i].isDead) {
+        if (enemyList[i].constructor.name == SpawnWarp.name && enemyList[i].isDead) {
+            enemyList.splice(i, 1);
+        } else if (enemyList[i].isDead) {
             enemyDeath.play();
             screenShake();
             

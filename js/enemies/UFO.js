@@ -11,15 +11,14 @@ class UFO extends WrapPosition {
 		this.collisionRadius = UFO_COLLISION_RADIUS;
 	}
 	
-	reset() {
+	reset(x, y) {
 		super.reset();
 		this.ang = 0;
 		this.targetAng = 0;
 		this.cyclesUntilDirectionChange = 0;
 		
-		var newPos = getClearSpawn(this);
-		this.x = newPos.x;
-		this.y = newPos.y;
+		this.x = x;
+		this.y = y;
 	} // end of reset
 	  
 	move() {
