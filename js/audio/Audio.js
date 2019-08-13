@@ -14,17 +14,17 @@ let loop1Queued = false,
 
 function setupAudio() {
 	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter.mp3', 106.666);
-	enemyDeath = new AudioOneShot('./audio/EnemyDeath.mp3', 3);
+	enemyDeath = new AudioOneShot('./audio/EnemyDeath.mp3', 6);
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot.mp3', 4);
 	playerDeathSFX = new AudioOneShot('./audio/PlayerDeath.wav', 2);
 	playerThrustSFX = new CrossFadeAudioLoop('./audio/PlayerThrust.mp3', 7, 3);
 
-	musicLoop.volume = 0.4;
-	playerShotSFX.volume = 0.4;
+	musicLoop.volume = 0.45;
+	playerShotSFX.volume = 1.0;
+	
 	playerDeathSFX.volume = 0.4;
-
-	musicLoop.play();
-/*
+	
+	/*
 	audioCtx = new AudioContext();
 	musicSource1 = audioCtx.createMediaElementSource(musicLoop1);
 	musicSource2 = audioCtx.createMediaElementSource(musicLoop2);
@@ -41,4 +41,15 @@ function loadMusicTrack(path) {
 	newAudio.preload = 'auto';
 
 	return newAudio;
+}
+
+//Assuming range of 0-1;
+function linearToExp(vol) {
+	if (vol <= 0) {
+		return;
+	}
+	let volume = vol;
+	volume = 3.1623 * Math.pow(10, -4) * Math.exp(8.059 * volume);
+
+	return volume;
 }
