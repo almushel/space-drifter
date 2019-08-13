@@ -27,11 +27,8 @@ function loadingDoneSoStartGame() {
 function update() {
 	updateFrameTimes();
 	pollGamepads();
-	if (gameStart) {
-		removeDead();
-		moveAll();
-	}
-
+	moveAll();
+	removeDead();
 	drawAll();
 	requestAnimationFrame(update);
 }
@@ -54,12 +51,13 @@ function moveAll() {
 function drawAll() {
 	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 	twinkleStars();
+	drawParticles();
+	for (var i = 0; i < enemyList.length; i++) {
+		enemyList[i].draw();
+	}
+	p1.draw();
+
 	if (gameStart) {
-		drawParticles();
-		for (var i = 0; i < enemyList.length; i++) {
-			enemyList[i].draw();
-		}
-		p1.draw();
 		drawHUD();
 	} else {
 		drawTitleScreen();

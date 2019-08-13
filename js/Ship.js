@@ -123,7 +123,7 @@ class Ship extends WrapPosition {
 	  
 	move() {
 		if (this.isDead) {
-			if (this.controlCannonFire.isPressed()) {
+			if (this.controlCannonFire.isPressed() && this.lives >= 0) {
 				this.respawn();
 			}
 			return;
