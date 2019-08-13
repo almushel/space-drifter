@@ -38,7 +38,9 @@ class SpawnWarp extends WrapPosition {
     }
 
     die() {
+        allEntities.push(this.target);
         enemyList.push(this.target);
+        spawnFinished = true;
         this.isDead = true;
     }
 }

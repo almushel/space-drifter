@@ -3,6 +3,8 @@ var canvas, canvasContext, bg, bgContext;
 
 var p1 = new Ship(playerPic);
 
+var allEntities = [];
+
 function loadGame() {
 	let startbutton = document.getElementById('startButton');
 	startbutton.style.display = "none";
@@ -35,26 +37,21 @@ function update() {
 
 function moveAll() {
 	p1.move();
-	for (var i = 0; i < enemyList.length; i++) {
-		enemyList[i].move();
 
-		for (var e = i + 1; e < enemyList.length; e++) {
-			enemyList[i].bumpCollision(enemyList[e]);
-		}
-
-		p1.checkShipAndShotCollisionAgainst(enemyList[i]);
-		p1.bumpCollision(enemyList[i]);
+	for(let e=allEntities.length-1; e >= 0; e--) {
+		allEntities[e].move();
 	}
-	moveParticles();
+	collide();
 }
 
 function drawAll() {
 	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 	twinkleStars();
-	drawParticles();
-	for (var i = 0; i < enemyList.length; i++) {
-		enemyList[i].draw();
+	
+	for(let e=allEntities.length-1; e >= 0; e--) {
+		allEntities[e].draw();
 	}
+
 	p1.draw();
 
 	if (gameStart) {
@@ -62,5 +59,25 @@ function drawAll() {
 	} else {
 		drawTitleScreen();
 	}
+}
 
+function collide() {
+	for (var i = 0; i < enemyList.length; i++) {
+		for (var e = i + 1; e < enemyList.length; e++) {
+			enemyList[i].bumpCollision(enemyList[e]);
+		}
+
+		p1.checkShipAndShotCollisionAgainst(enemyList[i]);
+		p1.bumpCollision(enemyList[i]);
+	}
+}
+
+function removeDead() {
+	for(let e=allEntities.length-1; e >= 0; e--) {
+		if (allEntities[e].isDead) {
+			allEntities.splice(e, 1);
+		}
+	}
+	removeDeadEnemies();
+	removeDeadParticles();
 }

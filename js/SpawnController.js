@@ -33,11 +33,10 @@ function spawnWave(waveList) {
         newEnemy.reset(enemyPos.x, enemyPos.y);
 
         let enemyWarp = new SpawnWarp(enemyPos.x, enemyPos.y, newEnemy);
-        enemyList.push(enemyWarp);
+        allEntities.push(enemyWarp);
 
         let spawnMarker = instantiateParticle(null, 'circle');
         spawnMarker.reset(enemyPos.x, enemyPos.y, 0, newEnemy.collisionRadius, 'white', null, 'circle');
-        spawnFinished = true;
     }
 }
 
@@ -78,7 +77,6 @@ function spawnEnemy(type) {
     }
 
     let newEnemy = enemySelect(type);
-    //enemyList.push(newEnemy);
     return newEnemy;
 }
 
@@ -174,7 +172,7 @@ function getClearSpawn(spawner) {
     return { x: checkX, y: checkY };
 }
 
-function removeDead() {
+function removeDeadEnemies() {
     for (let i = enemyList.length - 1; i >= 0; i--) {
         if (enemyList[i].constructor.name == SpawnWarp.name && enemyList[i].isDead) {
             enemyList.splice(i, 1);

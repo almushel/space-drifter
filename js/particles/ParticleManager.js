@@ -3,31 +3,19 @@ const EXPLOSION_STARTING_PARTICLES = 12;
 var particleList = [];
 var particlePool = [];
 
-function moveParticles() {
-	removeDeadParticles();
-	for (let p = 0; p < particleList.length; p++) {
-		particleList[p].move();
-	}
-}
-
-function drawParticles() {
-	for (let p = 0; p < particleList.length; p++) {
-		particleList[p].draw();
-	}
-}
-
 function instantiateParticle(sprite, shape) {
 	var particle;
 	if (particlePool.length < 1) {
 		particle = new Particle(sprite, shape);
-		particleList.push(particle)
 	} else {
 		particle = particlePool[particlePool.length - 1];
 		particle.sprite = sprite;
 		particle.shape = shape;
-		particleList.push(particle);
 		particlePool.pop();
 	}
+
+	particleList.push(particle);
+	allEntities.push(particle);
 
 	return particle;
 }
