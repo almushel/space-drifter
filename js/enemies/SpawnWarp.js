@@ -9,7 +9,7 @@ class SpawnWarp extends WrapPosition {
         this.radius = 0;
         this.isDead = false;
         if (target.sprite == undefined) {
-            this.maxRadius = target.collisionRadius;
+            this.maxRadius = 60;
         } else {
             this.maxRadius = target.sprite.width;
         }
