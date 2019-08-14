@@ -251,7 +251,7 @@ class Ship extends WrapPosition {
 	}
 	  
 	draw() {
-		if (this.isDead) {
+		if (this.isDead || !gameStart) {
 			return;
 		}
 
