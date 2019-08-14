@@ -47,8 +47,8 @@ function moveAll() {
 function drawAll() {
 	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 	twinkleStars();
-	
-	for(let e=allEntities.length-1; e >= 0; e--) {
+
+	for(let e=0; e < allEntities.length; e++) {
 		allEntities[e].draw();
 	}
 
