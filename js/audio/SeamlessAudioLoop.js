@@ -12,7 +12,7 @@ class SeamlessAudioLoop {
     }
 
     play() {
-        this.secondTrack.play();
+        this.firstTrack.play();
     }
 
     pause() {
@@ -53,7 +53,7 @@ class SeamlessAudioLoop {
                     if (this.secondTrack.currentTime >= this.loopPoint) {
                         this.firstTrack.currentTime = 0;
                         this.firstTrack.play();
-                        this.secondQueued = false;
+                        this.firstQueued = false;
                         clearInterval(this.loopInterval);
                         this.loopInterval = null;
                     }
