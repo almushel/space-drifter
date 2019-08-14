@@ -6,12 +6,13 @@ class SeamlessAudioLoop {
         this.loopPoint = loopPoint;
         this.firstQueued = false;
         this.secondQueued = false;
+        this.loopInterval = null;
 
         this.initLoop();
     }
 
     play() {
-        this.firstTrack.play();
+        this.secondTrack.play();
     }
 
     pause() {
@@ -26,32 +27,42 @@ class SeamlessAudioLoop {
 
     initLoop() {
         //Queue second track while first track is playing
-        this.firstTrack.ontimeupdate = function (loopPoint, nextQueued, nextTrack) {
-            if (this.currentTime >= loopPoint - 1 && this.currentTime < loopPoint && nextQueued == false) {
-                //Queue the next loop with setTimeout for more precision
-                setTimeout(function(){
-                    nextTrack.currentTime = 0;
-                    nextTrack.play();
-                    nextQueued = false;
-                }, (loopPoint - this.currentTime) * 1000);
+        this.firstTrack.ontimeupdate = function (loopPoint, nextQueued) {
+            if (this.firstTrack.currentTime >= loopPoint - 1 && this.firstTrack.currentTime < loopPoint && nextQueued == false && this.loopInterval == null) {
+                //Queue the next loop with setInterval for more precision
+                this.loopInterval = setInterval(function(){
+                    if (this.firstTrack.currentTime >= this.loopPoint) {
+                        this.secondTrack.currentTime = 0;
+                        this.secondTrack.play();
+                        this.secondQueued = false;
+                        clearInterval(this.loopInterval);
+                        this.loopInterval = null;
+                    }
+
+                }.bind(this), 5)
             
                 nextQueued = true;
             }
-	    }.bind(this.firstTrack, this.loopPoint, this.secondQueued, this.secondTrack);
+	    }.bind(this, this.loopPoint, this.secondQueued);
 
         //Queue first track while second track is playing
-        this.secondTrack.ontimeupdate = function (loopPoint, nextQueued, nextTrack) {
-            if (this.currentTime >= loopPoint - 1 && this.currentTime < loopPoint && nextQueued == false) {
-                //Queue the next loop with setTimeout for more precision
-                setTimeout(function(){
-                    nextTrack.currentTime = 0;
-                    nextTrack.play();
-                    nextQueued = false;
-                }, (loopPoint - this.currentTime) * 1000);
+        this.secondTrack.ontimeupdate = function (loopPoint, nextQueued) {
+            if (this.secondTrack.currentTime >= loopPoint - 1 && this.secondTrack.currentTime < loopPoint && nextQueued == false && this.loopInterval == null) {
+                //Queue the next loop with setInterval for more precision
+                this.loopInterval = setInterval(function(){
+                    if (this.secondTrack.currentTime >= this.loopPoint) {
+                        this.firstTrack.currentTime = 0;
+                        this.firstTrack.play();
+                        this.secondQueued = false;
+                        clearInterval(this.loopInterval);
+                        this.loopInterval = null;
+                    }
+
+                }.bind(this), 5)
             
                 nextQueued = true;
             }
-	    }.bind(this.secondTrack, this.loopPoint, this.firstQueued, this.firstTrack);
+	    }.bind(this, this.loopPoint, this.firstQueued);
     }
 
     set volume(vol) {

@@ -13,7 +13,7 @@ let loop1Queued = false,
 	//On Music/Sound volume change set volume to objectVolume * groupVolume * masterVolume;
 
 function setupAudio() {
-	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter.mp3', 106.666);
+	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter.mp3', 106.4);
 	enemyDeath = new AudioOneShot('./audio/EnemyDeath.mp3', 6);
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot.mp3', 4);
 	playerDeathSFX = new AudioOneShot('./audio/PlayerDeath.wav', 2);
