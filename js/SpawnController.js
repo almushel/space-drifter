@@ -17,13 +17,29 @@ function resetGame() {
 	currentScore = 0;
 	newHighScoreIndex = -1;
 
+    allEntities.length = 0;
 	particleList.length = 0;
-	particlePool.length = 0;
-
+	//particlePool.length = 0;
 	enemyList.length = 0;
-	enemyPool.length = 0;
-	p1.reset();
+    //enemyPool.length = 0;
+    
+    p1.reset();
+    spawnFinished = false;
 	spawnWave(generateWave(currentWave, pointMax));
+}
+
+function endGame() {
+    musicLoop.pause();
+    updateScoreTable();
+    if (localStorage.sdHighScore == undefined) {
+        localStorage.sdHighScore = 0;
+    }
+
+    if (currentScore > Number(localStorage.sdHighScore)) {
+        localStorage.sdHighScore = currentScore;
+    }
+    gameStart = false;
+    gameOver = true;
 }
 
 function spawnWave(waveList) {

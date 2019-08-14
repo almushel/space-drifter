@@ -78,8 +78,6 @@ class Drifter extends WrapPosition {
 		for (let s = 0; s < 3; s++) {
 			randAng += (Math.PI / 1.5);
 			let childDrifter = spawnEnemy(ENEMY_DRIFTER);
-			enemyList.push(childDrifter);
-			allEntities.push(childDrifter);
 			
 			let newX = whichDrifter.x + Math.cos(randAng) * childRadius;
 			let newY = whichDrifter.y + Math.sin(randAng) * childRadius;
@@ -89,6 +87,9 @@ class Drifter extends WrapPosition {
 
 			childDrifter.xv = Math.cos(randAng) * DRIFT_RATE;
 			childDrifter.yv = Math.sin(randAng) * DRIFT_RATE;
+
+			enemyList.push(childDrifter);
+			allEntities.push(childDrifter);
 		}
 	}
 } // end of class

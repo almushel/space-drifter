@@ -56,20 +56,6 @@ function endChaintimer() {
     currentMultiplier = 1;
 }
 
-function endGame() {
-    musicLoop.pause();
-    updateScoreTable();
-    if (localStorage.sdHighScore == undefined) {
-        localStorage.sdHighScore = 0;
-    }
-
-    if (currentScore > Number(localStorage.sdHighScore)) {
-        localStorage.sdHighScore = currentScore;
-    }
-    gameStart = false;
-    gameOver = true;
-}
-
 function updateScoreTable() {
     var hsTable;
     if (localStorage.sdHighScoreTable == undefined || 
