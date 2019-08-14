@@ -9,12 +9,8 @@ function createStarField() {
 	starField.length = canvas.width * canvas.height;
 
 	for (let i = 0; i < starField.length; i++) {
-		var randNum = Math.random() * 300
-		if (randNum < 1) {
-			starField[i] = Math.floor(randNum * 10);
-		} else {
-			starField[i] = 0;
-		}
+		let randNum = Math.random() * 500;
+		starField[i] = randNum < 1 ? Math.floor(randNum * 10) : 0
 	}
 	generateTwinkles();
 	drawStarField();
