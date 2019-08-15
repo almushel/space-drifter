@@ -37,21 +37,25 @@ class WrapPosition {
 	}
 
 	bumpCollision(whichEntity) {
-		if (this.isDead) {
+		if (this.isDead || whichEntity.isDead) {
 			return false;
 		}
-		var deltaX = whichEntity.x - this.x,
+		let deltaX = whichEntity.x - this.x,
 			deltaY = whichEntity.y - this.y,
 			deltaR = deltaX * deltaX + deltaY * deltaY;
 									   
 		if (deltaR <= Math.pow(this.collisionRadius + whichEntity.collisionRadius, 2)) {
-			var hitAng = Math.atan2(deltaY, deltaX);
+			let hitAng = Math.atan2(deltaY, deltaX);
 			
-			this.xv += Math.cos(hitAng + Math.PI) * deltaT;
-			this.yv += Math.sin(hitAng + Math.PI) * deltaT;
+			if (whichEntity.constructor.name != Particle.name) {
+				this.xv += Math.cos(hitAng + Math.PI) * deltaT;
+				this.yv += Math.sin(hitAng + Math.PI) * deltaT;
+			}			
 
-			whichEntity.xv += Math.cos(hitAng) * deltaT;
-			whichEntity.yv += Math.sin(hitAng) * deltaT;
+			if (this.constructor.name != Particle.name) {
+				whichEntity.xv += Math.cos(hitAng) * deltaT;
+				whichEntity.yv += Math.sin(hitAng) * deltaT;
+			}
 
 			return true;
 		}

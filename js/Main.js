@@ -8,7 +8,7 @@ var allEntities = [];
 function loadGame() {
 	let startbutton = document.getElementById('startButton');
 	startbutton.style.display = "none";
-	
+
 	bg = document.getElementById('bg');
 	bgContext = bg.getContext('2d');
 
@@ -21,7 +21,7 @@ function loadingDoneSoStartGame() {
 	createStarField();
 	initInput();
 	setupAudio();
-	
+
 	initialFrame();
 	requestAnimationFrame(update);
 }
@@ -38,7 +38,7 @@ function update() {
 function moveAll() {
 	p1.move();
 
-	for(let e=allEntities.length-1; e >= 0; e--) {
+	for (let e = allEntities.length - 1; e >= 0; e--) {
 		allEntities[e].move();
 	}
 	collide();
@@ -48,7 +48,7 @@ function drawAll() {
 	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 	twinkleStars();
 
-	for(let e=0; e < allEntities.length; e++) {
+	for (let e = 0; e < allEntities.length; e++) {
 		allEntities[e].draw();
 	}
 
@@ -62,18 +62,20 @@ function drawAll() {
 }
 
 function collide() {
-	for (var i = 0; i < enemyList.length; i++) {
-		for (var e = i + 1; e < enemyList.length; e++) {
-			enemyList[i].bumpCollision(enemyList[e]);
+	for (var i = 0; i < allEntities.length; i++) {
+		for (var a = i + 1; a < allEntities.length; a++) {
+			allEntities[i].bumpCollision(allEntities[a]);
 		}
+		p1.bumpCollision(allEntities[i]);
+	}
 
-		p1.checkShipAndShotCollisionAgainst(enemyList[i]);
-		p1.bumpCollision(enemyList[i]);
+	for (let e = 0; e < enemyList.length; e++) {
+		p1.checkShipAndShotCollisionAgainst(enemyList[e]);
 	}
 }
 
 function removeDead() {
-	for(let e=allEntities.length-1; e >= 0; e--) {
+	for (let e = allEntities.length - 1; e >= 0; e--) {
 		if (allEntities[e].isDead) {
 			allEntities.splice(e, 1);
 		}

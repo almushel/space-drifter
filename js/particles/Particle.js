@@ -3,23 +3,23 @@ const PARTICLE_MIN_START_RADIUS = 3;
 const PARTICLE_SPEED = 6;
 const PARTICLE_DECAY = .75;
 
-class Particle {
+class Particle extends WrapPosition{
 	constructor(sprite, shape) {
+		super();
 		this.ang = 0;
-		this.radius = 25;
+		this.collisionRadius = 25;
 		this.lifeLeft = 15;
 		if (sprite == undefined || sprite == null) {
 			this.sprite = UFOPic;
 		} else {
 			this.sprite = sprite;
-			this.radius = sprite.width;
+			this.collisionRadius = sprite.width;
 		}
 		if (this.shape === undefined || this.shape === null) {
 			this.shape = 'circle';
 		} else {
 			this.shape = shape;
 		}
-		this.color = 'white';
 		this.isDead = false;
 		
 		this.x = 400;
@@ -30,14 +30,14 @@ class Particle {
 
 	reset(x, y, angle, radius, color, sprite, shape) {
 		this.ang = angle;
-		this.radius = radius;
+		this.collisionRadius = radius;
 		this.lifeLeft = 15;
 		this.color = color;
 		if (sprite == undefined || sprite == null) {
 			this.sprite = UFOPic;
 		} else {
 			this.sprite = sprite;
-			this.radius = sprite.width;
+			this.collisionRadius = sprite.width;
 		}
 		if (this.shape === undefined || this.shape === null) {
 			this.shape = 'circle';
@@ -55,7 +55,7 @@ class Particle {
 
 	randomReset(x, y, color1, color2, color3) {
 		this.ang = this.randomAngle();
-		this.radius = this.randomRadius();
+		this.collisionRadius = this.randomRadius();
 		this.lifeLeft = 15;
 		this.color = this.randomColor(color1, color2, color3);
 		
@@ -125,24 +125,28 @@ class Particle {
 			return;
 		}
 
-		this.x += this.xv * deltaT;
-		this.y += this.yv * deltaT;
+		super.move();
 		
 		if (Math.random() * 100 > 50){
 			this.lifeLeft -= PARTICLE_DECAY * deltaT;
 			if (this.shape != 'line') {// && this.shape != 'sprite') {
-				this.radius -= PARTICLE_DECAY * deltaT;
-				if (this.radius <= 0) this.radius = 0;
+				this.collisionRadius -= PARTICLE_DECAY * deltaT;
+				if (this.collisionRadius <= 0) this.collisionRadius = 0;
 			}
 		}
 		if (this.lifeLeft <= 0) {
-			if (this.radius <= 0 || this.shape == 'line') {
+			if (this.collisionRadius <= 0 || this.shape == 'line') {
 				this.isDead = true;
 			}
 		}
 	}
-	
+
 	draw() {
+		this.drawSprite(this.x, this.y);
+		this.drawWrap();
+	}
+	
+	drawSprite(x, y) {
 		if (this.isDead) {
 			return;
 		}
@@ -150,25 +154,25 @@ class Particle {
 		switch (this.shape) {
 			case 'sprite':
 				canvasContext.save();
-				canvasContext.translate(this.x, this.y);
+				canvasContext.translate(x, y);
 				canvasContext.rotate(this.ang);
-				canvasContext.drawImage(this.sprite, 0, 0, this.sprite.width, this.sprite.height, -this.radius/2, -this.radius/2, this.radius, this.radius);
+				canvasContext.drawImage(this.sprite, 0, 0, this.sprite.width, this.sprite.height, -this.collisionRadius/2, -this.collisionRadius/2, this.collisionRadius, this.collisionRadius);
 				canvasContext.restore();
 				break;
 			case 'line':
-				let endX = this.x + Math.cos(this.ang) * this.radius*2;
-				let endY = this.y + Math.sin(this.ang) * this.radius*2;
-				drawLine(this.x, this.y, endX, endY, 3, this.color);
+				let endX = x + Math.cos(this.ang) * this.collisionRadius*2;
+				let endY = y + Math.sin(this.ang) * this.collisionRadius*2;
+				drawLine(x, y, endX, endY, 3, this.color);
 				break;
 			case 'rectangle':
 				canvasContext.save();
-				canvasContext.translate(this.x, this.y);
+				canvasContext.translate(x, y);
 				canvasContext.rotate(this.ang);
-				colorRect(-this.radius, -this.radius, this.radius*2, this.radius*2, this.color);
+				colorRect(-this.collisionRadius, -this.collisionRadius, this.collisionRadius*2, this.collisionRadius*2, this.color);
 				canvasContext.restore();
 				break;
 			default:
-				colorCircle(this.x, this.y, this.radius, this.color);
+				colorCircle(x, y, this.collisionRadius, this.color);
 				break;
 		}
 	}
