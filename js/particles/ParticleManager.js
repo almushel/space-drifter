@@ -21,6 +21,7 @@ function instantiateParticle(sprite, shape) {
 }
 
 function explodeAtPoint(splodeX, splodeY, color1, color2, color3, sprite, shape) {
+	forceCircle(splodeX, splodeY, 120, 2);
 	for (let p = 0; p < EXPLOSION_STARTING_PARTICLES; p++) {
 		let spawnParticle = instantiateParticle(sprite, shape);
 		spawnParticle.randomReset(splodeX, splodeY, color1, color2, color3);

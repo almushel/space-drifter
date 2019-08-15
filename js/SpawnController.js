@@ -19,9 +19,7 @@ function resetGame() {
 
 	allEntities.length = 0;
 	particleList.length = 0;
-	//particlePool.length = 0;
 	enemyList.length = 0;
-	//enemyPool.length = 0;
 
 	p1.reset();
 	spawnFinished = false;
@@ -157,16 +155,28 @@ function enemySelect(type) {
 }
 
 function forceCircle(x, y, radius, force) {
-	for (let i = 0; i < enemyList.length; i++) {
-		if (circleIntersect(x, y, radius, enemyList[i].x, enemyList[i].y, enemyList[i].collisionRadius)) {
-			let deltaX = x - enemyList[i].x,
-				deltaY = y - enemyList[i].y;
-			let deltaAng = Math.atan2(deltaY, deltaX);
+	let deltaX = 0;
+		deltaY = 0;
+		deltaAng = 0;
+	for (let i = 0; i < allEntities.length; i++) {
+		if (circleIntersect(x, y, radius, allEntities[i].x, allEntities[i].y, allEntities[i].collisionRadius)) {
+			deltaX = x - allEntities[i].x;
+			deltaY = y - allEntities[i].y;
+			deltaAng = Math.atan2(deltaY, deltaX);
 
-			//enemyList[i].ang = Math.atan2(-deltaY, -deltaX);
-			enemyList[i].xv -= Math.cos(deltaAng) * force;
-			enemyList[i].yv -= Math.sin(deltaAng) * force;
+			allEntities[i].xv -= Math.cos(deltaAng) * force;
+			allEntities[i].yv -= Math.sin(deltaAng) * force;
 		}
+	}
+
+	if (circleIntersect(x, y, radius, p1.x, p1.y, p1.collisionRadius)) {
+		deltaX = x - p1.x;
+		deltaY = y - p1.y;
+		if (deltaX == 0 && deltaY == 0) return;//Prevent p1 froming pushing itself
+		deltaAng = Math.atan2(deltaY, deltaX);
+
+		p1.xv -= Math.cos(deltaAng) * force;
+		p1.yv -= Math.sin(deltaAng) * force;
 	}
 }
 
@@ -205,9 +215,7 @@ function getClearSpawn(spawner, avoidList) {
 
 function removeDeadEnemies() {
 	for (let i = enemyList.length - 1; i >= 0; i--) {
-		if (enemyList[i].constructor.name == SpawnWarp.name && enemyList[i].isDead) {
-			enemyList.splice(i, 1);
-		} else if (enemyList[i].isDead) {
+		if (enemyList[i].isDead) {
 			enemyDeath.play();
 			screenShake();
 

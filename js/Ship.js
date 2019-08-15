@@ -113,7 +113,6 @@ class Ship extends WrapPosition {
 		
 		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
 		explodeAtPoint(this.x, this.y, 'white', 'orange', '#6DC2FF', null, 'circle');
-		explodeAtPoint(this.x, this.y, 'dimgry', 'orange', '#6DC2FF', null, 'rectangle');
 		
 		this.lives--;
 		if (this.lives < 0) {
