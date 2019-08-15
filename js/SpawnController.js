@@ -21,7 +21,7 @@ function resetGame() {
 	particleList.length = 0;
 	enemyList.length = 0;
 
-	p1.reset();
+	setTimeout(function() {p1.reset();}, 100);
 	spawnFinished = false;
 	spawnWave(generateWave(currentWave, pointMax));
 }
@@ -50,9 +50,6 @@ function spawnWave(waveList) {
 
 		let enemyWarp = new SpawnWarp(enemyPos.x, enemyPos.y, newEnemy);
 		allEntities.push(enemyWarp);
-
-		let spawnMarker = instantiateParticle(null, 'circle');
-		spawnMarker.reset(enemyPos.x, enemyPos.y, 0, newEnemy.collisionRadius, 'white', null, 'circle');
 	}
 }
 

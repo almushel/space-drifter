@@ -25,6 +25,10 @@ class SpawnWarp extends WrapPosition {
     draw(){
         if (!this.isDead) {
             let sprite = this.target.sprite;
+            canvasContext.strokeStyle = '#6DC2FF';
+            canvasContext.lineWidth = 1;
+            colorCircle(this.x, this.y, this.maxRadius/1.5 - this.radius/1.5, '#000a30');
+            canvasContext.stroke();
             if (sprite == undefined) {
                 canvasContext.save()
                 canvasContext.translate(this.x, this.y)
