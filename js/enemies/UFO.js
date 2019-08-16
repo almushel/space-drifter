@@ -10,35 +10,39 @@ class UFO extends WrapPosition {
 		this.sprite = UFOPic;
 		this.collisionRadius = UFO_COLLISION_RADIUS;
 	}
-	
+
 	reset(x, y) {
 		super.reset();
-		this.ang = 0;
-		this.targetAng = 0;
-		this.cyclesUntilDirectionChange = 0;
-		
 		this.x = x;
 		this.y = y;
+
+		this.ang = Math.random() * (Math.PI * 2);
+		this.targetAng = this.ang;
+		this.cyclesUntilDirectionChange = 0;
+
+		this.xv = Math.cos(this.ang) * UFO_SPEED;
+		this.yv = Math.sin(this.ang) * UFO_SPEED;
+
 	} // end of reset
-	  
+
 	move() {
 		super.move();
-		var turnAngDelta = Math.cos(this.targetAng)*Math.sin(this.ang) - Math.sin(this.targetAng)*Math.cos(this.ang);
+		var turnAngDelta = Math.cos(this.targetAng) * Math.sin(this.ang) - Math.sin(this.targetAng) * Math.cos(this.ang);
 
 		if (turnAngDelta > -UFO_TURN_PRECISION && turnAngDelta < UFO_TURN_PRECISION) {
 			this.cyclesUntilDirectionChange -= deltaT;
 		} else {
 			if (turnAngDelta < 0) {
-				this.ang += deltaT * Math.PI/180;
+				this.ang += deltaT * Math.PI / 180;
 			} else if (turnAngDelta > 0) {
-				this.ang -= deltaT * Math.PI/180;
+				this.ang -= deltaT * Math.PI / 180;
 			}
 			this.xv = Math.cos(this.ang) * UFO_SPEED;
 			this.yv = Math.sin(this.ang) * UFO_SPEED;
 		}
-		
-		if(this.cyclesUntilDirectionChange <= 0) {
-			this.targetAng = Math.random()*Math.PI*2.0;
+
+		if (this.cyclesUntilDirectionChange <= 0) {
+			this.targetAng = Math.random() * Math.PI * 2.0;
 			this.cyclesUntilDirectionChange = UFO_DIR_CHANGE_INTERVAL;
 		}
 
@@ -49,7 +53,7 @@ class UFO extends WrapPosition {
 			this.yv *= 1 - 0.02 * deltaT;
 		}
 	}
-	  
+
 	draw() {
 		this.drawWrap();
 		this.drawSprite(this.x, this.y);
@@ -60,7 +64,7 @@ class UFO extends WrapPosition {
 		canvasContext.globalAlpha = 0.3;
 		canvasContext.shadowBlur = 8;
 		canvasContext.shadowColor = '#9647FF';
-		colorCircle(x, y+6, this.collisionRadius, '#9647FF');
+		colorCircle(x, y + 6, this.collisionRadius, '#9647FF');
 		canvasContext.restore();
 		drawBitmapCenteredWithRotation(this.sprite, x, y, 0);
 	}

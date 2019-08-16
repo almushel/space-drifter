@@ -22,6 +22,10 @@ class SpawnWarp extends WrapPosition {
         }
     }
 
+    bumpCollision() {
+        return;
+    }
+
     draw(){
         if (!this.isDead) {
             let sprite = this.target.sprite;

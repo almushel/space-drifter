@@ -131,7 +131,7 @@ class Particle extends WrapPosition{
 			this.lifeLeft -= PARTICLE_DECAY * deltaT;
 			if (this.shape != 'line') {// && this.shape != 'sprite') {
 				this.collisionRadius -= PARTICLE_DECAY * deltaT;
-				if (this.collisionRadius <= 0) this.collisionRadius = 0;
+				if (this.collisionRadius < 0) this.collisionRadius = 0;
 			}
 		}
 		if (this.lifeLeft <= 0) {

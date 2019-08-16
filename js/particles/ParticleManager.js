@@ -56,7 +56,7 @@ function explodeSprite(x, y, sprite, division, ang) {
 
 
 		particle.randomReset(x + Math.cos(pAng) * radius / 2, y + Math.sin(pAng) * radius / 2, 'white', 'white', 'white');
-		particle.radius = radius;
+		particle.collisionRadius = radius;
 		particle.lifeLeft = 30;
 		particle.setAng(ang);
 		particle.setVelocity(pxv, pyv);

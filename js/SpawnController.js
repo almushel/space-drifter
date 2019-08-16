@@ -178,8 +178,8 @@ function forceCircle(x, y, radius, force) {
 }
 
 function getClearSpawn(spawner, avoidList) {
-	let checkX = Math.random() * canvas.width,
-		checkY = Math.random() * canvas.height,
+	let checkX = 60 + Math.random() * (canvas.width - 120),
+		checkY = 60 + Math.random() * (canvas.height - 120),
 		deltaX = 0,
 		deltaY = 0,
 		deltaAng = null;
@@ -218,11 +218,12 @@ function removeDeadEnemies() {
 
 			let splodeOrigin = instantiateParticle(null, 'circle');
 			splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius / 2, 'orange', null, 'circle');
+			explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'white', 'white', null, 'circle');
 
 			if (enemyList[i].sprite != undefined) {
 				explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite, 6, enemyList[i].ang);
 			}
-			explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'white', 'white', null, 'circle');
+			
 			enemyPool.push(enemyList[i]);
 			enemyList.splice(i, 1);
 		}

@@ -35,8 +35,8 @@ class Ship extends WrapPosition {
 			this.shotList.push(newShot);
 		}
 	
-		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
-		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 4, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
+		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
+		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 	}
 
 	// key controls used for this
@@ -108,11 +108,12 @@ class Ship extends WrapPosition {
 		playerThrustSFX.pause();
 		playerDeathSFX.play();
 		
+		explodeAtPoint(this.x, this.y, 'white', 'orange', '#6DC2FF', null, 'circle');
+
 		let splodeOrigin = instantiateParticle(null, 'circle');
 		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
 		
 		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
-		explodeAtPoint(this.x, this.y, 'white', 'orange', '#6DC2FF', null, 'circle');
 		
 		this.lives--;
 		if (this.lives < 0) {
