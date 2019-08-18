@@ -37,7 +37,7 @@ let tmColorInner = '#6DC2FF';
 let hmColorOuter = 'grey';
 let hmColorInner = 'red';
 
-let lastScore = lastMulti = null;
+let lastScore = lastMulti = lastLives = null;
 
 let scoreMetrics = null;
 let multiMetrics = null;
@@ -64,6 +64,7 @@ function initHUD() {
     ctx.fillStyle = 'white';
     ctx.fillText('Score: ', 8, canvas.height - 8);
     ctx.restore();
+
     setCanvas(gameCanvas, gameCtx);
 }
 
@@ -75,7 +76,6 @@ function clearHUD() {
 
 function drawHUD() {
     setCanvas(hud, hudContext);
-    
     drawPlayerLives();
     drawThrustMeter();
     drawWeaponHeat();
@@ -84,25 +84,35 @@ function drawHUD() {
 }
 
 function drawPlayerLives() {
-    drawPolygon(canvas.width / 2 + 1, canvas.height - 20, [{ x: 0, y: -20 }, { x: 13, y: 20 }, { x: -13, y: 20 }], '#6DC2FF', true);
-    ctx.save();
-    ctx.shadowBlur = 2;
-    ctx.shadowColor = 'black';
-    ctx.save();
-    ctx.translate(canvas.width/2 - 15.5, canvas.height+1);
-    ctx.rotate(-Math.PI / 2);
-    ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 33, 33)
-    ctx.restore();
-    ctx.save();
-    ctx.font = '15px Orbitron';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = 'white';
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 2;
-    ctx.strokeText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
-    ctx.fillText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
-    ctx.restore();
-    ctx.restore();
+    if (lastLives != p1.lives) {
+        ctx.clearRect(canvas.width / 2 - 14, 24, 30, 40);
+        ctx.save();
+        ctx.globalAlpha = 0.6;
+        colorRect(canvas.width / 2 - 14, 24, 30, 40, '#383838');
+        ctx.restore();
+
+        drawPolygon(canvas.width / 2 + 1, canvas.height - 20, [{ x: 0, y: -20 }, { x: 13, y: 20 }, { x: -13, y: 20 }], '#6DC2FF', true);
+        ctx.save();
+        ctx.shadowBlur = 2;
+        ctx.shadowColor = 'black';
+        ctx.save();
+        ctx.translate(canvas.width / 2 - 15.5, canvas.height + 1);
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 33, 33)
+        ctx.restore();
+        ctx.save();
+        ctx.font = '15px Orbitron';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.strokeText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
+        ctx.fillText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
+        ctx.restore();
+        ctx.restore();
+
+        lastLives = p1.lives;
+    }
 }
 
 function drawThrustMeter() {
@@ -142,9 +152,8 @@ function drawScore() {
     }
 
     if (lastMulti != currentMultiplier) {
-        console.log('multi');
         if (multiMetrics != null) {
-            let rectLeft = 186 - Math.round(multiMetrics.width/2) - 6; 
+            let rectLeft = 186 - Math.round(multiMetrics.width / 2) - 6;
             ctx.clearRect(rectLeft, canvas.height - 52, Math.round(multiMetrics.width + 12), 18);
             ctx.save();
             ctx.globalAlpha = 0.6;
@@ -158,7 +167,7 @@ function drawScore() {
         ctx.font = '20px Orbitron';
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
-        multiMetrics = ctx.measureText('x'+currentMultiplier);
+        multiMetrics = ctx.measureText('x' + currentMultiplier);
         lastMulti = currentMultiplier;
         ctx.fillText('x' + currentMultiplier, 186, canvas.height - 36);
         ctx.restore();
@@ -189,7 +198,7 @@ function drawWeaponHeat() {
     //109, 194, 255
     hmColorInner = 'rgb(' + (109 + p1.weaponHeat) + ', ' + (194 - 2 * p1.weaponHeat) + ', ' + (255 - 2.5 * p1.weaponHeat) + ')';
     drawPolygon(canvas.width / 2 + 60, canvas.height - 16, heatOuterPoly, hmColorOuter, true);
-    
+
     if (p1.weaponHeat >= 1) {
         let heatDelta = p1.weaponHeat / 100;
         heatInnerPoly[2].x = -41 + Math.floor(heatDelta * 90) - 5;
@@ -206,28 +215,28 @@ function drawTitleScreen() {
     } else {
         let yOffset = canvas.height / 2.5;
         ctx.lineWidth = 4;
-        colorArc(canvas.width/2, canvas.height+canvas.height/3, canvas.width/1.1, 0, Math.PI*2, false, 'orange');
-        drawLine(0, yOffset + 12, canvas.width/1.25, yOffset + 12, 2, 'white');
-        drawLine(0, yOffset + 14, canvas.width/1.25, yOffset + 14, 3, '#6DC2FF');
-        drawLine(0, yOffset + 16, canvas.width/1.25, yOffset + 16, 2, 'white');
+        colorArc(canvas.width / 2, canvas.height + canvas.height / 3, canvas.width / 1.1, 0, Math.PI * 2, false, 'orange');
+        drawLine(0, yOffset + 12, canvas.width / 1.25, yOffset + 12, 2, 'white');
+        drawLine(0, yOffset + 14, canvas.width / 1.25, yOffset + 14, 3, '#6DC2FF');
+        drawLine(0, yOffset + 16, canvas.width / 1.25, yOffset + 16, 2, 'white');
 
-        drawBitmapCenteredWithRotation(playerPic, canvas.width/1.25 + 40, yOffset + 14, 0);
+        drawBitmapCenteredWithRotation(playerPic, canvas.width / 1.25 + 40, yOffset + 14, 0);
         ctx.save();
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'white'
-        colorCircle(canvas.width/1.25, yOffset + 14, canvas.width/35, '#6DC2FF')
+        colorCircle(canvas.width / 1.25, yOffset + 14, canvas.width / 35, '#6DC2FF')
         ctx.stroke();
-        colorCircle(canvas.width/1.25 + canvas.width/60, yOffset + 14, canvas.width/70, 'white')
+        colorCircle(canvas.width / 1.25 + canvas.width / 60, yOffset + 14, canvas.width / 70, 'white')
         ctx.lineWidth = 3;
-        colorArc(-300, canvas.height/2, 300 + canvas.width/1.25 + canvas.width/60, Math.PI * 1.8, Math.PI/6, false, 'white');
-        
-        let lineAng = Math.PI/1.5;
-        drawLine(canvas.width/1.25 + canvas.width/60, yOffset +14, 
-                canvas.width/1.25 + Math.cos(lineAng) * 400, (yOffset + 14) + Math.sin(lineAng) * 400, 3, 'white');
-        lineAng += Math.PI/1.5;
-        drawLine(canvas.width/1.25 + canvas.width/60, yOffset +14, 
-                    canvas.width/1.25 + Math.cos(lineAng) * 400, (yOffset + 14) + Math.sin(lineAng) * 400, 3, 'white');
-                
+        colorArc(-300, canvas.height / 2, 300 + canvas.width / 1.25 + canvas.width / 60, Math.PI * 1.8, Math.PI / 6, false, 'white');
+
+        let lineAng = Math.PI / 1.5;
+        drawLine(canvas.width / 1.25 + canvas.width / 60, yOffset + 14,
+            canvas.width / 1.25 + Math.cos(lineAng) * 400, (yOffset + 14) + Math.sin(lineAng) * 400, 3, 'white');
+        lineAng += Math.PI / 1.5;
+        drawLine(canvas.width / 1.25 + canvas.width / 60, yOffset + 14,
+            canvas.width / 1.25 + Math.cos(lineAng) * 400, (yOffset + 14) + Math.sin(lineAng) * 400, 3, 'white');
+
 
         ctx.save();
         ctx.shadowBlur = 10;
@@ -249,12 +258,12 @@ function drawTitleScreen() {
             colorAlignedText(canvas.width / 2 - 110, yOffset + 160, 'left', '15px Orbitron', 'white', 'A');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 180, 'left', '15px Orbitron', 'white', 'LB');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 200, 'left', '15px Orbitron', 'white', 'RB');
-        
+
         } else {
             colorAlignedText(canvas.width / 2 - 110, yOffset + 160, 'left', '15px Orbitron', 'white', 'Spacebar');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 180, 'left', '15px Orbitron', 'white', 'Q');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 200, 'left', '15px Orbitron', 'white', 'E');
-    
+
         }
         colorAlignedText(canvas.width / 2 + 110, yOffset + 100, 'right', '15px Orbitron', 'white', 'Rotate Left');
         colorAlignedText(canvas.width / 2 + 110, yOffset + 120, 'right', '15px Orbitron', 'white', 'Rotate Right');
