@@ -3,14 +3,14 @@ const TRACKER_ACCEL = 0.13;
 const TRACKER_FRICTION = 0.02;
 const TRACKER_TURN_RATE = Math.PI/90;
 const TRACKER_PRECISION = 0.05;
-const TRACKER_COLLISION_RADIUS = 18;
+const TRACKER_COLLISION_RADIUS = 14;
 
 class Tracker extends WrapPosition {
 	constructor() {
 		super();
 		this.sprite = trackerPic;
 		this.collisionRadius = TRACKER_COLLISION_RADIUS;
-		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 4, null, 'rectangle', 'red', 'red', 'red');
+		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 20, 1, null, 'rectangle', 'red', 'red', 'red');
 	}
 
 	reset(x, y) {
@@ -23,10 +23,10 @@ class Tracker extends WrapPosition {
 	} // end of reset
 	  
 	move() {
-		super.move();
 		this.trackShip(p1);
-		this.xv *= 1 - TRACKER_FRICTION * deltaT;
-		this.yv *= 1 - TRACKER_FRICTION * deltaT;
+		super.move();
+		this.xv *= 1 - (TRACKER_FRICTION * deltaT);
+		this.yv *= 1 - (TRACKER_FRICTION * deltaT);
 	}
 	
 	trackShip(target) {
@@ -40,7 +40,7 @@ class Tracker extends WrapPosition {
 			this.targetAng -= Math.PI*2;
 		}
 
-		var turnAngDelta = Math.cos(this.targetAng)*Math.sin(this.ang) - Math.sin(this.targetAng)*Math.cos(this.ang);
+		let turnAngDelta = Math.cos(this.targetAng)*Math.sin(this.ang) - Math.sin(this.targetAng)*Math.cos(this.ang);
 		if (turnAngDelta > -TRACKER_PRECISION && turnAngDelta < TRACKER_PRECISION) {
 			this.xv += Math.cos(this.ang) * TRACKER_ACCEL * deltaT;
 			this.yv += Math.sin(this.ang) * TRACKER_ACCEL * deltaT;
@@ -51,8 +51,8 @@ class Tracker extends WrapPosition {
 			} else if (turnAngDelta > 0) {
 				this.ang -= TRACKER_TURN_RATE * deltaT;
 			}
-			this.xv += Math.cos(this.ang) * TRACKER_ACCEL/2 * deltaT;
-			this.yv += Math.sin(this.ang) * TRACKER_ACCEL/2 * deltaT;
+			this.xv += Math.cos(this.ang) * (TRACKER_ACCEL/2) * deltaT;
+			this.yv += Math.sin(this.ang) * (TRACKER_ACCEL/2) * deltaT;
 		}
 	}
 
