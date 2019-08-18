@@ -1,66 +1,66 @@
 function colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
-	canvasContext.fillStyle = fillColor;
-	canvasContext.fillRect(topLeftX, topLeftY, boxWidth, boxHeight);
+	ctx.fillStyle = fillColor;
+	ctx.fillRect(topLeftX, topLeftY, boxWidth, boxHeight);
 }
 
 function colorCircle(centerX, centerY, radius, fillColor) {
-	canvasContext.fillStyle = fillColor;
-	canvasContext.beginPath();
-	canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
-	canvasContext.fill();
+	ctx.fillStyle = fillColor;
+	ctx.beginPath();
+	ctx.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+	ctx.fill();
 }
 
 function colorArc(centerX, centerY, radius, startAng, endAng, counterclockwise, strokeColor) {
-	canvasContext.strokeStyle = strokeColor;
-	canvasContext.beginPath();
-	canvasContext.arc(centerX, centerY, radius, startAng, endAng, counterclockwise);
-	canvasContext.stroke();
+	ctx.strokeStyle = strokeColor;
+	ctx.beginPath();
+	ctx.arc(centerX, centerY, radius, startAng, endAng, counterclockwise);
+	ctx.stroke();
 }
   
 function drawBitmapCenteredWithRotation(graphic, atX, atY, withAngle) {
-	canvasContext.save(); // allows us to undo translate movement and rotate spin
-	canvasContext.translate(atX,atY); // sets the point where our graphic will go
-	canvasContext.rotate(withAngle); // sets the rotation
-	canvasContext.drawImage(graphic,-graphic.width/2,-graphic.height/2); // center, draw
-	canvasContext.restore(); // undo the translation movement and rotation since save()
+	ctx.save(); // allows us to undo translate movement and rotate spin
+	ctx.translate(atX,atY); // sets the point where our graphic will go
+	ctx.rotate(withAngle); // sets the rotation
+	ctx.drawImage(graphic,-graphic.width/2,-graphic.height/2); // center, draw
+	ctx.restore(); // undo the translation movement and rotation since save()
 }
 
 function colorAlignedText(textX, textY, textAlign, textFont, textColor, textString) {
-	canvasContext.save();
-	canvasContext.font = textFont;
-  	canvasContext.textAlign = textAlign;
- 	canvasContext.fillStyle = textColor;
-	canvasContext.fillText(textString, textX, textY);
-	canvasContext.restore();
+	ctx.save();
+	ctx.font = textFont;
+  	ctx.textAlign = textAlign;
+ 	ctx.fillStyle = textColor;
+	ctx.fillText(textString, textX, textY);
+	ctx.restore();
 }
 
 function drawLine(startX, startY, endX, endY, width, color) {
-	canvasContext.save();
-	canvasContext.lineWidth = width;
-	canvasContext.strokeStyle = color;
-	canvasContext.beginPath();
-	canvasContext.moveTo(startX, startY);
-	canvasContext.lineTo(endX, endY);
-	canvasContext.stroke();
-	canvasContext.restore();
+	ctx.save();
+	ctx.lineWidth = width;
+	ctx.strokeStyle = color;
+	ctx.beginPath();
+	ctx.moveTo(startX, startY);
+	ctx.lineTo(endX, endY);
+	ctx.stroke();
+	ctx.restore();
 }
 
 function drawPolygon(centerX, centerY, polyPoints, color, isFilled) {
-	canvasContext.save();
-	canvasContext.beginPath();
-	canvasContext.moveTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
+	ctx.save();
+	ctx.beginPath();
+	ctx.moveTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
 	for (var p=1; p<polyPoints.length; p++) {
-		canvasContext.lineTo(centerX + polyPoints[p].x, centerY + polyPoints[p].y);
+		ctx.lineTo(centerX + polyPoints[p].x, centerY + polyPoints[p].y);
 	}
-	canvasContext.lineTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
+	ctx.lineTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
 	if (isFilled) {
-		canvasContext.fillStyle = color;
-		canvasContext.fill();
+		ctx.fillStyle = color;
+		ctx.fill();
 	} else {
-		canvasContext.strokeStyle = color;
-		canvasContext.stroke();
+		ctx.strokeStyle = color;
+		ctx.stroke();
 	}
-	canvasContext.restore();
+	ctx.restore();
 }
 
 function screenShake() {

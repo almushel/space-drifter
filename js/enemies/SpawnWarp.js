@@ -29,18 +29,18 @@ class SpawnWarp extends WrapPosition {
     draw(){
         if (!this.isDead) {
             let sprite = this.target.sprite;
-            canvasContext.strokeStyle = '#6DC2FF';
-            canvasContext.lineWidth = 1;
+            ctx.strokeStyle = '#6DC2FF';
+            ctx.lineWidth = 1;
             colorCircle(this.x, this.y, this.maxRadius/1.5 - this.radius/1.5, '#000a30');
-            canvasContext.stroke();
+            ctx.stroke();
             if (sprite == undefined) {
-                canvasContext.save()
-                canvasContext.translate(this.x, this.y)
-                canvasContext.scale(this.radius/this.maxRadius, this.radius/this.maxRadius);
+                ctx.save()
+                ctx.translate(this.x, this.y)
+                ctx.scale(this.radius/this.maxRadius, this.radius/this.maxRadius);
                 this.target.drawSprite(0, 0);
-                canvasContext.restore();
+                ctx.restore();
             } else {
-                canvasContext.drawImage(sprite, 0, 0, sprite.width, sprite.width, this.x-this.radius/2, this.y-this.radius/2, this.radius, this.radius);
+                ctx.drawImage(sprite, 0, 0, sprite.width, sprite.width, this.x-this.radius/2, this.y-this.radius/2, this.radius, this.radius);
             }
         }
     }

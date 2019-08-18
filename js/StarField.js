@@ -30,10 +30,10 @@ function generateTwinkles() {
 }
 
 function twinkleStars() {
-	canvasContext.save();
+	ctx.save();
 	for (var t = 0; t < twinkles.length; t++) {
 		//Make twinkles fade in and out
-		canvasContext.globalAlpha = 1 - Math.abs(1 - (twinkleTimers[t] / TWINKLE_INTERVAL) * 2);
+		ctx.globalAlpha = 1 - Math.abs(1 - (twinkleTimers[t] / TWINKLE_INTERVAL) * 2);
 		colorCircle(twinkles[t].x + 0.5, twinkles[t].y + 0.5, 1, twinkles[t].color);
 
 		twinkleTimers[t] -= deltaT;
@@ -41,7 +41,7 @@ function twinkleStars() {
 			twinkleTimers[t] = TWINKLE_INTERVAL;
 		}
 	}
-	canvasContext.restore();
+	ctx.restore();
 }
 
 function getStarColor(value) {
@@ -70,25 +70,14 @@ function getStarColor(value) {
 }
 
 function drawStarField() {
-	//bgColorRect(0, 0, bg.width, bg.height, '#000a30');
+	setCanvas(bg, bgContext);
 	for (let x = 0; x < bg.width; x++) {
 		for (let y = 0; y < bg.height; y++) {
 			if (starField[x * bg.height + y] != 0) {
-				bgColorRect(x, y, 1, 1, getStarColor(starField[x * bg.height + y]));
+				colorRect(x, y, 1, 1, getStarColor(starField[x * bg.height + y]));
 			}//End of if
 		}//End of y for
 	}//End of x for
-}
-
-function bgColorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
-	bgContext.fillStyle = fillColor;
-	bgContext.fillRect(topLeftX, topLeftY, boxWidth, boxHeight);
-}
-
-function bgColorCircle(centerX, centerY, radius, fillColor) {
-	bgContext.fillStyle = fillColor;
-	bgContext.beginPath();
-	bgContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
-	bgContext.fill();
+	setCanvas(gameCanvas, gameCtx);
 }
 

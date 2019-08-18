@@ -11,6 +11,7 @@ var pointMax = 1;
 var spawnFinished = false;
 
 function resetGame() {
+	initHUD();
 	musicLoop.play();
 	currentWave = 1;
 	pointMax = 1;
@@ -27,6 +28,7 @@ function resetGame() {
 }
 
 function endGame() {
+	clearHUD()
 	musicLoop.pause();
 	updateScoreTable();
 	if (localStorage.sdHighScore == undefined) {

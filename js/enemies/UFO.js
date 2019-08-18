@@ -60,12 +60,12 @@ class UFO extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		canvasContext.save();
-		canvasContext.globalAlpha = 0.3;
-		canvasContext.shadowBlur = 8;
-		canvasContext.shadowColor = '#9647FF';
+		ctx.save();
+		ctx.globalAlpha = 0.3;
+		ctx.shadowBlur = 8;
+		ctx.shadowColor = '#9647FF';
 		colorCircle(x, y + 6, this.collisionRadius, '#9647FF');
-		canvasContext.restore();
+		ctx.restore();
 		drawBitmapCenteredWithRotation(this.sprite, x, y, 0);
 	}
 

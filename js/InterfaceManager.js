@@ -26,7 +26,7 @@ let meterBG = [{ x: -125, y: 22 },
 { x: 113, y: -22 },
 { x: 125, y: 22 }];
 
-let livesBG = [{ x: -125, y: 32 },
+let scoreBG = [{ x: -125, y: 32 },
 { x: -113, y: -32 },
 { x: 113, y: -32 },
 { x: 125, y: 32 }];
@@ -37,73 +37,134 @@ let tmColorInner = '#6DC2FF';
 let hmColorOuter = 'grey';
 let hmColorInner = 'red';
 
-function drawHUD() {
-    canvasContext.save();
-    //canvasContext.shadowColor = '#6DC2FF';
-    //canvasContext.shadowBlur = 3;
-    canvasContext.globalAlpha = 0.6;
+let lastScore = lastMulti = null;
+
+let scoreMetrics = null;
+let multiMetrics = null;
+
+function initHUD() {
+    setCanvas(hud, hudContext);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //Backgrounds
+    ctx.save();
+    ctx.globalAlpha = 0.6;
+    drawPolygon(100, canvas.height - 30, scoreBG, '#383838', true);
     drawPolygon(canvas.width / 2, canvas.height - 22, meterBG, '#383838', true);
-    drawPolygon(canvas.width / 2 + 1, canvas.height - 20, [{ x: 0, y: -20 }, { x: 13, y: 20 }, { x: -13, y: 20 }], '#6DC2FF', true);
-    canvasContext.restore();
+    ctx.restore();
+
+    //Text
+    ctx.save();
+    ctx.shadowColor = 'black';
+    ctx.shadowBlur = 5;
+    colorAlignedText(canvas.width / 2 - 56, canvas.height - 30, 'center', '10px Orbitron', 'white', 'Thrust Power');
+    colorAlignedText(canvas.width / 2 + 56, canvas.height - 30, 'center', '10px Orbitron', 'white', 'Weapon Temp');
+    ctx.font = '20px Orbitron';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'white';
+    ctx.fillText('Score: ', 8, canvas.height - 8);
+    ctx.restore();
+    setCanvas(gameCanvas, gameCtx);
+}
+
+function clearHUD() {
+    setCanvas(hud, hudContext);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setCanvas(gameCanvas, gameCtx);
+}
+
+function drawHUD() {
+    setCanvas(hud, hudContext);
+    
     drawPlayerLives();
     drawThrustMeter();
     drawWeaponHeat();
     drawScore();
+    setCanvas(gameCanvas, gameCtx);
 }
 
 function drawPlayerLives() {
-    canvasContext.save();
-    canvasContext.shadowBlur = 5;
-    canvasContext.shadowColor = 'black';
-    canvasContext.save();
-    canvasContext.translate(canvas.width/2 - 15.5, canvas.height+1);
-    canvasContext.rotate(-Math.PI / 2);
-    canvasContext.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 33, 33)
-    canvasContext.restore();
-    canvasContext.save();
-    canvasContext.font = '15px Orbitron';
-    canvasContext.textAlign = 'center';
-    canvasContext.fillStyle = 'white';
-    canvasContext.strokeStyle = 'black';
-    canvasContext.lineWidth = 2;
-    canvasContext.strokeText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
-    canvasContext.fillText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
-    canvasContext.restore();
-    canvasContext.restore();
+    drawPolygon(canvas.width / 2 + 1, canvas.height - 20, [{ x: 0, y: -20 }, { x: 13, y: 20 }, { x: -13, y: 20 }], '#6DC2FF', true);
+    ctx.save();
+    ctx.shadowBlur = 2;
+    ctx.shadowColor = 'black';
+    ctx.save();
+    ctx.translate(canvas.width/2 - 15.5, canvas.height+1);
+    ctx.rotate(-Math.PI / 2);
+    ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 33, 33)
+    ctx.restore();
+    ctx.save();
+    ctx.font = '15px Orbitron';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.strokeText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
+    ctx.fillText(p1.lives, canvas.width / 2 + 1, canvas.height - 8);
+    ctx.restore();
+    ctx.restore();
 }
 
 function drawThrustMeter() {
     tmColorInner = 'rgb(' + (209 - p1.thrustEnergy) + ', ' + (2 * p1.thrustEnergy) + ', ' + (5 + 2.5 * p1.thrustEnergy) + ')';
     drawPolygon(canvas.width / 2 - 60, canvas.height - 16, meterOuterPoly, tmColorOuter, true);
 
-    canvasContext.save();
-    canvasContext.shadowColor = 'black';
-    canvasContext.shadowBlur = 5;
-    colorAlignedText(canvas.width / 2 - 56, canvas.height - 30, 'center', '10px Orbitron', 'white', 'Thrust Power');
-
     if (p1.thrustEnergy >= 1) {
-        //canvasContext.shadowColor = tmColorInner;
-        //canvasContext.shadowBlur = 4;
         let thrustDelta = p1.thrustEnergy / 100;
         meterInnerPoly[2].x = -41 + Math.floor(thrustDelta * 90);
         meterInnerPoly[3].x = -41 + Math.floor(thrustDelta * 90) - 5;
         drawPolygon(canvas.width / 2 - 60, canvas.height - 16, meterInnerPoly, tmColorInner, true);
     }
-    canvasContext.restore();
 }
 
 function drawScore() {
     updateChainTimer();
-    canvasContext.save();
-    canvasContext.globalAlpha = 0.6;
-    drawPolygon(100, canvas.height - 30, livesBG, '#383838', true);
-    canvasContext.restore();
-    canvasContext.save();
-    canvasContext.shadowColor = 'black';
-    canvasContext.shadowBlur = 3;
+
+    if (lastScore != currentScore) {
+        if (scoreMetrics != null) {
+            ctx.clearRect(82, canvas.height - 24, Math.round(scoreMetrics.width + 12), 18);
+            ctx.save();
+            ctx.globalAlpha = 0.6;
+            colorRect(82, canvas.height - 24, Math.round(scoreMetrics.width + 12), 18, '#383838')
+            ctx.restore();
+        }
+
+        ctx.save();
+        ctx.shadowColor = 'black';
+        ctx.shadowBlur = 2;
+        ctx.font = '20px Orbitron';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = 'white';
+        scoreMetrics = ctx.measureText(currentScore);
+        lastScore = currentScore;
+        ctx.fillText(currentScore, 88, canvas.height - 8);
+        ctx.restore();
+    }
+
+    if (lastMulti != currentMultiplier) {
+        console.log('multi');
+        if (multiMetrics != null) {
+            let rectLeft = 186 - Math.round(multiMetrics.width/2) - 6; 
+            ctx.clearRect(rectLeft, canvas.height - 52, Math.round(multiMetrics.width + 12), 18);
+            ctx.save();
+            ctx.globalAlpha = 0.6;
+            colorRect(rectLeft, canvas.height - 52, Math.round(multiMetrics.width + 12), 18, '#383838')
+            ctx.restore();
+        }
+
+        ctx.save();
+        ctx.shadowColor = 'black';
+        ctx.shadowBlur = 2;
+        ctx.font = '20px Orbitron';
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        multiMetrics = ctx.measureText('x'+currentMultiplier);
+        lastMulti = currentMultiplier;
+        ctx.fillText('x' + currentMultiplier, 186, canvas.height - 36);
+        ctx.restore();
+    }
 
     for (let t = 0; t < 5; t++) {
-
         if (currentTimeCount > t) {
             colorRect(8 + 32 * t, canvas.height - 56, 26, 26, '#6DC2FF');
         } else {
@@ -111,19 +172,12 @@ function drawScore() {
         }
     }
 
-    canvasContext.font = '20px Orbitron';
-    canvasContext.textAlign = 'left';
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillText('Score: ' + currentScore, 8, canvas.height - 8);
-    canvasContext.textAlign = 'center';
-    canvasContext.fillText('x' + currentMultiplier, 186, canvas.height - 36);
-
     //Testing values
-    // canvasContext.textAlign = 'left';
-    // canvasContext.fillText('Chain: ' + currentChain, 10, 30);
-    // canvasContext.fillText('Timer: ' + currentTimeCount, 10, 50);
+    // ctx.textAlign = 'left';
+    // ctx.fillText('Chain: ' + currentChain, 10, 30);
+    // ctx.fillText('Timer: ' + currentTimeCount, 10, 50);
 
-    canvasContext.restore();
+    ctx.restore();
 }
 
 function drawWeaponHeat() {
@@ -135,21 +189,13 @@ function drawWeaponHeat() {
     //109, 194, 255
     hmColorInner = 'rgb(' + (109 + p1.weaponHeat) + ', ' + (194 - 2 * p1.weaponHeat) + ', ' + (255 - 2.5 * p1.weaponHeat) + ')';
     drawPolygon(canvas.width / 2 + 60, canvas.height - 16, heatOuterPoly, hmColorOuter, true);
-    canvasContext.save();
-    canvasContext.shadowColor = 'black';
-    canvasContext.shadowBlur = 6;
-    colorAlignedText(canvas.width / 2 + 56, canvas.height - 30, 'center', '10px Orbitron', 'white', 'Weapon Temp');
     
     if (p1.weaponHeat >= 1) {
-        //canvasContext.shadowColor = hmColorInner;
-        //canvasContext.shadowBlur = 4;
         let heatDelta = p1.weaponHeat / 100;
         heatInnerPoly[2].x = -41 + Math.floor(heatDelta * 90) - 5;
         heatInnerPoly[3].x = -41 + Math.floor(heatDelta * 90);
         drawPolygon(canvas.width / 2 + 60, canvas.height - 16, heatInnerPoly, hmColorInner, true);
     }
-    canvasContext.restore();
-
 }
 
 function drawTitleScreen() {
@@ -159,20 +205,20 @@ function drawTitleScreen() {
         drawScoreTable();
     } else {
         let yOffset = canvas.height / 2.5;
-        canvasContext.lineWidth = 4;
+        ctx.lineWidth = 4;
         colorArc(canvas.width/2, canvas.height+canvas.height/3, canvas.width/1.1, 0, Math.PI*2, false, 'orange');
         drawLine(0, yOffset + 12, canvas.width/1.25, yOffset + 12, 2, 'white');
         drawLine(0, yOffset + 14, canvas.width/1.25, yOffset + 14, 3, '#6DC2FF');
         drawLine(0, yOffset + 16, canvas.width/1.25, yOffset + 16, 2, 'white');
 
         drawBitmapCenteredWithRotation(playerPic, canvas.width/1.25 + 40, yOffset + 14, 0);
-        canvasContext.save();
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = 'white'
+        ctx.save();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'white'
         colorCircle(canvas.width/1.25, yOffset + 14, canvas.width/35, '#6DC2FF')
-        canvasContext.stroke();
+        ctx.stroke();
         colorCircle(canvas.width/1.25 + canvas.width/60, yOffset + 14, canvas.width/70, 'white')
-        canvasContext.lineWidth = 3;
+        ctx.lineWidth = 3;
         colorArc(-300, canvas.height/2, 300 + canvas.width/1.25 + canvas.width/60, Math.PI * 1.8, Math.PI/6, false, 'white');
         
         let lineAng = Math.PI/1.5;
@@ -183,17 +229,17 @@ function drawTitleScreen() {
                     canvas.width/1.25 + Math.cos(lineAng) * 400, (yOffset + 14) + Math.sin(lineAng) * 400, 3, 'white');
                 
 
-        canvasContext.save();
-        canvasContext.shadowBlur = 10;
-        canvasContext.shadowColor = 'black';
+        ctx.save();
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'black';
         colorAlignedText(canvas.width / 2, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
         colorAlignedText(canvas.width / 2, yOffset + 40, 'center', 'bold 20px Orbitron', 'orange',
             'Press FIRE to start!');
-        canvasContext.restore();
-        canvasContext.save();
-        canvasContext.globalAlpha = 0.5;
+        ctx.restore();
+        ctx.save();
+        ctx.globalAlpha = 0.5;
         colorRect(canvas.width / 2 - 130, yOffset + 75, 260, 145, 'dimgrey');
-        canvasContext.restore();
+        ctx.restore();
 
         colorAlignedText(canvas.width / 2 - 110, yOffset + 100, 'left', '15px Orbitron', 'white', '<');
         colorAlignedText(canvas.width / 2 - 110, yOffset + 120, 'left', '15px Orbitron', 'white', '>');
@@ -216,7 +262,7 @@ function drawTitleScreen() {
         colorAlignedText(canvas.width / 2 + 110, yOffset + 160, 'right', '15px Orbitron', 'white', 'Fire');
         colorAlignedText(canvas.width / 2 + 110, yOffset + 180, 'right', '15px Orbitron', 'white', 'Thrust Left');
         colorAlignedText(canvas.width / 2 + 110, yOffset + 200, 'right', '15px Orbitron', 'white', 'Thrust Right');
-        canvasContext.restore();
+        ctx.restore();
     }
 }
 

@@ -240,14 +240,14 @@ class Ship extends WrapPosition {
 		var laserInterp = this.laserAnim/100;
 		var laserLength = laserInterp * LASER_RANGE;
 		var laserWidth = laserInterp * 3;
-		canvasContext.save();
-		canvasContext.shadowBlur = 3;
-		canvasContext.shadowColor = '#6DC2FF';
-		canvasContext.translate(this.x, this.y);
-		canvasContext.rotate(this.ang);
+		ctx.save();
+		ctx.shadowBlur = 3;
+		ctx.shadowColor = '#6DC2FF';
+		ctx.translate(this.x, this.y);
+		ctx.rotate(this.ang);
 		drawLine(18, -4, laserLength, -4, laserWidth, '#6DC2FF');
 		drawLine(18, 3, laserLength, 3, laserWidth, '#6DC2FF');
-		canvasContext.restore();
+		ctx.restore();
 	}
 	  
 	draw() {

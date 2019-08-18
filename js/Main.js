@@ -1,5 +1,6 @@
 //Canvas and context for play area and starfield
-var canvas, canvasContext, bg, bgContext;
+var canvas, ctx
+var gameCanvas, gameCtx, bg, bgContext, hud, hudContext;
 
 var p1 = new Ship(playerPic);
 
@@ -12,8 +13,13 @@ function loadGame() {
 	bg = document.getElementById('bg');
 	bgContext = bg.getContext('2d');
 
-	canvas = document.getElementById('gameCanvas');
-	canvasContext = canvas.getContext('2d');
+	gameCanvas = document.getElementById('gameCanvas');
+	gameCtx = gameCanvas.getContext('2d');
+
+	hud = document.getElementById('hud');
+	hudContext = hud.getContext('2d');
+
+	setCanvas(gameCanvas, gameCtx);
 	loadImages();
 }
 
@@ -45,7 +51,7 @@ function moveAll() {
 }
 
 function drawAll() {
-	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	twinkleStars();
 
 	for (let e = 0; e < allEntities.length; e++) {
@@ -56,6 +62,7 @@ function drawAll() {
 
 	if (gameStart) {
 		drawHUD();
+		
 	} else {
 		drawTitleScreen();
 	}
@@ -82,4 +89,9 @@ function removeDead() {
 	}
 	removeDeadEnemies();
 	removeDeadParticles();
+}
+
+function setCanvas(newCanvas, newContext) {
+	canvas = newCanvas;
+	ctx = newContext;
 }

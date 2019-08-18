@@ -132,17 +132,17 @@ class Turret extends WrapPosition {
 
 		colorCircle(x, y, TURRET_RADIUS, 'dimgrey');
 
-		canvasContext.save();
-		canvasContext.translate(x, y);
-		canvasContext.rotate(this.ang)
+		ctx.save();
+		ctx.translate(x, y);
+		ctx.rotate(this.ang)
 		colorRect(-TURRET_RADIUS / 2, -TURRET_RADIUS, TURRET_RADIUS / 2, TURRET_RADIUS * 2, '#494949');
-		canvasContext.restore();
+		ctx.restore();
 
-		canvasContext.save();
-		canvasContext.translate(x + cannonOffsetX, y + cannonOffsetY);
-		canvasContext.rotate(this.ang)
+		ctx.save();
+		ctx.translate(x + cannonOffsetX, y + cannonOffsetY);
+		ctx.rotate(this.ang)
 		colorRect(-TURRET_RADIUS / 3, -TURRET_RADIUS / 2, TURRET_RADIUS * 1.5, TURRET_RADIUS, '#494949');
-		canvasContext.restore();
+		ctx.restore();
 
 		colorCircle(x, y, TURRET_RADIUS - 5, '#d87300');
 		colorCircle(x, y, TURRET_RADIUS - 9, 'orange');

@@ -153,11 +153,11 @@ class Particle extends WrapPosition{
 
 		switch (this.shape) {
 			case 'sprite':
-				canvasContext.save();
-				canvasContext.translate(x, y);
-				canvasContext.rotate(this.ang);
-				canvasContext.drawImage(this.sprite, 0, 0, this.sprite.width, this.sprite.height, -this.collisionRadius/2, -this.collisionRadius/2, this.collisionRadius, this.collisionRadius);
-				canvasContext.restore();
+				ctx.save();
+				ctx.translate(x, y);
+				ctx.rotate(this.ang);
+				ctx.drawImage(this.sprite, 0, 0, this.sprite.width, this.sprite.height, -this.collisionRadius/2, -this.collisionRadius/2, this.collisionRadius, this.collisionRadius);
+				ctx.restore();
 				break;
 			case 'line':
 				let endX = x + Math.cos(this.ang) * this.collisionRadius*2;
@@ -165,11 +165,11 @@ class Particle extends WrapPosition{
 				drawLine(x, y, endX, endY, 3, this.color);
 				break;
 			case 'rectangle':
-				canvasContext.save();
-				canvasContext.translate(x, y);
-				canvasContext.rotate(this.ang);
+				ctx.save();
+				ctx.translate(x, y);
+				ctx.rotate(this.ang);
 				colorRect(-this.collisionRadius, -this.collisionRadius, this.collisionRadius*2, this.collisionRadius*2, this.color);
-				canvasContext.restore();
+				ctx.restore();
 				break;
 			default:
 				colorCircle(x, y, this.collisionRadius, this.color);
