@@ -6,20 +6,29 @@ class SpawnWarp extends WrapPosition {
         this.x = x;
         this.y = y;
         this.target = target;
-        this.radius = 0;
         this.isDead = false;
+        this.opening = true;
         if (target.sprite == undefined) {
             this.maxRadius = 60;
         } else {
             this.maxRadius = target.sprite.width;
         }
+        this.radius = this.maxRadius;
     }
 
     move() {
-        this.radius += deltaT * SPAWN_WARP_SPEED;
-        if (this.radius >= this.maxRadius) {
-            this.die();
+        if (this.opening) {
+            this.radius -= deltaT * SPAWN_WARP_SPEED;
+            if (this.radius <= 0) {
+                this.opening = false;
+            }
+        } else {
+            this.radius += deltaT * SPAWN_WARP_SPEED;
+            if (this.radius >= this.maxRadius) {
+                this.die();
+            }
         }
+
     }
 
     bumpCollision() {
@@ -33,6 +42,11 @@ class SpawnWarp extends WrapPosition {
             ctx.lineWidth = 1;
             colorCircle(this.x, this.y, this.maxRadius/1.5 - this.radius/1.5, '#000a30');
             ctx.stroke();
+
+            if (this.opening) {
+                return;
+            }
+            
             if (sprite == undefined) {
                 ctx.save()
                 ctx.translate(this.x, this.y)
