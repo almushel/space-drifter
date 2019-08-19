@@ -58,7 +58,7 @@ class Ship extends WrapPosition {
 	} // end of reset
 
 	respawn() {
-		super.reset();
+		super.reset(gameCanvas.width/2, gameCanvas.height/2);
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;

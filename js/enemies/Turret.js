@@ -65,14 +65,12 @@ class Turret extends WrapPosition {
 
 		let turnAngDelta = deltaX * Math.sin(this.ang) - deltaY * Math.cos(this.ang);
 
-		if (turnAngDelta < 0) {
-			this.ang += TURRET_TURN_SPEED * deltaT;
-		}
-		if (turnAngDelta > 0) {
-			this.ang -= TURRET_TURN_SPEED * deltaT;
-		}
 		if (turnAngDelta >= -TURRET_AIM_TOLERANCE && turnAngDelta <= TURRET_AIM_TOLERANCE) {
 			this.prepareToFire()
+		} else if (turnAngDelta < 0) {
+			this.ang += TURRET_TURN_SPEED * deltaT;
+		} else if (turnAngDelta > 0) {
+			this.ang -= TURRET_TURN_SPEED * deltaT;
 		}
 	}
 

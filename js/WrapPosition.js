@@ -6,11 +6,11 @@ class WrapPosition {
 		this.isDead = false;
 	}
 	
-	reset() {
+	reset(x, y) {
 		this.xv = 0;
 		this.yv = 0;
-		this.x = canvas.width/2;
-		this.y = canvas.height/2;
+		this.x = x;
+		this.y = y;
 		this.isDead = false;
 	} // end of reset
 	  
@@ -60,6 +60,11 @@ class WrapPosition {
 			return true;
 		}
 		return false;
+	}
+
+	draw() {
+		this.drawSprite(this.x, this.y);
+		this.drawWrap();
 	}
 
 	drawSprite(x, y) {

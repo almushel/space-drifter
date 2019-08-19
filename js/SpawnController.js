@@ -2,6 +2,7 @@ const ENEMY_DRIFTER = 0;
 const ENEMY_UFO = 1;
 const ENEMY_TRACKER = 2;
 const ENEMY_TURRET = 3;
+const ENEMY_GRAPPLER = 4;
 
 var enemyList = [];
 var enemyPool = [];
@@ -105,6 +106,8 @@ function getEnemyName(type) {
 			return Drifter.name;
 		case ENEMY_TURRET:
 			return Turret.name;
+		case ENEMY_GRAPPLER:
+			return Grappler.name;
 		default:
 			return '';
 	}
@@ -120,6 +123,8 @@ function getEnemyValue(name) {
 			return ENEMY_DRIFTER + 1;
 		case Turret.name:
 			return ENEMY_TURRET + 1;
+		case Grappler.name:
+			return ENEMY_GRAPPLER + 1;
 		default:
 			return 0;
 	}
@@ -144,8 +149,12 @@ function enemySelect(type) {
 			whichEnemy = new Turret();
 			whichEnemy.reset();
 			break;
+		case ENEMY_GRAPPLER:
+			whichEnemy = new Grappler;
+			whichEnemy.reset();
+			break;
 		default:
-			whichEnemy = new UFO();
+			whichEnemy = new Drifter();
 			whichEnemy.reset();
 			break;
 	}
