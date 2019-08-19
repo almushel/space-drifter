@@ -36,25 +36,28 @@ class WrapPosition {
 		this.handleScreenWrap();
 	}
 
-	bumpCollision(whichEntity) {
-		if (this.isDead || whichEntity.isDead) {
+	collision(whichEntity) {
+		if (this.isDead || whichEntity.isDead ||
+			!boundingRects(this.x, this.y, this.collisionRadius, whichEntity.x, whichEntity.y, whichEntity.collisionRadius)) {
 			return false;
 		}
+		
 		let deltaX = whichEntity.x - this.x,
 			deltaY = whichEntity.y - this.y,
 			deltaR = deltaX * deltaX + deltaY * deltaY;
 									   
 		if (deltaR <= Math.pow(this.collisionRadius + whichEntity.collisionRadius, 2)) {
 			let hitAng = Math.atan2(deltaY, deltaX);
+			let magnitude = Math.sqrt(deltaR) / Math.sqrt(this.collisionRadius * whichEntity.collisionRadius);
 			
 			if (whichEntity.constructor.name != Particle.name) {
-				this.xv += Math.cos(hitAng + Math.PI) * deltaT;
-				this.yv += Math.sin(hitAng + Math.PI) * deltaT;
+				this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
+				this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
 			}			
 
 			if (this.constructor.name != Particle.name) {
-				whichEntity.xv += Math.cos(hitAng) * deltaT;
-				whichEntity.yv += Math.sin(hitAng) * deltaT;
+				whichEntity.xv += Math.cos(hitAng) * magnitude * deltaT;
+				whichEntity.yv += Math.sin(hitAng) * magnitude * deltaT;
 			}
 
 			return true;

@@ -75,7 +75,7 @@ class Ship extends WrapPosition {
 		if (this.isDead) {
 			return;
 		}
-		if(thisEnemy.bumpCollision(this)) {
+		if(thisEnemy.collision(this)) {
 			thisEnemy.die();
 			this.die();
 		}

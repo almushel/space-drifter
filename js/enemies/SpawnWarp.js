@@ -31,7 +31,7 @@ class SpawnWarp extends WrapPosition {
 
     }
 
-    bumpCollision() {
+    collision() {
         return;
     }
 
