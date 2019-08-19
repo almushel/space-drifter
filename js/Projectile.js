@@ -34,7 +34,7 @@ class Projectile extends WrapPosition {
 		if (this.isDead) {
 			return false;
 		} else {
-			return thisEnemy.bumpCollision(this);
+			return thisEnemy.collision(this);
 		}
 	}
 
