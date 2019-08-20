@@ -7,7 +7,7 @@ class Grappler extends WrapPosition {
 		super();
 		this.ang = Math.random() * (Math.PI * 2);
 		this.firing = false;
-		this.gHook = new GrapplingHook(1, 'white', this.collisionRadius/2, this);
+		this.gHook = new GrapplingHook(0.5, 'lime', this.collisionRadius/1.5, this);
 	}
 	
 	reset(x, y) {
@@ -48,7 +48,9 @@ class Grappler extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		colorCircle(x, y, this.collisionRadius, 'green');
+		colorCircle(x, y, this.collisionRadius, 'lime');
 		drawLine(this.x, this.y, this.x + Math.cos(this.ang) * this.collisionRadius, this.y + Math.sin(this.ang) * this.collisionRadius, 4, 'red');
+		colorCircle(x, y, this.collisionRadius-3, 'dimgrey');
+		colorCircle(x, y, this.collisionRadius/3, 'lime');
 	}
 }

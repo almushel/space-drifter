@@ -15,6 +15,7 @@ class GrapplingHook extends WrapPosition {
 		super.reset(this.parent.x, this.parent.y);
 		this.extending = false;
 		this.retracting = false;
+		this.target = null;
 	} // end of reset
 
 	readyToFire() {
@@ -57,19 +58,25 @@ class GrapplingHook extends WrapPosition {
 		if (this.target != null) {
 			return false;
 		} else {
-			return thisEnemy.bumpCollision(this);
+			return thisEnemy.collision(this);
 		}
 	}
 
 	move() {
 		if (this.target != null) {
+			if (this.target.isDead) {
+				this.target = null;
+				this.retract();
+				return;
+			}
+
 			if (this.target.x < this.collisionRadius || this.target.x > gameCanvas.wdth - this.collisionRadius ||
 				this.target.y < this.collisionRadius || this.target.y > gameCanvas.width - this.collisionRadius) {
-					this.target = null;
-					this.retract();
-					return;
-				}
-			
+				this.target = null;
+				this.retract();
+				return;
+			}
+
 			this.x = this.target.x;
 			this.y = this.target.y;
 
@@ -78,7 +85,7 @@ class GrapplingHook extends WrapPosition {
 				deltaAng = Math.atan2(deltaY, deltaX);
 
 			this.ang = deltaAng + Math.PI;
-			
+
 			//Reel in grapple target
 			if (this.retracting) {
 				this.target.xv += Math.cos(deltaAng) * GRAPPLE_RETRACT_SPEED * deltaT;
@@ -93,12 +100,16 @@ class GrapplingHook extends WrapPosition {
 			this.x += this.xv * deltaT;
 			this.y += this.yv * deltaT;
 
+			if (p1.isDead) {
+				this.extending = false;
+				this.retract();
+			}
 			//Stop and attach to target
-			if (this.hitTest(p1)) {
+			else if (this.hitTest(p1)) {
 				this.attach(p1);
 				this.extending = false;
 				this.retract();
-			//Stop and retract from screen boundaries
+				//Stop and retract from screen boundaries
 			} else if (this.x < this.collisionRadius || this.x > gameCanvas.width - this.collisionRadius ||
 				this.y < this.collisionRadius || this.y > gameCanvas.height - this.collisionRadius) {
 				this.extending = false;
@@ -131,17 +142,33 @@ class GrapplingHook extends WrapPosition {
 	}
 
 	draw() {
-		drawLine(this.x, this.y, this.parent.x, this.parent.y, 4, 'white');
+		drawLine(this.x + Math.cos(this.ang + Math.PI / 2), this.y + Math.sin(this.ang + Math.PI / 2), 
+				this.parent.x + Math.cos(this.parent.ang + Math.PI / 2), this.parent.y + Math.sin(this.parent.ang + Math.PI / 2), 1, this.color);
+		
+		drawLine(this.x + Math.cos(this.ang - Math.PI / 2), this.y + Math.sin(this.ang - Math.PI / 2), 
+				this.parent.x + Math.cos(this.parent.ang - Math.PI / 2), this.parent.y + Math.sin(this.parent.ang - Math.PI / 2), 1, this.color);
 		this.drawSprite(this.x, this.y);
 		this.drawWrap();
 	}
 
 	drawSprite(x, y) {
+		let offset = 0;
+		if (!this.extending && !this.retracting) {
+			offset = this.target == null ? this.parent.collisionRadius : -this.target.collisionRadius;
+		}
+
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.rotate(this.ang);
-		drawPolygon(Math.cos(0) * this.collisionRadius, Math.sin(0) * this.collisionRadius,
-			[{ x: 0, y: -this.collisionRadius }, { x: this.collisionRadius, y: 0 }, { x: 0, y: this.collisionRadius }], 'white', true);
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 1;
+		drawPolygon(offset, this.collisionRadius / 2,
+			[{ x: 0, y: -this.collisionRadius / 2 }, { x: this.collisionRadius, y: 0 }, { x: 0, y: this.collisionRadius / 2 }], 'dimgrey', true);
+		ctx.stroke();
+
+		drawPolygon(offset, -this.collisionRadius / 2,
+			[{ x: 0, y: -this.collisionRadius / 2 }, { x: this.collisionRadius, y: 0 }, { x: 0, y: this.collisionRadius / 2 }], 'dimgrey', true);
+		ctx.stroke();
 		ctx.restore();
 	}
 }
