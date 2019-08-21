@@ -49,13 +49,14 @@ class Drifter extends WrapPosition {
 	}
 
 	move() {
-		super.move();
-		var magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
+		let magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
 
 		if (magnitude > DRIFT_RATE) {
 			this.xv *= 1 - 0.04 * deltaT;
 			this.yv *= 1 - 0.04 * deltaT;
 		}
+
+		super.move();
 	}
 
 	die() {

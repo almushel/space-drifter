@@ -16,11 +16,11 @@ class Grappler extends WrapPosition {
 	}
 	
 	move() {
-		super.move();
 		this.xv *= 1 - GRAPPLER_SPACE_FRICTION * deltaT;
 		this.yv *= 1 - GRAPPLER_SPACE_FRICTION * deltaT;
-		this.gHook.move();
+		super.move();
 		this.updateAim(p1);
+		this.gHook.move();
 	}
 
 	updateAim(target) {

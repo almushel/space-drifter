@@ -26,7 +26,6 @@ class UFO extends WrapPosition {
 	} // end of reset
 
 	move() {
-		super.move();
 		var turnAngDelta = Math.cos(this.targetAng) * Math.sin(this.ang) - Math.sin(this.targetAng) * Math.cos(this.ang);
 
 		if (turnAngDelta > -UFO_TURN_PRECISION && turnAngDelta < UFO_TURN_PRECISION) {
@@ -52,6 +51,7 @@ class UFO extends WrapPosition {
 			this.xv *= 1 - 0.02 * deltaT;
 			this.yv *= 1 - 0.02 * deltaT;
 		}
+		super.move();
 	}
 
 	draw() {

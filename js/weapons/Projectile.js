@@ -30,7 +30,7 @@ class Projectile extends WrapPosition {
 		this.lifeLeft = this.lifeSpan;
 	}
 
-	hitTest(thisEnemy) {
+	collision(thisEnemy) {
 		if (this.isDead) {
 			return false;
 		} else {

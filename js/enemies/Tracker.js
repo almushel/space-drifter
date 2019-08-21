@@ -24,9 +24,9 @@ class Tracker extends WrapPosition {
 	  
 	move() {
 		this.trackShip(p1);
-		super.move();
 		this.xv *= 1 - (TRACKER_FRICTION * deltaT);
 		this.yv *= 1 - (TRACKER_FRICTION * deltaT);
+		super.move();
 	}
 	
 	trackShip(target) {

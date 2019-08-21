@@ -124,8 +124,6 @@ class Particle extends WrapPosition{
 		if (this.isDead) {
 			return;
 		}
-
-		super.move();
 		
 		if (Math.random() * 100 > 50){
 			this.lifeLeft -= PARTICLE_DECAY * deltaT;
@@ -139,6 +137,7 @@ class Particle extends WrapPosition{
 				this.isDead = true;
 			}
 		}
+		super.move();
 	}
 
 	draw() {

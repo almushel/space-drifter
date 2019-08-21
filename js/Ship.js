@@ -92,7 +92,7 @@ class Ship extends WrapPosition {
 		}
 
 		for (let i=0; i < this.shotList.length; i++) {
-			if(this.shotList[i].hitTest(thisEnemy)) {
+			if(this.shotList[i].collision(thisEnemy)) {
 				this.shotList[i].reset();
 				thisEnemy.die();
 				let scorePoints = getEnemyValue(thisEnemy.constructor.name);
@@ -160,12 +160,11 @@ class Ship extends WrapPosition {
 				this.thrustEnergy += 1 * deltaT;
 			}
 		}
-			
-		super.move();
-			
+		
 		this.xv *= 1 - SPACE_FRICTION * deltaT;
 		this.yv *= 1 - SPACE_FRICTION * deltaT;
 
+		super.move();
 		this.updateWeapons();
 	}
 

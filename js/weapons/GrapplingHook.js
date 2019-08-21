@@ -1,4 +1,4 @@
-const GRAPPLE_RETRACT_SPEED = 0.08;
+const GRAPPLE_RETRACT_ACCEL = 0.08;
 
 class GrapplingHook extends WrapPosition {
 	constructor(speed, color, radius, parent) {
@@ -54,62 +54,43 @@ class GrapplingHook extends WrapPosition {
 		this.target = target;
 	}
 
-	hitTest(thisEnemy) {
+	collision(whichEntity) {
 		if (this.target != null) {
 			return false;
 		} else {
-			return thisEnemy.collision(this);
+			return super.collision(whichEntity);
 		}
 	}
 
 	move() {
+		let deltaX = this.parent.x - this.x,
+			deltaY = this.parent.y - this.y,
+			deltaAng = Math.atan2(deltaY, deltaX);
+
 		if (this.target != null) {
-			if (this.target.isDead) {
+			if (this.target.x < this.target.collisionRadius/2 || this.target.x > gameCanvas.wdth - this.target.collisionRadius/2 ||
+				this.target.y < this.target.collisionRadius/2 || this.target.y > gameCanvas.width - this.target.collisionRadius/2 || this.target.isDead) {
 				this.target = null;
 				this.retract();
 				return;
 			}
-
-			if (this.target.x < this.collisionRadius || this.target.x > gameCanvas.wdth - this.collisionRadius ||
-				this.target.y < this.collisionRadius || this.target.y > gameCanvas.width - this.collisionRadius) {
-				this.target = null;
-				this.retract();
-				return;
-			}
-
-			this.x = this.target.x;
-			this.y = this.target.y;
-
-			let deltaX = this.parent.x - this.x,
-				deltaY = this.parent.y - this.y,
-				deltaAng = Math.atan2(deltaY, deltaX);
-
 			this.ang = deltaAng + Math.PI;
 
-			//Reel in grapple target
-			if (this.retracting) {
-				this.target.xv += Math.cos(deltaAng) * GRAPPLE_RETRACT_SPEED * deltaT;
-				this.target.yv += Math.sin(deltaAng) * GRAPPLE_RETRACT_SPEED * deltaT;
+			this.target.xv += Math.cos(deltaAng) * GRAPPLE_RETRACT_ACCEL * deltaT;
+			this.target.yv += Math.sin(deltaAng) * GRAPPLE_RETRACT_ACCEL * deltaT;
 
-				this.parent.xv += Math.cos(deltaAng + Math.PI) * GRAPPLE_RETRACT_SPEED * deltaT;
-				this.parent.yv += Math.sin(deltaAng + Math.PI) * GRAPPLE_RETRACT_SPEED * deltaT;
-			}
+			this.parent.xv += Math.cos(this.ang) * GRAPPLE_RETRACT_ACCEL * deltaT;
+			this.parent.yv += Math.sin(this.ang) * GRAPPLE_RETRACT_ACCEL * deltaT;
+		
 		} else if (this.extending) {
 			this.xv += Math.cos(this.ang) * this.speed * deltaT;
 			this.yv += Math.sin(this.ang) * this.speed * deltaT;
-			this.x += this.xv * deltaT;
-			this.y += this.yv * deltaT;
 
-			if (p1.isDead) {
-				this.extending = false;
-				this.retract();
-			}
 			//Stop and attach to target
-			else if (this.hitTest(p1)) {
+			if (this.collision(p1)) {
 				this.attach(p1);
 				this.extending = false;
-				this.retract();
-				//Stop and retract from screen boundaries
+			//Stop and retract from screen boundaries
 			} else if (this.x < this.collisionRadius || this.x > gameCanvas.width - this.collisionRadius ||
 				this.y < this.collisionRadius || this.y > gameCanvas.height - this.collisionRadius) {
 				this.extending = false;
@@ -117,22 +98,21 @@ class GrapplingHook extends WrapPosition {
 			}
 		} else if (this.retracting) {
 			//Stop on contact with parent object
-			if (this.hitTest(this.parent)) {
-				this.x = this.parent.x;
-				this.y = this.parent.y;
+			if (this.collision(this.parent)) {
 				this.retracting = false;
-				this.target = null;
 			} else {
-				let deltaX = this.parent.x - this.x,
-					deltaY = this.parent.y - this.y,
-					deltaAng = Math.atan2(deltaY, deltaX);
-
 				this.xv += Math.cos(deltaAng) * this.speed * deltaT;
 				this.yv += Math.sin(deltaAng) * this.speed * deltaT;
-
-				this.x += this.xv * deltaT;
-				this.y += this.yv * deltaT;
 			}
+		}
+
+		if (this.extending || this.retracting) {
+			this.x += this.xv * deltaT;
+			this.y += this.yv * deltaT;
+		} else if (this.target != null) {
+			//Follow target when attached
+			this.x = this.target.x;
+			this.y = this.target.y; 
 		} else {
 			//Follow parent when inactive
 			this.ang = this.parent.ang;

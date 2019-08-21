@@ -40,16 +40,15 @@ class Turret extends WrapPosition {
 	}
 
 	move() {
-		super.move();
 		this.updateAim(p1);
-		this.animate();
-
 		this.xv *= 1 - 0.08 * deltaT;
 		this.yv *= 1 - 0.08 * deltaT;
+		super.move();
+		this.animate();
 
 		for (var s = 0; s < this.shotList.length; s++) {
 			this.shotList[s].move();
-			if (this.shotList[s].hitTest(p1)) {
+			if (this.shotList[s].collision(p1)) {
 				p1.die();
 				this.shotList[s].die();
 			}
