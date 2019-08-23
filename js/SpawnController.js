@@ -227,9 +227,9 @@ function removeDeadEnemies() {
 			enemyDeath.play();
 			screenShake();
 
+			explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'white', 'white', null, 'circle');
 			let splodeOrigin = instantiateParticle(null, 'circle');
 			splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius / 2, 'orange', null, 'circle');
-			explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'white', 'white', null, 'circle');
 
 			if (enemyList[i].sprite != undefined) {
 				explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite, 6, enemyList[i].ang);

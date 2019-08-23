@@ -72,12 +72,14 @@ function collide() {
 	for (var i = 0; i < allEntities.length; i++) {
 		for (var a = i + 1; a < allEntities.length; a++) {
 			allEntities[i].collision(allEntities[a]);
+			allEntities[a].collision(allEntities[i]);
 		}
+		allEntities[i].collision(p1);		
 		p1.collision(allEntities[i]);
 	}
 
 	for (let e = 0; e < enemyList.length; e++) {
-		p1.checkShipAndShotCollisionAgainst(enemyList[e]);
+		p1.enemyCollision(enemyList[e]);
 	}
 }
 

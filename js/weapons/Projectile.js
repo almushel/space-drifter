@@ -7,12 +7,14 @@ class Projectile extends WrapPosition {
 		this.lifeLeft = 0;
 		this.speed = speed;
 		this.color = color;
+		this.parent = null;
 	}
 
 	reset() {
 		super.reset();
 		this.isDead = true;
 		this.lifeLeft = 0;
+		this.parent = null;
 	} // end of reset
 
 	isReadyToFire() {
@@ -20,21 +22,38 @@ class Projectile extends WrapPosition {
 	}
 
 	shootFrom(shipFiring) {
-		this.x = shipFiring.x;
-		this.y = shipFiring.y;
+		this.x = shipFiring.x + Math.cos(shipFiring.ang) * shipFiring.collisionRadius;
+		this.y = shipFiring.y + Math.sin(shipFiring.ang) * shipFiring.collisionRadius;
 
 		this.xv = Math.cos(shipFiring.ang) * this.speed + shipFiring.xv;
 		this.yv = Math.sin(shipFiring.ang) * this.speed + shipFiring.yv;
 
 		this.isDead = false;
 		this.lifeLeft = this.lifeSpan;
+		this.parent = shipFiring;
 	}
 
 	collision(thisEnemy) {
-		if (this.isDead) {
+		if (this.parent == null || thisEnemy == this.parent) {
 			return false;
-		} else {
-			return thisEnemy.collision(this);
+		}
+
+		if (super.collision(thisEnemy)) {
+			let enemyValue = getEnemyValue(thisEnemy.constructor.name);
+			//Bullets fired from player ships
+			if (this.parent.constructor.name == Ship.name && enemyValue > 0) {
+				this.reset();
+				thisEnemy.die();
+				updateScore(enemyValue);
+			//Bullets fired from enemies
+			} else if (getEnemyValue(this.parent.constructor.name) > 0 && thisEnemy.constructor.name == Ship.name) {
+				this.reset();
+				thisEnemy.die();
+			} else if (thisEnemy.constructor.name == Projectile.name) {
+				explodeAtPoint(this.x, this.y, 'white', 'white', 'white', null, 'circle');
+				this.reset();
+				thisEnemy.reset();
+			}
 		}
 	}
 

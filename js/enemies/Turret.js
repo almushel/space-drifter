@@ -5,8 +5,8 @@ const TURRET_SHOT_SPEED = 2;
 const TURRET_SHOT_LIFE = 160;
 const TURRET_AIM_TOLERANCE = 15;
 const TURRET_TURN_SPEED = Math.PI / 300;
-const TURRET_FIRE_ANIM_SPEED = 5; //1 second
-const TURRET_RECOVERY_ANIM_SPEED = 30; //2 seconds
+const TURRET_FIRE_ANIM_SPEED = 5; //83ms
+const TURRET_RECOVERY_ANIM_SPEED = 60; //500ms
 
 class Turret extends WrapPosition {
 	constructor() {
@@ -14,7 +14,6 @@ class Turret extends WrapPosition {
 		this.xv = 0;
 		this.yv = 0;
 		this.ang = 0;
-		this.shotList = [];
 		this.collisionRadius = TURRET_RADIUS;
 		this.firing = false;
 		this.recovering = false;
@@ -22,12 +21,6 @@ class Turret extends WrapPosition {
 		this.fTimer = 0; //Fire animation
 		this.rTimer = 0; //Recovery animation
 		this.fireOffset = 2;//Animation offset multiplier
-
-
-		for (var i = 0; i < TURRET_SHOT_MAX; i++) {
-			let newShot = new Projectile(TURRET_SHOT_SPEED, 'red', TURRET_SHOT_RADIUS, TURRET_SHOT_LIFE);
-			this.shotList.push(newShot);
-		}
 	}
 
 	reset(x, y) {
@@ -41,18 +34,10 @@ class Turret extends WrapPosition {
 
 	move() {
 		this.updateAim(p1);
-		this.xv *= 1 - 0.08 * deltaT;
-		this.yv *= 1 - 0.08 * deltaT;
+		this.xv *= 1 - 0.03 * deltaT;
+		this.yv *= 1 - 0.03 * deltaT;
 		super.move();
 		this.animate();
-
-		for (var s = 0; s < this.shotList.length; s++) {
-			this.shotList[s].move();
-			if (this.shotList[s].collision(p1)) {
-				p1.die();
-				this.shotList[s].die();
-			}
-		}
 	}
 
 	updateAim(target) {
@@ -74,21 +59,16 @@ class Turret extends WrapPosition {
 	}
 
 	fire() {
-		for (let i = 0; i < this.shotList.length; i++) {
-			if (this.shotList[i].isReadyToFire()) {
-				this.shotList[i].shootFrom(this);
-				return true;
-			}
-		}
-		return false;
+		let newShot = new Projectile(TURRET_SHOT_SPEED, 'red', TURRET_SHOT_RADIUS, TURRET_SHOT_LIFE);
+		newShot.shootFrom(this);
+		allEntities.push(newShot);
 	}
 
 	prepareToFire() {
 		if (this.firing == false && this.recovering == false) {
-			if (this.fire()) {
-				this.firing = true;
-				this.fTimer = TURRET_FIRE_ANIM_SPEED;
-			}
+			this.fire();
+			this.firing = true;
+			this.fTimer = TURRET_FIRE_ANIM_SPEED;
 		}
 	}
 
@@ -114,9 +94,6 @@ class Turret extends WrapPosition {
 	}
 
 	draw() {
-		for (let s = 0; s < this.shotList.length; s++) {
-			this.shotList[s].draw();
-		}
 		this.drawSprite(this.x, this.y);
 		this.drawWrap();
 	}

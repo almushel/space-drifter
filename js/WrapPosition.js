@@ -54,12 +54,6 @@ class WrapPosition {
 				this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
 				this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
 			}			
-
-			if (this.constructor.name != Particle.name) {
-				whichEntity.xv += Math.cos(hitAng) * magnitude * deltaT;
-				whichEntity.yv += Math.sin(hitAng) * magnitude * deltaT;
-			}
-
 			return true;
 		}
 		return false;

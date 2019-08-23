@@ -23,17 +23,11 @@ class Ship extends WrapPosition {
 		this.sprite = sprite;
 		
 		this.name = 'player';
-		this.shotList = [];
 		this.canShoot = true;
 		this.laserAnim = 0;
 		this.laserFiring = false;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
-
-		for (var i=0; i < PLAYER_SHOT_MAX; i++) {
-			let newShot = new Projectile(PLAYER_SHOT_SPEED, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE);
-			this.shotList.push(newShot);
-		}
 	
 		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
@@ -51,9 +45,6 @@ class Ship extends WrapPosition {
 
 	reset() {
 		this.lives = PLAYER_STARTING_LIVES;
-		for (let i = 0; i < this.shotList.length; i++) {
-			this.shotList[i].reset();
-		}
 		this.respawn();
 	} // end of reset
 
@@ -66,12 +57,12 @@ class Ship extends WrapPosition {
 		this.laserFiring = false;
 
 		forceCircle(this.x, this.y, canvas.width/6, 5);
-		explodeAtPoint(this.x, this.y, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'line');
+		explodeAtPoint(this.x, this.y, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
 		let spawnMarker = instantiateParticle(null, 'circle');
 		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, '#6DC2FF', null, 'circle');
 	}
 	  
-	checkShipAndShotCollisionAgainst(thisEnemy) {
+	enemyCollision(thisEnemy) {
 		if (this.isDead) {
 			return;
 		}
@@ -79,21 +70,13 @@ class Ship extends WrapPosition {
 			thisEnemy.die();
 			this.die();
 		}
+
 		if (this.laserFiring) {
 			let xOffset = (Math.cos(this.ang) * 18) + (Math.cos(this.ang+Math.PI/2) * 4)
 			let yOffset = (Math.sin(this.ang) * 18) + (Math.sin(this.ang+Math.PI/2) * 4)
 			
 			if (circleRotRectIntersect(this.x + xOffset, this.y + yOffset, LASER_RANGE * (this.laserAnim/100), 32, this.ang, 
 										thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
-				thisEnemy.die();
-				let scorePoints = getEnemyValue(thisEnemy.constructor.name);
-				updateScore(scorePoints);
-			}
-		}
-
-		for (let i=0; i < this.shotList.length; i++) {
-			if(this.shotList[i].collision(thisEnemy)) {
-				this.shotList[i].reset();
 				thisEnemy.die();
 				let scorePoints = getEnemyValue(thisEnemy.constructor.name);
 				updateScore(scorePoints);
@@ -178,10 +161,6 @@ class Ship extends WrapPosition {
 	}
 
 	updateWeapons() {
-		for (let i=0; i < this.shotList.length; i++) {
-			this.shotList[i].move();
-		}
-		
 		if (this.controlCannonFire.isPressed() && this.weaponHeat < 100) {
 			this.fireCannon();
 			//this.fireLaser();
@@ -208,18 +187,17 @@ class Ship extends WrapPosition {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
+		
+		this.weaponHeat += 20;
+		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
+		
+		playerShotSFX.play();
+		let newShot = new Projectile(PLAYER_SHOT_SPEED, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE);
+		newShot.shootFrom(this);
+		allEntities.push(newShot);
 
-		for(let i=0; i < this.shotList.length; i++) {
-			if (this.shotList[i].isReadyToFire()){
-				this.weaponHeat += 20;
-				if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
-				playerShotSFX.play();
-				this.shotList[i].shootFrom(this);
-				this.canShoot = false;
-				setTimeout(function (self) {self.canShoot = true}, 200, this);
-				break;
-			}
-		}
+		this.canShoot = false;
+		setTimeout(function (self) {self.canShoot = true}, 200, this);
 	}
 
 	fireLaser() {
@@ -254,9 +232,6 @@ class Ship extends WrapPosition {
 			return;
 		}
 
-		for (let i=0; i<this.shotList.length; i++) {
-			this.shotList[i].draw();
-		}
 		if (this.laserFiring) {
 			this.drawLaser();
 		}
