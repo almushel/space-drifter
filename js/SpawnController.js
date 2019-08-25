@@ -4,12 +4,16 @@ const ENEMY_TRACKER = 2;
 const ENEMY_TURRET = 3;
 const ENEMY_GRAPPLER = 4;
 
+const ITEM_ACCUMLATE_RATE = 0.25;
+
 var enemyList = [];
 var enemyPool = [];
 
 var currentWave = 1;
 var pointMax = 1;
 var spawnFinished = false;
+
+let pickUpAccumulator = 0;
 
 function resetGame() {
 	initHUD();
@@ -116,11 +120,11 @@ function getEnemyName(type) {
 function getEnemyValue(name) {
 	switch (name) {
 		case UFO.name:
-			return ENEMY_UFO + 1;
+			return ENEMY_UFO;
 		case Tracker.name:
 			return ENEMY_TRACKER + 1;
 		case Drifter.name:
-			return ENEMY_DRIFTER + 1;
+			return ENEMY_DRIFTER + 0.25;
 		case Turret.name:
 			return ENEMY_TURRET + 1;
 		case Grappler.name:
@@ -227,7 +231,8 @@ function removeDeadEnemies() {
 			enemyDeath.play();
 			screenShake();
 
-			explodeAtPoint(enemyList[i].x, enemyList[i].y, 'white', 'white', 'white', null, 'circle');
+			spawnItems(enemyList[i]);
+			explodeAtPoint(enemyList[i].x, enemyList[i].y, 1, 'white', 'white', 'white', null, 'circle');
 			let splodeOrigin = instantiateParticle(null, 'circle');
 			splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius / 2, 'orange', null, 'circle');
 
@@ -245,5 +250,17 @@ function removeDeadEnemies() {
 		currentWave++;
 		pointMax++;
 		setTimeout(spawnWave, 1000, generateWave(currentWave, pointMax));
+	}
+}
+
+function spawnItems(enemy) {
+	pickUpAccumulator += ITEM_ACCUMLATE_RATE * getEnemyValue(enemy.constructor.name);
+
+	let roll = 10 + Math.random() * 90;
+
+	if (roll < pickUpAccumulator) {
+		let pickup = new Item(enemy.x, enemy.y, 'Life Up');
+		allEntities.push(pickup);
+		pickUpAccumulator = 0;
 	}
 }

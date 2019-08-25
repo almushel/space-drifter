@@ -50,7 +50,7 @@ class Projectile extends WrapPosition {
 				this.reset();
 				thisEnemy.die();
 			} else if (thisEnemy.constructor.name == Projectile.name) {
-				explodeAtPoint(this.x, this.y, 'white', 'white', 'white', null, 'circle');
+				explodeAtPoint(this.x, this.y, 0, 'white', 'white', 'white', null, 'circle');
 				this.reset();
 				thisEnemy.reset();
 			}

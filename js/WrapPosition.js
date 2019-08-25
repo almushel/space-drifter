@@ -50,7 +50,7 @@ class WrapPosition {
 			let hitAng = Math.atan2(deltaY, deltaX);
 			let magnitude = Math.sqrt(deltaR) / Math.sqrt(this.collisionRadius * whichEntity.collisionRadius);
 			
-			if (whichEntity.constructor.name != Particle.name) {
+			if (whichEntity.constructor.name != Particle.name && whichEntity.constructor.name != Item.name) {
 				this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
 				this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
 			}			

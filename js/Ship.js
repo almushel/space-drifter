@@ -57,7 +57,7 @@ class Ship extends WrapPosition {
 		this.laserFiring = false;
 
 		forceCircle(this.x, this.y, canvas.width/6, 5);
-		explodeAtPoint(this.x, this.y, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
+		explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
 		let spawnMarker = instantiateParticle(null, 'circle');
 		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, '#6DC2FF', null, 'circle');
 	}
@@ -91,7 +91,7 @@ class Ship extends WrapPosition {
 		playerThrustSFX.pause();
 		playerDeathSFX.play();
 		
-		explodeAtPoint(this.x, this.y, 'white', 'orange', '#6DC2FF', null, 'circle');
+		explodeAtPoint(this.x, this.y, 2, 'white', 'orange', '#6DC2FF', null, 'circle');
 
 		let splodeOrigin = instantiateParticle(null, 'circle');
 		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
