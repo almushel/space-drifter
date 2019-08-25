@@ -162,7 +162,8 @@ class Ship extends WrapPosition {
 
 	updateWeapons() {
 		if (this.controlCannonFire.isPressed() && this.weaponHeat < 100) {
-			this.fireCannon();
+			this.fireMissile();
+			//this.fireCannon();
 			//this.fireLaser();
 		}
 
@@ -211,6 +212,22 @@ class Ship extends WrapPosition {
 		this.canShoot = false;
 		setTimeout(function (self) {self.canShoot = true;}, 250, this);
 		setTimeout(function (self) {self.laserFiring = false; self.laserAnim = 0;}, 200, this);
+	}
+
+	fireMissile() {
+		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
+			return;
+		}
+		
+		this.weaponHeat += 20;
+		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
+		playerMissileSFX.play();
+		let newShot = new Missile(0.2, 3, 200);
+		newShot.shootFrom(this);
+		allEntities.push(newShot);
+
+		this.canShoot = false;
+		setTimeout(function (self) {self.canShoot = true}, 800, this);
 	}
 
 	drawLaser() {

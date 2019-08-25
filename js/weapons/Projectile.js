@@ -22,8 +22,9 @@ class Projectile extends WrapPosition {
 	}
 
 	shootFrom(shipFiring) {
-		this.x = shipFiring.x + Math.cos(shipFiring.ang) * shipFiring.collisionRadius;
-		this.y = shipFiring.y + Math.sin(shipFiring.ang) * shipFiring.collisionRadius;
+		this.ang = shipFiring.ang;
+		this.x = shipFiring.x + Math.cos(shipFiring.ang) * (shipFiring.collisionRadius + this.collisionRadius);
+		this.y = shipFiring.y + Math.sin(shipFiring.ang) * (shipFiring.collisionRadius + this.collisionRadius);
 
 		this.xv = Math.cos(shipFiring.ang) * this.speed + shipFiring.xv;
 		this.yv = Math.sin(shipFiring.ang) * this.speed + shipFiring.yv;
@@ -34,7 +35,7 @@ class Projectile extends WrapPosition {
 	}
 
 	collision(thisEnemy) {
-		if (this.parent == null || thisEnemy == this.parent) {
+		if (this.parent == null || thisEnemy === this.parent) {
 			return false;
 		}
 
@@ -54,6 +55,7 @@ class Projectile extends WrapPosition {
 				this.reset();
 				thisEnemy.reset();
 			}
+			return true;
 		}
 	}
 
@@ -73,9 +75,9 @@ class Projectile extends WrapPosition {
 		}
 	}
 
-	draw() {
+	drawSprite(x, y) {
 		if (this.isDead == false) {
-			colorCircle(this.x, this.y, this.collisionRadius, this.color);
+			colorCircle(x, y, this.collisionRadius, this.color);
 		}
 	}
 

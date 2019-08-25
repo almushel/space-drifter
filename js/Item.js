@@ -64,7 +64,11 @@ class Item extends WrapPosition {
         
         switch (this.type) {
             case "Life Up":
+                lifeUpSFX.play();
                 whichEntity.lives++;
+                break;
+            case "Missile":
+                pickUpSFX.play();
                 break;
             default:
                 break;
@@ -74,30 +78,34 @@ class Item extends WrapPosition {
         this.activated = true;
     }
 
-    drawSprite() {
+    drawSprite(x, y) {
         let bubble = ctx.createRadialGradient(this.x, this.y, this.drawRadius/2, this.x, this.y, this.drawRadius);
         bubble.addColorStop(0, 'rgba(0,0,0,0)');
         bubble.addColorStop(0.9, 'rgba(255, 255, 255, 0.6');
 
+        ctx.save();
+        colorCircle(x, y, this.drawRadius, bubble);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#6DC2FF';
+        ctx.stroke();
+        
         switch (this.type) {
             case "Life Up":
-                colorCircle(this.x, this.y, this.drawRadius, bubble);
-                ctx.lineWidth = 1;
-                ctx.strokeStyle = '#6DC2FF';
-                ctx.stroke();
-                ctx.save();
-                ctx.translate(this.x, this.y);
+                ctx.translate(x, y);
                 ctx.rotate(this.drawAng);
                 ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, -this.drawRadius, -this.drawRadius, this.drawRadius*2, this.drawRadius*2)
-                ctx.restore();
+                break;
+            case "Missile":
+                ctx.translate(x, y);
+                ctx.rotate(this.drawAng);
+                ctx.drawImage(missilePic, 0, 0, missilePic.width, missilePic.height, -this.drawRadius, -this.drawRadius, this.drawRadius*2, this.drawRadius*2)
                 break;
             default:
-                colorCircle(this.x, this.y, this.drawRadius, bubble);
-                ctx.lineWidth = 1;
-                ctx.strokeStyle = '#6DC2FF';
+                colorCircle(x, y, this.drawRadius, bubble);
                 ctx.stroke();
-                drawBitmapCenteredWithRotation(playerPic, this.x, this.y, this.drawAng);
                 break;
         }
+
+        ctx.restore();
     }
 }

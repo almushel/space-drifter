@@ -1,6 +1,7 @@
 var playerPic=document.createElement("img");
 var UFOPic=document.createElement("img");
 var trackerPic=document.createElement("img");
+var missilePic=document.createElement("img");
 
 var trackPics = [];
 
@@ -28,7 +29,8 @@ function loadImages() {
 var imageList = [
   {varName:playerPic, theFile:"player1.png"},
   {varName:UFOPic, theFile: "ufo.png"},
-  {varName:trackerPic, theFile:"tracker.png"}
+  {varName:trackerPic, theFile:"tracker.png"},
+  {varName:missilePic, theFile:"missile.png"}
   ];
 
 picsToLoad = imageList.length;

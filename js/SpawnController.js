@@ -30,6 +30,8 @@ function resetGame() {
 	setTimeout(function() {p1.reset();}, 100);
 	spawnFinished = false;
 	spawnWave(generateWave(currentWave, pointMax));
+	let lifeup = new Item(gameCanvas.width/2, gameCanvas.height/4, 'Missile')
+	allEntities.push(lifeup);
 }
 
 function endGame() {

@@ -34,24 +34,34 @@ class particleEmitter {
     }
 
     emitDirection(xv, yv) {
-        var relX = this.parent.x + Math.cos(this.parent.ang + this.angOffset) * this.offset;
-        var relY = this.parent.y + Math.sin(this.parent.ang + this.angOffset) * this.offset;
         this.counter += this.density * deltaT;
-        while(this.counter >= 1) {
+        if (this.counter < 1) {
+            return;
+        }
+
+        let relX = this.parent.x + Math.cos(this.parent.ang + this.angOffset) * this.offset,
+            relY = this.parent.y + Math.sin(this.parent.ang + this.angOffset) * this.offset;
+
+        for (let i=0; i < Math.floor(this.counter); i++) {
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
             particle.setVelocity(xv, yv);
-            this.counter--;
         }
+
+        this.counter -= Math.floor(this.counter);
     }
 
     emitPattern(speed, division) {
-        var relX = this.parent.x + Math.cos(this.parent.ang + this.angOffset) * this.offset;
-        var relY = this.parent.y + Math.sin(this.parent.ang + this.angOffset) * this.offset;
         this.counter += this.density * deltaT;
-        var pDiv = ((Math.PI*2)/ division);
+        if (this.counter < 1) {
+            return;
+        }
+
+        let relX = this.parent.x + Math.cos(this.parent.ang + this.angOffset) * this.offset,
+            relY = this.parent.y + Math.sin(this.parent.ang + this.angOffset) * this.offset,
+            pDiv = ((Math.PI*2)/ division);
         
-        while(this.counter >= 1) {
+        for (let i=0; i < Math.floor(this.counter); i++) {
             let ang = 0;
             for (let p=0; p<division; p++) {
                 ang += pDiv;
@@ -60,8 +70,9 @@ class particleEmitter {
                 particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
                 particle.setVelocity(Math.cos(ang) * speed, Math.sin(ang) * speed);
             }
-            this.counter--;
         }
+
+        this.counter -= Math.floor(this.counter);
     }
 
     emitSpiral(speed, division) {
@@ -76,13 +87,13 @@ class particleEmitter {
         var relX = this.parent.x + Math.cos(this.parent.ang + this.angOffset) * this.offset;
         var relY = this.parent.y + Math.sin(this.parent.ang + this.angOffset) * this.offset;
         
-        while(this.counter >= 1) {
+        for (let i=0; i < Math.floor(this.counter); i++) {
             let ang = this.parent.ang + this.angOffset;
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
             particle.setVelocity(Math.cos(ang) * speed, Math.sin(ang) * speed);
-            this.counter--;
         }
+        this.counter -= Math.floor(this.counter);
     }
 
     emitCone(speed, minAng, maxAng) {
@@ -94,7 +105,7 @@ class particleEmitter {
         var relX = this.parent.x + Math.cos(this.parent.ang + this.angOffset) * this.offset;
         var relY = this.parent.y + Math.sin(this.parent.ang + this.angOffset) * this.offset;
 
-        while(this.counter >= 1) {
+        for (let i=0; i < Math.floor(this.counter); i++) {
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
             
@@ -106,8 +117,8 @@ class particleEmitter {
             }
             
             particle.setVelocity(Math.cos(coneAng) * speed, Math.sin(coneAng) * speed);
-            this.counter--;
         }
+        this.counter -= Math.floor(this.counter);
     }
 
     setPosition(newX, newY) {
