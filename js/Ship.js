@@ -12,6 +12,10 @@ const THRUST_MAX = 100;
 const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
 const PLAYER_STARTING_LIVES = 3;
+
+const MG_ACTIVE = 0
+const MISSILES_ACTIVE = 1;
+const LASER_ACTIVE = 2;
 const LASER_RANGE = 400;
 
 class Ship extends WrapPosition {
@@ -24,6 +28,7 @@ class Ship extends WrapPosition {
 		
 		this.name = 'player';
 		this.canShoot = true;
+		this.activeWeapon = MG_ACTIVE;
 		this.laserAnim = 0;
 		this.laserFiring = false;
 		this.thrustEnergy = THRUST_MAX;
@@ -162,9 +167,19 @@ class Ship extends WrapPosition {
 
 	updateWeapons() {
 		if (this.controlCannonFire.isPressed() && this.weaponHeat < 100) {
-			this.fireMissile();
-			//this.fireCannon();
-			//this.fireLaser();
+			switch(this.activeWeapon) {
+				case MG_ACTIVE:
+					this.fireCannon();
+					break;
+				case MISSILES_ACTIVE:
+					this.fireMissile();
+					break;
+				case LASER_ACTIVE:
+					this.fireLaser();
+					break;
+				default:
+					this.fireCannon();
+			}
 		}
 
 		if (this.laserFiring) {
@@ -205,7 +220,7 @@ class Ship extends WrapPosition {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
-		this.weaponHeat += 25;
+		this.weaponHeat += 55;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 				
 		this.laserFiring = true;

@@ -4,7 +4,7 @@ class Missile extends Projectile {
 		this.accel = accel;
 		this.ang = 0;
 		this.sprite = missilePic;
-		this.rearThrustEmitter = new particleEmitter(this, Math.PI, this.sprite.width - this.collisionRadius, 1, null, 'circle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
+		this.rearThrustEmitter = new particleEmitter(this, Math.PI, this.sprite.width - this.collisionRadius, 1, null, 'circle', this.color, this.color, this.color);
 	}
 
 	move() {

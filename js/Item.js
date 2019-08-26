@@ -18,6 +18,8 @@ class Item extends WrapPosition {
         this.drawRadius = 0;
         this.spawning = true;
         this.activated = false;
+        this.target = null;
+        this.duration = this.type == 'Life Up' ? 0 : 240;
     }
 
     collision(whichEntity) {
@@ -40,8 +42,9 @@ class Item extends WrapPosition {
             }
             return;
         } else if (this.activated) {
-            this.drawRadius -= ITEM_SHRINK_RATE * deltaT;
-            if (this.drawRadius <= 0) {
+            if (this.drawRadius > 0) {
+                this.drawRadius -= ITEM_SHRINK_RATE * deltaT;
+            } else if (this.countDown()) {
                 this.isDead = true;
             }
             return;
@@ -62,6 +65,8 @@ class Item extends WrapPosition {
             return;
         }
         
+        this.target = whichEntity;
+
         switch (this.type) {
             case "Life Up":
                 lifeUpSFX.play();
@@ -69,6 +74,11 @@ class Item extends WrapPosition {
                 break;
             case "Missile":
                 pickUpSFX.play();
+                whichEntity.activeWeapon = MISSILES_ACTIVE;
+                break;
+            case "Laser":
+                pickUpSFX.play();
+                whichEntity.activeWeapon = LASER_ACTIVE;
                 break;
             default:
                 break;
@@ -78,7 +88,29 @@ class Item extends WrapPosition {
         this.activated = true;
     }
 
+    countDown() {
+        if (this.duration > 0) {
+            this.duration -= deltaT;
+            return false;
+        } else {
+            switch (this.type) {
+                case "Missile":
+                    this.target.activeWeapon = MG_ACTIVE;
+                    break;
+                case "Laser":
+                    this.target.activeWeapon = MG_ACTIVE;
+                default:
+                    break;
+            }
+            return true;
+        }
+    }
+
     drawSprite(x, y) {
+        if (this.drawRadius <= 0) {
+            return;
+        }
+
         let bubble = ctx.createRadialGradient(this.x, this.y, this.drawRadius/2, this.x, this.y, this.drawRadius);
         bubble.addColorStop(0, 'rgba(0,0,0,0)');
         bubble.addColorStop(0.9, 'rgba(255, 255, 255, 0.6');
