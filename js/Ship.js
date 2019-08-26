@@ -234,7 +234,7 @@ class Ship extends WrapPosition {
 			return;
 		}
 		
-		this.weaponHeat += 20;
+		this.weaponHeat += 40;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 		playerMissileSFX.play();
 		let newShot = new Missile(0.2, 3, 200);

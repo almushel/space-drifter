@@ -30,7 +30,7 @@ function resetGame() {
 	setTimeout(function() {p1.reset();}, 100);
 	spawnFinished = false;
 	spawnWave(generateWave(currentWave, pointMax));
-	let lifeup = new Item(gameCanvas.width/2, gameCanvas.height/4, 'Missile')
+	let lifeup = new Item(gameCanvas.width/2, gameCanvas.height/4, 'Laser')
 	allEntities.push(lifeup);
 }
 
@@ -258,10 +258,18 @@ function removeDeadEnemies() {
 function spawnItems(enemy) {
 	pickUpAccumulator += ITEM_ACCUMLATE_RATE * getEnemyValue(enemy.constructor.name);
 
-	let roll = 10 + Math.random() * 90;
+	let roll = 5 + Math.random() * 95;
 
 	if (roll < pickUpAccumulator) {
-		let pickup = new Item(enemy.x, enemy.y, 'Life Up');
+		roll = Math.random() * 100;
+		let pickup;
+		if (roll > 55) {
+			pickup = new Item(enemy.x, enemy.y, 'Missile');
+		} else if (roll > 10) {
+			pickup = new Item(enemy.x, enemy.y, 'Laser');
+		} else {
+			pickup = new Item(enemy.x, enemy.y, 'Life Up');
+		}
 		allEntities.push(pickup);
 		pickUpAccumulator = 0;
 	}

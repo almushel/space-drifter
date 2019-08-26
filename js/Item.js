@@ -111,7 +111,7 @@ class Item extends WrapPosition {
             return;
         }
 
-        let bubble = ctx.createRadialGradient(this.x, this.y, this.drawRadius/2, this.x, this.y, this.drawRadius);
+        let bubble = ctx.createRadialGradient(x, y, this.drawRadius/2, x, y, this.drawRadius);
         bubble.addColorStop(0, 'rgba(0,0,0,0)');
         bubble.addColorStop(0.9, 'rgba(255, 255, 255, 0.6');
 
@@ -132,6 +132,11 @@ class Item extends WrapPosition {
                 ctx.rotate(this.drawAng);
                 ctx.drawImage(missilePic, 0, 0, missilePic.width, missilePic.height, -this.drawRadius, -this.drawRadius, this.drawRadius*2, this.drawRadius*2)
                 break;
+            case "Laser":
+                ctx.translate(x, y);
+                ctx.rotate(this.drawAng);
+                drawLine(-this.drawRadius+3, 0, this.drawRadius-3, 0, 4, '#6DC2FF');
+                break;1
             default:
                 colorCircle(x, y, this.drawRadius, bubble);
                 ctx.stroke();
