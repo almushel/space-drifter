@@ -15,8 +15,6 @@ function instantiateParticle(sprite, shape) {
 	}
 
 	particleList.push(particle);
-	allEntities.unshift(particle);
-
 	return particle;
 }
 

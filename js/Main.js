@@ -48,12 +48,21 @@ function moveAll() {
 	for (let e = allEntities.length - 1; e >= 0; e--) {
 		allEntities[e].move();
 	}
+
+	for (let p = 0; p < particleList.length; p++) {
+		particleList[p].move();
+	}
+	
 	collide();
 }
 
 function drawAll() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	twinkleStars();
+
+	for (let p = 0; p < particleList.length; p++) {
+		particleList[p].draw();
+	}
 
 	for (let e = 0; e < allEntities.length; e++) {
 		allEntities[e].draw();
@@ -63,7 +72,6 @@ function drawAll() {
 
 	if (gameStart) {
 		drawHUD();
-		
 	} else {
 		drawTitleScreen();
 	}
@@ -75,6 +83,10 @@ function collide() {
 			allEntities[i].collision(allEntities[a]);
 			allEntities[a].collision(allEntities[i]);
 		}
+		for (let p = 0; p < particleList.length; p++) {
+			particleList[p].collision(allEntities[i]);
+		}
+
 		allEntities[i].collision(p1);		
 		p1.collision(allEntities[i]);
 	}
