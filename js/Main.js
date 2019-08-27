@@ -5,6 +5,7 @@ var gameCanvas, gameCtx, bg, bgContext, hud, hudContext;
 var p1 = new Ship(playerPic);
 
 var allEntities = [];
+var activeItems = [];
 
 function loadGame() {
 	let startbutton = document.getElementById('startButton');

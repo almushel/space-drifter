@@ -84,6 +84,20 @@ class Item extends WrapPosition {
                 break;
         }
 
+        for (let i = activeItems.length-1; i >= 0; i--) {
+            if (activeItems[i].type === this.type && activeItems[i].target === whichEntity) {
+                this.duration += activeItems[i].duration;
+                activeItems[i].duration = 0;
+                activeItems[i].target = null;
+                activeItems.splice(i, 1);
+            } else if (activeItems[i].type === 'Missile' || activeItems[i].type === 'Laser' && this.type != 'Life Up') {
+                activeItems[i].duration = 0;
+                activeItems[i].target = null;
+                activeItems.splice(i, 1);
+            }
+        }
+        activeItems.push(this);
+
         explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
         this.activated = true;
     }
@@ -92,7 +106,7 @@ class Item extends WrapPosition {
         if (this.duration > 0) {
             this.duration -= deltaT;
             return false;
-        } else {
+        } else if (this.target != null) {
             switch (this.type) {
                 case "Missile":
                     this.target.activeWeapon = MG_ACTIVE;
@@ -141,7 +155,7 @@ class Item extends WrapPosition {
                 colorCircle(x, y, this.drawRadius, bubble);
                 ctx.stroke();
                 break;
-        }
+        }   
 
         ctx.restore();
     }
