@@ -110,6 +110,10 @@ class Ship extends WrapPosition {
 	}
 	  
 	move() {
+		if (!gameStart) {
+			return;
+		}
+		
 		if (this.isDead) {
 			if (this.controlCannonFire.isPressed() && this.lives >= 0) {
 				this.respawn();
@@ -220,7 +224,8 @@ class Ship extends WrapPosition {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
-		this.weaponHeat += 55;
+		playerLaserSFX.play();
+		this.weaponHeat += 30;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 				
 		this.laserFiring = true;
@@ -237,8 +242,17 @@ class Ship extends WrapPosition {
 		this.weaponHeat += 40;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 		playerMissileSFX.play();
-		let newShot = new Missile(0.2, 3, 200);
+		
+		let newShot = new Missile(0.2, 3, 120);
 		newShot.shootFrom(this);
+		newShot.x += Math.cos(this.ang - Math.PI/3) * this.collisionRadius * 1.5;
+		newShot.y += Math.sin(this.ang - Math.PI/3) * this.collisionRadius * 1.5;
+		allEntities.push(newShot);
+
+		newShot = new Missile(0.2, 3, 120);
+		newShot.shootFrom(this);
+		newShot.x += Math.cos(this.ang + Math.PI/3) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang + Math.PI/3) * this.collisionRadius;
 		allEntities.push(newShot);
 
 		this.canShoot = false;

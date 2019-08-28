@@ -271,6 +271,10 @@ function drawTitleScreen() {
         colorAlignedText(canvas.width / 2 + 110, yOffset + 160, 'right', '15px Orbitron', 'white', 'Fire');
         colorAlignedText(canvas.width / 2 + 110, yOffset + 180, 'right', '15px Orbitron', 'white', 'Thrust Left');
         colorAlignedText(canvas.width / 2 + 110, yOffset + 200, 'right', '15px Orbitron', 'white', 'Thrust Right');
+
+        if (controllerEnabled) {
+            colorAlignedText(8, canvas.height - 8, 'left', '15px Orbitron', 'orange', 'Gamepad Enabled')
+        }
         ctx.restore();
     }
 }

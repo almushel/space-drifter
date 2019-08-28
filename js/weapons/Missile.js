@@ -15,7 +15,12 @@ class Missile extends Projectile {
 		this.yv *= 1 - 0.02 * deltaT;
 
 		super.move();
-		this.rearThrustEmitter.emitDirection(-this.xv, -this.yv);
+		this.rearThrustEmitter.emitDirection(Math.cos(this.ang + Math.PI) * 3, Math.sin(this.ang + Math.PI) * 3);
+	}
+
+	die() {
+		super.die();
+		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
 	}
 
 	drawSprite(x, y) {

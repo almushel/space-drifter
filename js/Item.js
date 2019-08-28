@@ -19,7 +19,7 @@ class Item extends WrapPosition {
         this.spawning = true;
         this.activated = false;
         this.target = null;
-        this.duration = this.type == 'Life Up' ? 0 : 240;
+        this.duration = this.type == 'Life Up' ? 0 : 600;
     }
 
     collision(whichEntity) {
@@ -69,7 +69,7 @@ class Item extends WrapPosition {
 
         switch (this.type) {
             case "Life Up":
-                lifeUpSFX.play();
+                pickUpSFX.play();
                 whichEntity.lives++;
                 break;
             case "Missile":
@@ -90,7 +90,7 @@ class Item extends WrapPosition {
                 activeItems[i].duration = 0;
                 activeItems[i].target = null;
                 activeItems.splice(i, 1);
-            } else if (activeItems[i].type === 'Missile' || activeItems[i].type === 'Laser' && this.type != 'Life Up') {
+            } else if (this.type != 'Life Up' && activeItems[i].type === 'Missile' || activeItems[i].type === 'Laser') {
                 activeItems[i].duration = 0;
                 activeItems[i].target = null;
                 activeItems.splice(i, 1);
