@@ -2,6 +2,7 @@
 class WrapPosition {
 
 	constructor() {
+		this.mass = 1;
 		this.collisionRadius = 20; 
 		this.isDead = false;
 	}
@@ -37,7 +38,7 @@ class WrapPosition {
 	}
 
 	collision(whichEntity) {
-		if (this.isDead || whichEntity.isDead ||
+		if (this.isDead || whichEntity.isDead || whichEntity.mass <= 0 ||
 			!boundingRects(this.x, this.y, this.collisionRadius, whichEntity.x, whichEntity.y, whichEntity.collisionRadius)) {
 			return false;
 		}
@@ -50,10 +51,9 @@ class WrapPosition {
 			let hitAng = Math.atan2(deltaY, deltaX);
 			let magnitude = Math.sqrt(deltaR) / Math.sqrt(this.collisionRadius * whichEntity.collisionRadius);
 			
-			if (whichEntity.constructor.name != Particle.name && whichEntity.constructor.name != Item.name) {
-				this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
-				this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
-			}			
+			this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
+			this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
+			
 			return true;
 		}
 		return false;

@@ -2,10 +2,12 @@ class Projectile extends WrapPosition {
 	constructor(speed, color, radius, lifeSpan) {
 		super();
 		this.isDead = true;
+		this.mass = 0;
 		this.collisionRadius = radius;
 		this.lifeSpan = lifeSpan;
 		this.lifeLeft = 0;
 		this.speed = speed;
+		this.ang = 0;
 		this.color = color;
 		this.parent = null;
 	}
@@ -39,7 +41,7 @@ class Projectile extends WrapPosition {
 			return false;
 		}
 
-		if (super.collision(thisEnemy)) {
+		if (circleIntersect(this.x, this.y, this.collisionRadius, thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
 			let enemyValue = getEnemyValue(thisEnemy.constructor.name);
 			//Bullets fired from player ships
 			if (this.parent.constructor.name == Ship.name && enemyValue > 0) {

@@ -14,6 +14,7 @@ class Item extends WrapPosition {
         this.drawAng = this.ang;
         this.xv = Math.cos(this.ang) * ITEM_SPEED;
         this.yv = Math.sin(this.ang) * ITEM_SPEED;
+        this.mass = 0;
         this.collisionRadius = 15;
         this.drawRadius = 0;
         this.spawning = true;

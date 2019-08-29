@@ -173,7 +173,7 @@ function forceCircle(x, y, radius, force) {
 		deltaY = 0;
 		deltaAng = 0;
 	for (let i = 0; i < allEntities.length; i++) {
-		if (circleIntersect(x, y, radius, allEntities[i].x, allEntities[i].y, allEntities[i].collisionRadius)) {
+		if (allEntities[i].mass > 0 && circleIntersect(x, y, radius, allEntities[i].x, allEntities[i].y, allEntities[i].collisionRadius)) {
 			deltaX = x - allEntities[i].x;
 			deltaY = y - allEntities[i].y;
 			deltaAng = Math.atan2(deltaY, deltaX);

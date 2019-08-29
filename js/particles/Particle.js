@@ -7,6 +7,7 @@ class Particle extends WrapPosition{
 	constructor(sprite, shape) {
 		super();
 		this.ang = 0;
+		this.mass = 0;
 		this.collisionRadius = 25;
 		this.lifeLeft = 15;
 		if (sprite == undefined || sprite == null) {

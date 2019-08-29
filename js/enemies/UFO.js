@@ -66,7 +66,7 @@ class UFO extends WrapPosition {
 		ctx.shadowColor = '#9647FF';
 		colorCircle(x, y + 6, this.collisionRadius, '#9647FF');
 		ctx.restore();
-		drawBitmapCenteredWithRotation(this.sprite, x, y, 0);
+		drawBitmapCenteredWithRotation(this.sprite, Math.floor(x), Math.floor(y), 0);
 	}
 
 } // end of class

@@ -29,8 +29,6 @@ class Ship extends WrapPosition {
 		this.name = 'player';
 		this.canShoot = true;
 		this.activeWeapon = MG_ACTIVE;
-		this.laserAnim = 0;
-		this.laserFiring = false;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
 	
@@ -58,8 +56,9 @@ class Ship extends WrapPosition {
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
-		this.laserAnim = 0;
-		this.laserFiring = false;
+		this.activeWeapon = MG_ACTIVE;
+
+		activeItems.length = 0;
 
 		forceCircle(this.x, this.y, canvas.width/6, 5);
 		explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
@@ -74,18 +73,6 @@ class Ship extends WrapPosition {
 		if(thisEnemy.collision(this)) {
 			thisEnemy.die();
 			this.die();
-		}
-
-		if (this.laserFiring) {
-			let xOffset = (Math.cos(this.ang) * 18) + (Math.cos(this.ang+Math.PI/2) * 4)
-			let yOffset = (Math.sin(this.ang) * 18) + (Math.sin(this.ang+Math.PI/2) * 4)
-			
-			if (circleRotRectIntersect(this.x + xOffset, this.y + yOffset, LASER_RANGE * (this.laserAnim/100), 32, this.ang, 
-										thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
-				thisEnemy.die();
-				let scorePoints = getEnemyValue(thisEnemy.constructor.name);
-				updateScore(scorePoints);
-			}
 		}
 	}
 
@@ -186,14 +173,6 @@ class Ship extends WrapPosition {
 			}
 		}
 
-		if (this.laserFiring) {
-			if (this.laserAnim <= 100) {
-				this.laserAnim += 10 + deltaT;
-			} else {
-				this.laserAnim = 100;
-			}
-		}
-
 		if (this.weaponHeat > 0) {
 			if (this.controlCannonFire.isPressed() && this.weaponHeat >= 100) {
 
@@ -224,14 +203,25 @@ class Ship extends WrapPosition {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
-		playerLaserSFX.play();
+
 		this.weaponHeat += 30;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
-				
-		this.laserFiring = true;
+
+		playerLaserSFX.play();
+		let newShot = new Laser(PLAYER_SHOT_SPEED*2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
+		newShot.shootFrom(this);
+		newShot.x += Math.cos(this.ang - Math.PI/7) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang - Math.PI/7) * this.collisionRadius;
+		allEntities.push(newShot);
+
+		newShot = new Laser(PLAYER_SHOT_SPEED*2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
+		newShot.shootFrom(this);
+		newShot.x += Math.cos(this.ang + Math.PI/7) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang + Math.PI/7) * this.collisionRadius;
+		allEntities.push(newShot);
+		
 		this.canShoot = false;
 		setTimeout(function (self) {self.canShoot = true;}, 250, this);
-		setTimeout(function (self) {self.laserFiring = false; self.laserAnim = 0;}, 200, this);
 	}
 
 	fireMissile() {
@@ -245,8 +235,8 @@ class Ship extends WrapPosition {
 		
 		let newShot = new Missile(0.2, 3, 120);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang - Math.PI/3) * this.collisionRadius * 1.5;
-		newShot.y += Math.sin(this.ang - Math.PI/3) * this.collisionRadius * 1.5;
+		newShot.x += Math.cos(this.ang - Math.PI/3) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang - Math.PI/3) * this.collisionRadius;
 		allEntities.push(newShot);
 
 		newShot = new Missile(0.2, 3, 120);
@@ -258,28 +248,10 @@ class Ship extends WrapPosition {
 		this.canShoot = false;
 		setTimeout(function (self) {self.canShoot = true}, 800, this);
 	}
-
-	drawLaser() {
-		var laserInterp = this.laserAnim/100;
-		var laserLength = laserInterp * LASER_RANGE;
-		var laserWidth = laserInterp * 3;
-		ctx.save();
-		ctx.shadowBlur = 3;
-		ctx.shadowColor = '#6DC2FF';
-		ctx.translate(this.x, this.y);
-		ctx.rotate(this.ang);
-		drawLine(18, -4, laserLength, -4, laserWidth, '#6DC2FF');
-		drawLine(18, 3, laserLength, 3, laserWidth, '#6DC2FF');
-		ctx.restore();
-	}
 	  
 	draw() {
 		if (this.isDead || !gameStart) {
 			return;
-		}
-
-		if (this.laserFiring) {
-			this.drawLaser();
 		}
 
 		this.drawSprite(this.x, this.y);
