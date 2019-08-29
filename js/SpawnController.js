@@ -57,7 +57,7 @@ function spawnWave(waveList) {
 		newEnemy.reset(enemyPos.x, enemyPos.y);
 		enemiesSpawned.push(newEnemy);
 
-		let enemyWarp = new SpawnWarp(enemyPos.x, enemyPos.y, newEnemy);
+		let enemyWarp = new SpawnWarp(enemyPos.x, enemyPos.y, newEnemy, ENEMY_WARP_SPEED);
 		allEntities.push(enemyWarp);
 	}
 }

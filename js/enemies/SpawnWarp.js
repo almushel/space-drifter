@@ -1,7 +1,7 @@
-const SPAWN_WARP_SPEED = 2.25;
+const ENEMY_WARP_SPEED = 26;
 
 class SpawnWarp extends WrapPosition {
-    constructor(x, y, target) {
+    constructor(x, y, target, decay) {
         super();
         this.x = x;
         this.y = y;
@@ -9,21 +9,22 @@ class SpawnWarp extends WrapPosition {
         this.isDead = false;
         this.opening = true;
         if (target.sprite == undefined) {
-            this.maxRadius = 60;
+            this.maxRadius = target.collisionRadius;
         } else {
             this.maxRadius = target.sprite.width;
         }
+        this.decayRate = this.maxRadius / decay;
         this.radius = this.maxRadius;
     }
 
     move() {
         if (this.opening) {
-            this.radius -= deltaT * SPAWN_WARP_SPEED;
+            this.radius -= deltaT * this.decayRate;
             if (this.radius <= 0) {
                 this.opening = false;
             }
         } else {
-            this.radius += deltaT * SPAWN_WARP_SPEED;
+            this.radius += deltaT * this.decayRate;
             if (this.radius >= this.maxRadius) {
                 this.die();
             }
