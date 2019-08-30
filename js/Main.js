@@ -80,19 +80,19 @@ function drawAll() {
 function collide() {
 	for (var i = 0; i < allEntities.length; i++) {
 		for (var a = i + 1; a < allEntities.length; a++) {
-			allEntities[i].collision(allEntities[a]);
-			allEntities[a].collision(allEntities[i]);
+			allEntities[i].collide(allEntities[a]);
+			allEntities[a].collide(allEntities[i]);
 		}
 		for (let p = 0; p < particleList.length; p++) {
-			particleList[p].collision(allEntities[i]);
+			particleList[p].collide(allEntities[i]);
 		}
 
-		allEntities[i].collision(p1);		
-		p1.collision(allEntities[i]);
+		allEntities[i].collide(p1);		
+		p1.collide(allEntities[i]);
 	}
 
 	for (let e = 0; e < enemyList.length; e++) {
-		p1.enemyCollision(enemyList[e]);
+		p1.collideEnemy(enemyList[e]);
 	}
 }
 

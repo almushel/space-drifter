@@ -23,12 +23,12 @@ class Item extends WrapPosition {
         this.duration = this.type == 'Life Up' ? 0 : 600;
     }
 
-    collision(whichEntity) {
+    collide(whichEntity) {
         if (this.activated) {
             return;
         }
         if (whichEntity.constructor.name == Ship.name) {
-            if (super.collision(whichEntity)) {
+            if (super.collide(whichEntity)) {
                 this.activate(whichEntity);
             }
         }

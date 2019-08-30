@@ -36,8 +36,8 @@ class Projectile extends WrapPosition {
 		this.parent = shipFiring;
 	}
 
-	collision(thisEnemy) {
-		if (this.parent == null || thisEnemy === this.parent) {
+	collide(thisEnemy) {
+		if (this.parent == null || thisEnemy === this.parent || thisEnemy.invulnerabilityTime > 0) {
 			return false;
 		}
 

@@ -23,27 +23,27 @@ class Ship extends WrapPosition {
 		super();
 		this.collisionRadius = SHIP_RADIUS;
 		this.lives = PLAYER_STARTING_LIVES;
-		  
+
 		this.sprite = sprite;
-		
+
 		this.name = 'player';
 		this.canShoot = true;
 		this.activeWeapon = MG_ACTIVE;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
-	
+
 		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 	}
 
 	// key controls used for this
 	setupControls() {
-		this.controlGas = new Control (KEY_UP_ARROW, PAD_UP, PAD_AXIS_LV, -1, 0.2);
-		this.controlTurnLeft = new Control (KEY_LEFT_ARROW, PAD_LEFT, PAD_AXIS_LH, -1, 0.2);
-		this.controlTurnRight = new Control (KEY_RIGHT_ARROW, PAD_RIGHT, PAD_AXIS_LH, 1, 0.2);
-		this.controlThrustLeft = new Control (KEY_LETTER_Q, PAD_LB, null, null);
-		this.controlThrustRight = new Control (KEY_LETTER_E, PAD_RB, null, null);
-		this.controlCannonFire = new Control (KEY_SPACEBAR, PAD_A, null, null);
+		this.controlGas = new Control(KEY_UP_ARROW, PAD_UP, PAD_AXIS_LV, -1, 0.2);
+		this.controlTurnLeft = new Control(KEY_LEFT_ARROW, PAD_LEFT, PAD_AXIS_LH, -1, 0.2);
+		this.controlTurnRight = new Control(KEY_RIGHT_ARROW, PAD_RIGHT, PAD_AXIS_LH, 1, 0.2);
+		this.controlThrustLeft = new Control(KEY_LETTER_Q, PAD_LB, null, null);
+		this.controlThrustRight = new Control(KEY_LETTER_E, PAD_RB, null, null);
+		this.controlCannonFire = new Control(KEY_SPACEBAR, PAD_A, null, null);
 	}
 
 	reset() {
@@ -52,25 +52,26 @@ class Ship extends WrapPosition {
 	} // end of reset
 
 	respawn() {
-		super.reset(gameCanvas.width/2, gameCanvas.height/2);
+		super.reset(gameCanvas.width / 2, gameCanvas.height / 2);
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
 		this.activeWeapon = MG_ACTIVE;
+		this.invulnerabilityTime = 180;
 
 		activeItems.length = 0;
 
-		forceCircle(this.x, this.y, canvas.width/6, 5);
+		forceCircle(this.x, this.y, canvas.width / 6, 5);
 		explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
 		let spawnMarker = instantiateParticle(null, 'circle');
 		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, '#6DC2FF', null, 'circle');
 	}
-	  
-	enemyCollision(thisEnemy) {
-		if (this.isDead) {
+
+	collideEnemy(thisEnemy) {
+		if (this.isDead || this.invulnerabilityTime > 0) {
 			return;
 		}
-		if(thisEnemy.collision(this)) {
+		if (super.collide(thisEnemy)) {
 			thisEnemy.die();
 			this.die();
 		}
@@ -82,25 +83,25 @@ class Ship extends WrapPosition {
 		screenShake();
 		playerThrustSFX.pause();
 		playerDeathSFX.play();
-		
+
 		explodeAtPoint(this.x, this.y, 2, 'white', 'orange', '#6DC2FF', null, 'circle');
 
 		let splodeOrigin = instantiateParticle(null, 'circle');
 		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
-		
+
 		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
-		
+
 		this.lives--;
 		if (this.lives < 0) {
 			endGame();
 		}
 	}
-	  
+
 	move() {
 		if (!gameStart) {
 			return;
 		}
-		
+
 		if (this.isDead) {
 			if (this.controlCannonFire.isPressed() && this.lives >= 0) {
 				this.respawn();
@@ -108,24 +109,24 @@ class Ship extends WrapPosition {
 			return;
 		}
 		//Turning
-		if(this.controlTurnLeft.isPressed()) {
+		if (this.controlTurnLeft.isPressed()) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;
 		}
-		if(this.controlTurnRight.isPressed()) {
+		if (this.controlTurnRight.isPressed()) {
 			this.ang += (TURN_RATE * deltaT) * Math.PI;
 		}
-		
+
 		//Thrust
 		if (this.thrustEnergy > 0) {
-			if(this.controlGas.isPressed()) {
+			if (this.controlGas.isPressed()) {
 				this.thrust(this.ang, THRUST_POWER, this.rearThrustEmitter);
 			}
 			if (this.controlThrustLeft.isPressed()) {
-				let tAng = this.ang - Math.PI/2;
+				let tAng = this.ang - Math.PI / 2;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
 			if (this.controlThrustRight.isPressed()) {
-				let tAng = this.ang + Math.PI/2;;
+				let tAng = this.ang + Math.PI / 2;;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
 		} else {
@@ -139,7 +140,7 @@ class Ship extends WrapPosition {
 				this.thrustEnergy += 1 * deltaT;
 			}
 		}
-		
+
 		this.xv *= 1 - SPACE_FRICTION * deltaT;
 		this.yv *= 1 - SPACE_FRICTION * deltaT;
 
@@ -153,12 +154,12 @@ class Ship extends WrapPosition {
 		this.xv += Math.cos(angle) * (acceleration * deltaT);
 		this.yv += Math.sin(angle) * (acceleration * deltaT);
 
-		emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)	
+		emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)
 	}
 
 	updateWeapons() {
 		if (this.controlCannonFire.isPressed() && this.weaponHeat < 100) {
-			switch(this.activeWeapon) {
+			switch (this.activeWeapon) {
 				case MG_ACTIVE:
 					this.fireCannon();
 					break;
@@ -181,22 +182,22 @@ class Ship extends WrapPosition {
 			}
 		}
 	}
-	  
+
 	fireCannon() {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
-		
+
 		this.weaponHeat += 20;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
-		
+
 		playerShotSFX.play();
 		let newShot = new Projectile(PLAYER_SHOT_SPEED, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE);
 		newShot.shootFrom(this);
 		allEntities.push(newShot);
 
 		this.canShoot = false;
-		setTimeout(function (self) {self.canShoot = true}, 200, this);
+		setTimeout(function (self) { self.canShoot = true }, 200, this);
 	}
 
 	fireLaser() {
@@ -208,47 +209,47 @@ class Ship extends WrapPosition {
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 
 		playerLaserSFX.play();
-		let newShot = new Laser(PLAYER_SHOT_SPEED*2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
+		let newShot = new Laser(PLAYER_SHOT_SPEED * 2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang - Math.PI/7) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang - Math.PI/7) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang - Math.PI / 7) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang - Math.PI / 7) * this.collisionRadius;
 		allEntities.push(newShot);
 
-		newShot = new Laser(PLAYER_SHOT_SPEED*2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
+		newShot = new Laser(PLAYER_SHOT_SPEED * 2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang + Math.PI/7) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang + Math.PI/7) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang + Math.PI / 7) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang + Math.PI / 7) * this.collisionRadius;
 		allEntities.push(newShot);
-		
+
 		this.canShoot = false;
-		setTimeout(function (self) {self.canShoot = true;}, 250, this);
+		setTimeout(function (self) { self.canShoot = true; }, 250, this);
 	}
 
 	fireMissile() {
 		if (!this.canShoot || this.weaponHeat >= HEAT_MAX) {
 			return;
 		}
-		
+
 		this.weaponHeat += 40;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 		playerMissileSFX.play();
-		
+
 		let newShot = new Missile(0.2, 3, 120);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang - Math.PI/3) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang - Math.PI/3) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang - Math.PI / 3) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang - Math.PI / 3) * this.collisionRadius;
 		allEntities.push(newShot);
 
 		newShot = new Missile(0.2, 3, 120);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang + Math.PI/3) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang + Math.PI/3) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang + Math.PI / 3) * this.collisionRadius;
+		newShot.y += Math.sin(this.ang + Math.PI / 3) * this.collisionRadius;
 		allEntities.push(newShot);
 
 		this.canShoot = false;
-		setTimeout(function (self) {self.canShoot = true}, 800, this);
+		setTimeout(function (self) { self.canShoot = true }, 800, this);
 	}
-	  
+
 	draw() {
 		if (this.isDead || !gameStart) {
 			return;
@@ -260,5 +261,16 @@ class Ship extends WrapPosition {
 
 	drawSprite(x, y) {
 		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
+
+		if (this.invulnerabilityTime > 0) {
+			let bubble = ctx.createRadialGradient(x, y, this.sprite.width / 4, x, y, this.sprite.width / 2);
+			bubble.addColorStop(0, 'rgba(0,0,0,0)');
+			bubble.addColorStop(0.9, 'rgba(109, 194, 255, 0.6');
+
+			colorCircle(x, y, this.sprite.width / 2, bubble);
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = '#6DC2FF';
+			ctx.stroke();
+		}
 	}
 } // end of class

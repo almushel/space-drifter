@@ -5,6 +5,7 @@ class WrapPosition {
 		this.mass = 1;
 		this.collisionRadius = 20; 
 		this.isDead = false;
+		this.invulnerabilityTime = 0;
 	}
 	
 	reset(x, y) {
@@ -13,6 +14,7 @@ class WrapPosition {
 		this.x = x;
 		this.y = y;
 		this.isDead = false;
+		this.invulnerabilityTime = 12;
 	} // end of reset
 	  
 	handleScreenWrap() {
@@ -33,11 +35,15 @@ class WrapPosition {
 	move() {
 		this.x += this.xv * deltaT;
 		this.y += this.yv * deltaT;
+
+		if (this.invulnerabilityTime > 0) {
+			this.invulnerabilityTime -= deltaT;
+		}
 				
 		this.handleScreenWrap();
 	}
 
-	collision(whichEntity) {
+	collide(whichEntity) {
 		if (this.isDead || whichEntity.isDead || whichEntity.mass <= 0 ||
 			!boundingRects(this.x, this.y, this.collisionRadius, whichEntity.x, whichEntity.y, whichEntity.collisionRadius)) {
 			return false;

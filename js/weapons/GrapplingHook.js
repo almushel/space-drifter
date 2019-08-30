@@ -54,11 +54,11 @@ class GrapplingHook extends WrapPosition {
 		this.target = target;
 	}
 
-	collision(whichEntity) {
+	collide(whichEntity) {
 		if (this.target != null) {
 			return false;
 		} else {
-			return super.collision(whichEntity);
+			return super.collide(whichEntity);
 		}
 	}
 
@@ -87,7 +87,7 @@ class GrapplingHook extends WrapPosition {
 			this.yv += Math.sin(this.ang) * this.speed * deltaT;
 
 			//Stop and attach to target
-			if (this.collision(p1)) {
+			if (this.collide(p1)) {
 				this.attach(p1);
 				this.extending = false;
 			//Stop and retract from screen boundaries
@@ -98,7 +98,7 @@ class GrapplingHook extends WrapPosition {
 			}
 		} else if (this.retracting) {
 			//Stop on contact with parent object
-			if (this.collision(this.parent)) {
+			if (this.collide(this.parent)) {
 				this.retracting = false;
 			} else {
 				this.xv += Math.cos(deltaAng) * this.speed * deltaT;

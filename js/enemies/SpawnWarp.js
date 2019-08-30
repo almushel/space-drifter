@@ -32,7 +32,7 @@ class SpawnWarp extends WrapPosition {
 
     }
 
-    collision() {
+    collide() {
         return;
     }
 
