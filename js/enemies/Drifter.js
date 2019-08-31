@@ -60,8 +60,8 @@ class Drifter extends WrapPosition {
 	}
 
 	die() {
-		if (this.radius > DRIFT_RADIUS / 2) Drifter.divide(this);
 		super.die();
+		if (this.radius > DRIFT_RADIUS / 2) Drifter.divide(this);
 	}
 
 	draw() {
@@ -74,16 +74,18 @@ class Drifter extends WrapPosition {
 	}
 
 	static divide(whichDrifter) {
+		console.log(whichDrifter);
 		let randAng = Math.random() * (Math.PI * 2);
 		let childRadius = whichDrifter.radius / 2;
 		for (let s = 0; s < 3; s++) {
 			randAng += (Math.PI / 1.5);
-			let childDrifter = spawnEnemy(ENEMY_DRIFTER);
 			
-			let newX = whichDrifter.x + Math.cos(randAng) * childRadius;
-			let newY = whichDrifter.y + Math.sin(randAng) * childRadius;
+			
+			let newX = whichDrifter.x + Math.cos(randAng) * childRadius,
+				newY = whichDrifter.y + Math.sin(randAng) * childRadius,
+				childDrifter = spawnEnemy(ENEMY_DRIFTER);
 
-			childDrifter.reset(newX, newY, whichDrifter.radius / 2);
+			childDrifter.reset(newX, newY, childRadius);
 			childDrifter.generatePoly();
 
 			childDrifter.xv = Math.cos(randAng) * DRIFT_RATE;
