@@ -3,6 +3,10 @@ var UFOPic=document.createElement("img");
 var trackerPic=document.createElement("img");
 var missilePic=document.createElement("img");
 
+var mgHUD=document.createElement("img");
+var missileHUD=document.createElement("img");
+var laserHUD=document.createElement("img");
+
 var trackPics = [];
 
 var picsToLoad = 0;
@@ -30,7 +34,10 @@ var imageList = [
   {varName:playerPic, theFile:"player1.png"},
   {varName:UFOPic, theFile: "ufo.png"},
   {varName:trackerPic, theFile:"tracker.png"},
-  {varName:missilePic, theFile:"missile.png"}
+  {varName:missilePic, theFile:"missile.png"},
+  {varName:mgHUD, theFile:"mgHUD.png"},
+  {varName:missileHUD, theFile:"missileHUD.png"},
+  {varName:laserHUD, theFile:"laserHUD.png"}
   ];
 
 picsToLoad = imageList.length;

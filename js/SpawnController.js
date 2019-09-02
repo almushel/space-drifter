@@ -4,7 +4,7 @@ const ENEMY_TRACKER = 2;
 const ENEMY_TURRET = 3;
 const ENEMY_GRAPPLER = 4;
 
-const ITEM_ACCUMLATE_RATE = 0.25;
+const ITEM_ACCUMLATE_RATE = 0.5;
 
 var enemyList = [];
 var enemyPool = [];
@@ -31,6 +31,9 @@ function resetGame() {
 	spawnFinished = false;
 	spawnWave(generateWave(currentWave, pointMax));
 	let lifeup = new Item(gameCanvas.width/2, gameCanvas.height/4, 'Laser')
+	lifeup.ang = Math.PI / 2;
+	lifeup.xv = Math.cos(lifeup.ang) * ITEM_SPEED;
+	lifeup.yv = Math.sin(lifeup.ang) * ITEM_SPEED;
 	allEntities.push(lifeup);
 }
 
