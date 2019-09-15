@@ -74,7 +74,6 @@ class Drifter extends WrapPosition {
 	}
 
 	static divide(whichDrifter) {
-		console.log(whichDrifter);
 		let randAng = Math.random() * (Math.PI * 2);
 		let childRadius = whichDrifter.radius / 2;
 		for (let s = 0; s < 3; s++) {

@@ -61,6 +61,7 @@ class SpawnWarp extends WrapPosition {
     }
 
     die() {
+        this.target.invulnerabilityTime = 0;
         allEntities.push(this.target);
         enemyList.push(this.target);
         spawnFinished = true;
