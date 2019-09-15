@@ -14,7 +14,7 @@ class WrapPosition {
 		this.x = x;
 		this.y = y;
 		this.isDead = false;
-		this.invulnerabilityTime = 15;
+		this.invulnerabilityTime = 12;
 	} // end of reset
 	  
 	handleScreenWrap() {
