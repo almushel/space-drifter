@@ -16,7 +16,7 @@ class Particle extends WrapPosition{
 			this.sprite = sprite;
 			this.collisionRadius = sprite.width;
 		}
-		if (this.shape === undefined || this.shape === null) {
+		if (shape === undefined || shape === null) {
 			this.shape = 'circle';
 		} else {
 			this.shape = shape;

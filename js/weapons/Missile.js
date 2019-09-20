@@ -1,4 +1,4 @@
-const MISSILE_TURN_RATE = Math.PI/30;
+const MISSILE_TURN_RATE = Math.PI/45;
 
 class Missile extends Projectile {
 	constructor(accel, radius, lifeSpan) {
@@ -36,7 +36,7 @@ class Missile extends Projectile {
 		
 		if (Math.abs(angDelta) > 0.5) {
 			this.target = null;
-		} else if (Math.abs(angDelta) > 0.03) {
+		} else if (Math.abs(angDelta) > 0.05) {
 			//Left of missile vector
 			if (angDelta < 0) {
 				this.ang -= MISSILE_TURN_RATE * deltaT;
@@ -77,7 +77,7 @@ class Missile extends Projectile {
 
 	die() {
 		super.die();
-		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
+		explodeSprite(this.x, this.y, this.sprite.chunks, this.ang);
 	}
 
 	drawSprite(x, y) {

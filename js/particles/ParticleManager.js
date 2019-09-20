@@ -28,34 +28,18 @@ function explodeAtPoint(splodeX, splodeY, force, color1, color2, color3, sprite,
 	}
 }
 
-function explodeSprite(x, y, sprite, division, ang) {
-	let angDiv = (Math.PI * 2) / division;
-	let clipW = Math.round(sprite.width / (division / 2));
-	let clipH = Math.round(sprite.height / (division / 2));
-	let radius = (clipW + clipH) / 2;
-	let chunks = [];
-
-	//Cut the sprite into chunks
-	for (let i = 0; i < division / 2; i++) {
-		for (let e = 0; e < division / 2; e++) {
-			let sChunk = document.createElement('canvas');
-			sChunk.width = clipW;
-			sChunk.height = clipH;
-			sChunk.ctx = sChunk.getContext('2d');
-			sChunk.ctx.drawImage(sprite, clipW * i, clipH * e, clipW, clipH, 0, 0, clipW, clipH);
-			chunks.push(sChunk);
-		}
-	}
+function explodeSprite(x, y, chunks, ang) {
+	let angDiv = (Math.PI * 2) / chunks.length,
+		radius = (chunks[0].width + chunks[0].height) / 2;
 
 	//Create explosion using chunks as particle sprites
-	for (let c = 0; c < chunks.length; c++) {
+	for (let c in chunks) {
 		let particle = instantiateParticle(chunks[c], 'sprite');
-		let pAng = (ang + Math.PI + angDiv / 2) - (angDiv * c);
-		let pxv = Math.cos(pAng) * 1.5;
-		let pyv = Math.sin(pAng) * 1.5;
+			pAng = (ang + Math.PI + angDiv / 2) - (angDiv * c),
+			pxv = Math.cos(pAng) * 1.5,
+			pyv = Math.sin(pAng) * 1.5;
 
-
-		particle.randomReset(x + Math.cos(pAng) * radius / 2, y + Math.sin(pAng) * radius / 2, 'white', 'white', 'white');
+		particle.randomReset(x + Math.cos(pAng) * radius / 2, y + Math.sin(pAng) * radius / 2);
 		particle.collisionRadius = radius;
 		particle.lifeLeft = 30;
 		particle.setAng(ang);

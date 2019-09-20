@@ -237,7 +237,7 @@ function removeDeadEnemies() {
 			splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius / 2, 'orange', null, 'circle');
 
 			if (enemyList[i].sprite != undefined) {
-				explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite, 6, enemyList[i].ang);
+				explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite.chunks, enemyList[i].ang);
 			}
 			
 			enemyPool.push(enemyList[i]);

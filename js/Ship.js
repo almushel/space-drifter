@@ -89,7 +89,7 @@ class Ship extends WrapPosition {
 		let splodeOrigin = instantiateParticle(null, 'circle');
 		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
 
-		explodeSprite(this.x, this.y, this.sprite, 4, this.ang);
+		explodeSprite(this.x, this.y, this.sprite.chunks, this.ang);
 
 		this.lives--;
 		if (this.lives < 0) {
