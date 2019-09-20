@@ -1,6 +1,6 @@
 // tuning constants
 const UFO_SPEED = 1.9;
-const UFO_DIR_CHANGE_INTERVAL = 85;
+const UFO_DIR_CHANGE_INTERVAL = 120;
 const UFO_COLLISION_RADIUS = 20;
 const UFO_TURN_PRECISION = 0.05;
 
@@ -26,7 +26,7 @@ class UFO extends WrapPosition {
 	} // end of reset
 
 	move() {
-		var turnAngDelta = Math.cos(this.targetAng) * Math.sin(this.ang) - Math.sin(this.targetAng) * Math.cos(this.ang);
+		let turnAngDelta = Math.cos(this.targetAng) * Math.sin(this.ang) - Math.sin(this.targetAng) * Math.cos(this.ang);
 
 		if (turnAngDelta > -UFO_TURN_PRECISION && turnAngDelta < UFO_TURN_PRECISION) {
 			this.cyclesUntilDirectionChange -= deltaT;
@@ -36,8 +36,9 @@ class UFO extends WrapPosition {
 			} else if (turnAngDelta > 0) {
 				this.ang -= deltaT * Math.PI / 180;
 			}
-			this.xv = Math.cos(this.ang) * UFO_SPEED;
-			this.yv = Math.sin(this.ang) * UFO_SPEED;
+
+			this.xv += Math.cos(this.ang) * UFO_SPEED * 0.03;
+			this.yv += Math.sin(this.ang) * UFO_SPEED * 0.03;
 		}
 
 		if (this.cyclesUntilDirectionChange <= 0) {
@@ -45,11 +46,14 @@ class UFO extends WrapPosition {
 			this.cyclesUntilDirectionChange = UFO_DIR_CHANGE_INTERVAL;
 		}
 
-		var magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
+		let magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
 
 		if (magnitude > UFO_SPEED) {
-			this.xv *= 1 - 0.02 * deltaT;
-			this.yv *= 1 - 0.02 * deltaT;
+			this.xv *= 1 - 0.026 * deltaT;
+			this.yv *= 1 - 0.026 * deltaT;
+		} else if (magnitude < UFO_SPEED - 0.05) {
+			this.xv += Math.cos(this.ang) * UFO_SPEED * 0.03;
+			this.yv += Math.sin(this.ang) * UFO_SPEED * 0.03;
 		}
 		super.move();
 	}

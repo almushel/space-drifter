@@ -6,12 +6,12 @@ const ENEMY_GRAPPLER = 4;
 
 const ITEM_ACCUMLATE_RATE = 0.5;
 
-var enemyList = [];
-var enemyPool = [];
+const enemyList = [];
+const enemyPool = [];
 
-var currentWave = 1;
-var pointMax = 1;
-var spawnFinished = false;
+let currentWave = 1,
+	pointMax = 1,
+	spawnFinished = false;
 
 let pickUpAccumulator = 0;
 

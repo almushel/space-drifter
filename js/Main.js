@@ -1,11 +1,11 @@
 //Canvas and context for play area and starfield
-var canvas, ctx
-var gameCanvas, gameCtx, bg, bgContext, hud, hudContext;
+let canvas, ctx
+let gameCanvas, gameCtx, bg, bgContext, hud, hudContext;
 
-var p1 = new Ship(playerPic);
+const p1 = new Ship(playerPic);
 
-var allEntities = [];
-var activeItems = [];
+const allEntities = [];
+const activeItems = [];
 
 function loadGame() {
 	let startbutton = document.getElementById('startButton');
