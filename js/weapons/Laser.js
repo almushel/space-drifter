@@ -4,10 +4,6 @@ class Laser extends Projectile {
         this.length = length;
     }
 
-    reset() {
-        return;
-    }
-
     shootFrom(shipFiring) {
         super.shootFrom(shipFiring);
         this.xv -= shipFiring.xv;

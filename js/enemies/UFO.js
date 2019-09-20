@@ -37,8 +37,8 @@ class UFO extends WrapPosition {
 				this.ang -= deltaT * Math.PI / 180;
 			}
 
-			this.xv += Math.cos(this.ang) * UFO_SPEED * 0.03;
-			this.yv += Math.sin(this.ang) * UFO_SPEED * 0.03;
+			this.xv += Math.cos(this.ang) * UFO_SPEED * 0.025;
+			this.yv += Math.sin(this.ang) * UFO_SPEED * 0.025;
 		}
 
 		if (this.cyclesUntilDirectionChange <= 0) {
@@ -49,11 +49,11 @@ class UFO extends WrapPosition {
 		let magnitude = Math.sqrt(-this.xv * -this.xv + -this.yv * -this.yv);
 
 		if (magnitude > UFO_SPEED) {
-			this.xv *= 1 - 0.026 * deltaT;
-			this.yv *= 1 - 0.026 * deltaT;
+			this.xv *= 1 - 0.028 * deltaT;
+			this.yv *= 1 - 0.028 * deltaT;
 		} else if (magnitude < UFO_SPEED - 0.05) {
-			this.xv += Math.cos(this.ang) * UFO_SPEED * 0.03;
-			this.yv += Math.sin(this.ang) * UFO_SPEED * 0.03;
+			this.xv += Math.cos(this.ang) * UFO_SPEED * 0.025;
+			this.yv += Math.sin(this.ang) * UFO_SPEED * 0.025;
 		}
 		super.move();
 	}

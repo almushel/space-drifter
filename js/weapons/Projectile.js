@@ -12,13 +12,6 @@ class Projectile extends WrapPosition {
 		this.parent = null;
 	}
 
-	reset() {
-		super.reset();
-		this.isDead = true;
-		this.lifeLeft = 0;
-		this.parent = null;
-	} // end of reset
-
 	isReadyToFire() {
 		return (this.isDead);
 	}
@@ -45,16 +38,16 @@ class Projectile extends WrapPosition {
 			let enemyValue = getEnemyValue(thisEnemy.constructor.name);
 			//Bullets fired from player ships
 			if (this.parent.constructor.name == Ship.name && enemyValue > 0) {
-				this.reset();
+				this.die();
 				thisEnemy.die();
 				updateScore(enemyValue);
 			//Bullets fired from enemies
 			} else if (getEnemyValue(this.parent.constructor.name) > 0 && thisEnemy.constructor.name == Ship.name) {
-				this.reset();
+				this.die();
 				thisEnemy.die();
 			} else if (thisEnemy.constructor.name == Projectile.name) {
 				explodeAtPoint(this.x, this.y, 0, 'white', 'white', 'white', null, 'circle');
-				this.reset();
+				this.die();
 				thisEnemy.reset();
 			}
 			return true;
