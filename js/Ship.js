@@ -56,7 +56,7 @@ class Ship extends WrapPosition {
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
-		this.activeWeapon = MG_ACTIVE;
+		this.activeWeapon = MISSILES_ACTIVE;
 		this.invulnerabilityTime = 180;
 
 		activeItems.length = 0;
@@ -234,13 +234,13 @@ class Ship extends WrapPosition {
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 		playerMissileSFX.play();
 
-		let newShot = new Missile(0.2, 3, 120);
+		let newShot = new Missile(0.2, 4, 120);
 		newShot.shootFrom(this);
 		newShot.x += Math.cos(this.ang - Math.PI / 3) * this.collisionRadius;
 		newShot.y += Math.sin(this.ang - Math.PI / 3) * this.collisionRadius;
 		allEntities.push(newShot);
 
-		newShot = new Missile(0.2, 3, 120);
+		newShot = new Missile(0.2, 4, 120);
 		newShot.shootFrom(this);
 		newShot.x += Math.cos(this.ang + Math.PI / 3) * this.collisionRadius;
 		newShot.y += Math.sin(this.ang + Math.PI / 3) * this.collisionRadius;

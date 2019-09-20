@@ -17,7 +17,7 @@ function setupAudio() {
 	initAudioVolume();
 }
 
-function loadAudioAssetS() {
+function loadAudioAssets() {
 	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter' + audioFormat, 106.6);
 	enemyDeath = new AudioOneShot('./audio/EnemyDeath' + audioFormat, 14);
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot' + audioFormat, 4);
