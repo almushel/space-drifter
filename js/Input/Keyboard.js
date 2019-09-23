@@ -12,14 +12,28 @@ const KEY_LETTER_D = 68;
 const KEY_CTRL = 17;
 const KEY_SPACEBAR = 32;
 
-var keysHeld = [];
+let keysPressed = [],
+	keysHeld = [],
+	keysReleased = [];
 
 function setKeyHoldState(thisKey, setTo) {
+	if (setTo === true) {
+		if (keysHeld[thisKey] !== setTo) {
+			keysPressed[thisKey] = setTo;
+		} else {
+			keysPressed[thisKey] = !setTo;
+		}
+		keysReleased[thisKey] = !setTo;
+	} else if (setTo === false) {
+		keysPressed[thisKey] = setTo;
+		keysReleased[thisKey] = !setTo;
+	}
+
 	keysHeld[thisKey] = setTo;
 }
 
 function titleKeys(key) {
-	if (key == KEY_SPACEBAR && keysHeld[KEY_SPACEBAR] == false) {
+	if (key == KEY_SPACEBAR && keysHeld[KEY_SPACEBAR] == true) {
 		if (gameOver) {
 			gameOver = false;
 			showHighScores = true;
@@ -35,14 +49,14 @@ function titleKeys(key) {
 function keyPressed(evt) {
 	evt.preventDefault(); // without this, arrow keys scroll the browser
 	if (!gameStart) {
-		titleKeys(evt.keyCode);
+		//titleKeys(evt.keyCode);
 	}
 	setKeyHoldState(evt.keyCode, true);
 }
 
 function keyReleased(evt) {
 	if (!gameStart) {
-		titleKeys(evt.keyCode);
+		//titleKeys(evt.keyCode);
 	}
 	setKeyHoldState(evt.keyCode, false);
 }

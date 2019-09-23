@@ -27,7 +27,7 @@ function resetGame() {
 	particleList.length = 0;
 	enemyList.length = 0;
 
-	setTimeout(function() {p1.reset();}, 100);
+	p1.reset();
 	spawnFinished = false;
 	spawnWave(generateWave(currentWave, pointMax));
 }

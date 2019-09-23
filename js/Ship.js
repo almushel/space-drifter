@@ -103,7 +103,7 @@ class Ship extends WrapPosition {
 		}
 
 		if (this.isDead) {
-			if (this.controlCannonFire.isPressed() && this.lives >= 0) {
+			if (this.controlCannonFire.isReleased() && this.lives >= 0) {
 				this.respawn();
 			}
 			return;

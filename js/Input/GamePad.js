@@ -23,8 +23,10 @@ const PAD_AXIS_RH = 2;
 const PAD_AXIS_RV = 3;
 
 //Arrays of most recent button and axis values
-var padButtonsHeld = [];
-var padAxes = [];
+let padButtonsPressed = [],
+    padButtonsHeld = [],
+    padButtonsReleased = [],
+    padAxes = [];
 
 var controllerEnabled = false;
 var lastPadUpdate = null;
@@ -65,12 +67,27 @@ function pollGamepads() {
             }
 
             if (!gameStart) {
-                titlePad(gp);
+                //titlePad(gp);
             }
             
             //Update all gamepad buttons
             for (let b = 0; b < gp.buttons.length; b++) {
-                padButtonsHeld[b] = gp.buttons[b].pressed;
+                if (padButtonsHeld[b] === !gp.buttons[b].pressed) {
+                    //Pressed
+                    if (padButtonsHeld[b] === false) {
+                        padButtonsPressed[b] = true;
+                        padButtonsReleased[b] = false;
+                    //Released
+                    } else if (padButtonsHeld[b] === true) {
+                        padButtonsPressed[b] = false;
+                        padButtonsReleased[b] = true;
+                    }
+                    padButtonsHeld[b] = gp.buttons[b].pressed;
+                //Reset pressed and released values for buttons that haven't changed
+                } else {
+                    padButtonsPressed[b] = false;
+                    padButtonsReleased[b] = false;
+                }
             }
 
             //Update all gamepad axes

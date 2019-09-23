@@ -2,7 +2,6 @@ let gameStart = false;
 let gameOver = false;
 let showHighScores = false;
 
-
 function clearHUD() {
     setCanvas(hud, hudContext);
     ctx.clearRect(0, 0, canvas.width, canvas.height);

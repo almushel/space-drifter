@@ -35,7 +35,7 @@ function loadingDoneSoStartGame() {
 
 function update() {
 	updateFrameTimes();
-	pollGamepads();
+	pollInput();
 	moveAll();
 	removeDead();
 	drawAll();

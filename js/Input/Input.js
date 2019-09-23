@@ -1,3 +1,5 @@
+let menuConfirm = new Control(KEY_SPACEBAR, PAD_A, null, null);
+
 
 function initInput() {
 	keysHeld.length = 222;
@@ -13,4 +15,25 @@ function initInput() {
 	document.addEventListener("keyup", keyReleased);
 
 	p1.setupControls();
+}
+
+function pollInput() {
+	pollGamepads();
+	if (!gameStart) {
+		menuControl();
+	}
+}
+
+function menuControl() {
+	if (menuConfirm.isReleased()) {
+		if (gameOver) {
+			gameOver = false;
+			showHighScores = true;
+		} else if (showHighScores) {
+			showHighScores = false;
+		} else {
+			resetGame();
+			gameStart = true;
+		}
+	} 
 }
