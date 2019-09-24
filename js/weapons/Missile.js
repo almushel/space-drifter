@@ -45,9 +45,8 @@ class Missile extends Projectile {
 				this.ang += MISSILE_TURN_RATE * deltaT;
 			}
 		} else {
-			let targetAng = Math.atan2(this.y - this.target.y + this.target.yv, this.x - this.target.x + this.target.xv);
-			this.x += -Math.cos(targetAng) * 3 * deltaT;
-			this.y += -Math.sin(targetAng) * 3 * deltaT;
+			this.x += -Math.cos(targetAng + angDelta) * 3 * deltaT;
+			this.y += -Math.sin(targetAng + angDelta) * 3 * deltaT;
 		}
 	}
 
