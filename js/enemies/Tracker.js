@@ -10,7 +10,7 @@ class Tracker extends WrapPosition {
 		super();
 		this.sprite = trackerPic;
 		this.collisionRadius = TRACKER_COLLISION_RADIUS;
-		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 20, 1, null, 'rectangle', 'red', 'red', 'red');
+		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 18, 1, null, 'rectangle', 'red', 'red', 'red');
 	}
 
 	reset(x, y) {
@@ -44,7 +44,7 @@ class Tracker extends WrapPosition {
 		if (turnAngDelta > -TRACKER_PRECISION && turnAngDelta < TRACKER_PRECISION) {
 			this.xv += Math.cos(this.ang) * TRACKER_ACCEL * deltaT;
 			this.yv += Math.sin(this.ang) * TRACKER_ACCEL * deltaT;
-			this.rearThrustEmitter.emitDirection(-this.xv, -this.yv);
+			this.rearThrustEmitter.emitDirection(Math.cos(this.ang + Math.PI) * 2, Math.sin(this.ang + Math.PI) * 2);
 		} else {
 			if (turnAngDelta < 0) {
 				this.ang += TRACKER_TURN_RATE * deltaT;
