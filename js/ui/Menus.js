@@ -43,9 +43,11 @@ function drawTitleScreen() {
         ctx.shadowBlur = 10;
         ctx.shadowColor = 'black';
         colorAlignedText(canvas.width / 2, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
+        let confirmControl = controllerEnabled ? 'START' : 'ENTER';
         colorAlignedText(canvas.width / 2, yOffset + 40, 'center', 'bold 20px Orbitron', 'orange',
-            'Press FIRE to start!');
+            'Press '+confirmControl+' to start!');
         ctx.restore();
+
         ctx.save();
         ctx.globalAlpha = 0.5;
         colorRect(canvas.width / 2 - 130, yOffset + 75, 260, 145, 'dimgrey');
@@ -59,12 +61,10 @@ function drawTitleScreen() {
             colorAlignedText(canvas.width / 2 - 110, yOffset + 160, 'left', '15px Orbitron', 'white', 'A');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 180, 'left', '15px Orbitron', 'white', 'LB');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 200, 'left', '15px Orbitron', 'white', 'RB');
-
         } else {
             colorAlignedText(canvas.width / 2 - 110, yOffset + 160, 'left', '15px Orbitron', 'white', 'Spacebar');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 180, 'left', '15px Orbitron', 'white', 'Q');
             colorAlignedText(canvas.width / 2 - 110, yOffset + 200, 'left', '15px Orbitron', 'white', 'E');
-
         }
         colorAlignedText(canvas.width / 2 + 110, yOffset + 100, 'right', '15px Orbitron', 'white', 'Rotate Left');
         colorAlignedText(canvas.width / 2 + 110, yOffset + 120, 'right', '15px Orbitron', 'white', 'Rotate Right');
@@ -87,8 +87,9 @@ function drawGameOver() {
     drawLine(0, canvas.height / 2, canvas.width, canvas.height / 2, 2, 'white');
     colorAlignedText(canvas.width / 2, canvas.height / 2 + canvas.height / 4, 'center', 'bold 30px Orbitron', 'white',
         'Final Score: ' + currentScore);
+    let confirmControl = controllerEnabled ? 'START' : 'ENTER';
     colorAlignedText(canvas.width / 2, canvas.height / 2 + canvas.height / 2.7, 'center', 'bold 20px Orbitron', 'orange',
-        'Press FIRE to view high scores.');
+        'Press ' + confirmControl + ' to view high scores.');
 }
 
 function drawScoreTable() {
@@ -107,6 +108,7 @@ function drawScoreTable() {
         colorAlignedText(canvas.width / 2 + canvas.width / 8, yOffset + 50 + (25 * newHighScoreIndex), 'left', 'bold 16px Orbitron', 'white', 'NEW HIGH SCORE!');
     }
 
+    let confirmControl = controllerEnabled ? 'START' : 'ENTER';
     colorAlignedText(canvas.width / 2, yOffset + 325, 'center', 'bold 20px Orbitron', 'orange',
-        'Press FIRE to return to title screen.');
+        'Press ' + confirmControl + ' to return to title screen');
 }

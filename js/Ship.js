@@ -103,7 +103,7 @@ class Ship extends WrapPosition {
 		}
 
 		if (this.isDead) {
-			if (this.controlCannonFire.isReleased() && this.lives >= 0) {
+			if (menuConfirm.isReleased() && this.lives >= 0) {
 				this.respawn();
 			}
 			return;
@@ -251,7 +251,12 @@ class Ship extends WrapPosition {
 	}
 
 	draw() {
-		if (this.isDead || !gameStart) {
+		if (this.isDead && gameStart) {
+			let confirmControl = controllerEnabled ? 'START' : 'ENTER';
+			colorAlignedText(canvas.width / 2, canvas.height/2, 'center', 'bold 20px Orbitron', 'orange',
+				'Press ' + confirmControl + ' to respawn');
+			return;
+		} else if (!gameStart) {
 			return;
 		}
 

@@ -1,5 +1,4 @@
-let menuConfirm = new Control(KEY_SPACEBAR, PAD_A, null, null);
-
+let menuConfirm = new Control(KEY_ENTER, PAD_START, null, null);
 
 function initInput() {
 	keysHeld.length = 222;
