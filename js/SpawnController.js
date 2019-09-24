@@ -67,7 +67,7 @@ function generateWave(waveNum, maxPoints) {
 	let maxValue = Math.floor(waveNum / 5);
 
 	//Disallow enemies that don't exist
-	maxValue = clamp(maxValue, 0, ENEMY_TURRET);
+	maxValue = clamp(maxValue, 0, ENEMY_GRAPPLER);
 
 	for (pointsRemain; pointsRemain > 0;) {
 		//Prevent generating enemy type worth more points that remaining in wave
