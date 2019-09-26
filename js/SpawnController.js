@@ -4,6 +4,7 @@ const ENEMY_TRACKER = 2;
 const ENEMY_TURRET = 3;
 const ENEMY_GRAPPLER = 4;
 
+const WAVE_ESCALATION_RATE = 4;
 const ITEM_ACCUMLATE_RATE = 0.5;
 
 const enemyList = [];
@@ -64,7 +65,7 @@ function generateWave(waveNum, maxPoints) {
 	let newWave = [];
 	//Add new enemy types every 5 waves
 	let pointsRemain = maxPoints;
-	let maxValue = Math.floor(waveNum / 5);
+	let maxValue = Math.floor(waveNum / WAVE_ESCALATION_RATE);
 
 	//Disallow enemies that don't exist
 	maxValue = clamp(maxValue, 0, ENEMY_GRAPPLER);
