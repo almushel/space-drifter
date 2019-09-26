@@ -10,6 +10,12 @@ class Laser extends Projectile {
         this.yv -= shipFiring.yv;
     }
 
+    die() {
+        if (this.lifeLeft <= 0) {
+            this.isDead = true;
+        }
+	}
+ 
     drawSprite(x, y) {
         if (this.isDead == false) {
             let offsetX = x + Math.cos(this.ang + Math.PI) * this.length, 
