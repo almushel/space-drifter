@@ -39,7 +39,7 @@ function explodeSprite(x, y, chunks, ang) {
 			pxv = Math.cos(pAng) * 1.5,
 			pyv = Math.sin(pAng) * 1.5;
 
-		particle.randomReset(x + Math.cos(pAng) * radius / 2, y + Math.sin(pAng) * radius / 2);
+		particle.randomReset(x + Math.cos(pAng), y + Math.sin(pAng));
 		particle.collisionRadius = radius;
 		particle.lifeLeft = 30;
 		particle.setAng(ang);

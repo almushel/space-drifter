@@ -45,7 +45,23 @@ class Drifter extends WrapPosition {
 
 			colRadius += pointDist;
 		}
-		this.collisionRadius = colRadius/sides;
+		this.collisionRadius = colRadius / sides;
+		
+		this.createSprite();
+	}
+
+	createSprite() {
+		let pCanvas = document.createElement('canvas');
+		pCanvas.ctx = pCanvas.getContext('2d');
+		pCanvas.height = this.radius * 2;
+		pCanvas.width = this.radius * 2;
+		
+		setCanvas(pCanvas, pCanvas.ctx);
+		drawPolygon(Math.floor(pCanvas.width / 2), Math.floor(pCanvas.height / 2), this.polyPoints, 'dimgrey', true)
+		setCanvas(gameCanvas, gameCtx);
+
+		this.sprite = pCanvas;
+		this.sprite.chunks = divideSprite(pCanvas, 6);
 	}
 
 	move() {
@@ -70,7 +86,8 @@ class Drifter extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		drawPolygon(x, y, this.polyPoints, 'dimgrey', true);
+		//drawPolygon(x, y, this.polyPoints, 'dimgrey', true);
+		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
 	}
 
 	static divide(whichDrifter) {
@@ -78,8 +95,8 @@ class Drifter extends WrapPosition {
 		let childRadius = whichDrifter.radius / 2;
 		for (let s = 0; s < 3; s++) {
 			randAng += (Math.PI / 1.5);
-			
-			
+
+
 			let newX = whichDrifter.x + Math.cos(randAng) * childRadius,
 				newY = whichDrifter.y + Math.sin(randAng) * childRadius,
 				childDrifter = spawnEnemy(ENEMY_DRIFTER);
