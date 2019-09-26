@@ -54,9 +54,9 @@ class WrapPosition {
 			deltaR = deltaX * deltaX + deltaY * deltaY;
 									   
 		if (deltaR <= Math.pow(this.collisionRadius + whichEntity.collisionRadius, 2)) {
-			let hitAng = Math.atan2(deltaY, deltaX);
-			let magnitude = Math.sqrt(deltaR) / Math.sqrt(this.collisionRadius * whichEntity.collisionRadius);
-			
+			let hitAng = Math.atan2(deltaY, deltaX),
+				magnitude = deltaR / (this.collisionRadius * whichEntity.collisionRadius) / (2 + whichEntity.mass - this.mass);
+
 			this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
 			this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
 			
