@@ -41,14 +41,14 @@ function loadImages() {
 }
 
 function divideSprite(sprite, division) {
-	let clipW = Math.round(sprite.width / (division / 2));
+	let clipW = Math.round(sprite.width / 2);
 	let clipH = Math.round(sprite.height / (division / 2));
 	let chunks = [];
 
 	//Cut the sprite into chunks
 	//Doesn't actually divide properly (division of 6 gives 9 chunks);
-	for (let i = 0; i < division / 2; i++) {
-		for (let e = 0; e < division / 2; e++) {
+	for (let i = 0; i < 2; i++) {
+		for (let e = 0; e < Math.round(division / 2); e++) {
 			let sChunk = document.createElement('canvas');
 			sChunk.width = clipW;
 			sChunk.height = clipH;

@@ -30,16 +30,19 @@ function explodeAtPoint(splodeX, splodeY, force, color1, color2, color3, sprite,
 
 function explodeSprite(x, y, chunks, ang) {
 	let angDiv = (Math.PI * 2) / chunks.length,
-		radius = (chunks[0].width + chunks[0].height) / 2;
+		radius = (chunks[0].width + chunks[0].height) / 2,
+		cHalf = Math.floor(chunks.length / 2);
 
 	//Create explosion using chunks as particle sprites
 	for (let c in chunks) {
 		let particle = instantiateParticle(chunks[c], 'sprite');
-			pAng = (ang + Math.PI + angDiv / 2) - (angDiv * c),
+			colOffset = c > cHalf ? 1 : -1,
+			multiple = c > cHalf ? c - cHalf : c,
+			pAng = ang + (Math.PI * 1.5) + (angDiv * multiple * colOffset),
 			pxv = Math.cos(pAng) * 1.5,
 			pyv = Math.sin(pAng) * 1.5;
 
-		particle.randomReset(x + Math.cos(pAng), y + Math.sin(pAng));
+		particle.randomReset(x, y);
 		particle.collisionRadius = radius;
 		particle.lifeLeft = 30;
 		particle.setAng(ang);
