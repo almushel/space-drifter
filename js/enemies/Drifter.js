@@ -76,8 +76,13 @@ class Drifter extends WrapPosition {
 	}
 
 	die() {
-		super.die();
-		if (this.radius > DRIFT_RADIUS / 2) Drifter.divide(this);
+		if (this.radius > DRIFT_RADIUS / 2) {
+			this.isDead = true;
+			this.invulnerabilityTime = 1;
+			Drifter.divide(this);
+		} else { 
+			super.die();
+		}
 	}
 
 	draw() {

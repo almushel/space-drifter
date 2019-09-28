@@ -104,6 +104,10 @@ class WrapPosition {
 	die() {
 		this.isDead = true;
 		this.invulnerabilityTime = 1;
+
+		if (this.sprite != undefined) {
+			explodeSprite(this.x, this.y, this.sprite.chunks, this.ang);
+		}
 	}
 
 } // end of class

@@ -236,10 +236,6 @@ function removeDeadEnemies() {
 			explodeAtPoint(enemyList[i].x, enemyList[i].y, 1, 'white', 'white', 'white', null, 'circle');
 			let splodeOrigin = instantiateParticle(null, 'circle');
 			splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius / 2, 'orange', null, 'circle');
-
-			if (enemyList[i].sprite != undefined) {
-				explodeSprite(enemyList[i].x, enemyList[i].y, enemyList[i].sprite.chunks, enemyList[i].ang);
-			}
 			
 			enemyPool.push(enemyList[i]);
 			enemyList.splice(i, 1);
