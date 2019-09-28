@@ -9,6 +9,7 @@ class GrapplingHook extends WrapPosition {
 		this.parent = parent;
 		this.ang = parent.ang;
 		this.target = null;
+		this.createSprite();
 	}
 
 	reset() {
@@ -121,6 +122,32 @@ class GrapplingHook extends WrapPosition {
 		}
 	}
 
+	createSprite() {
+		let pCanvas = document.createElement('canvas');
+		pCanvas.ctx = pCanvas.getContext('2d');
+		pCanvas.height = this.collisionRadius * 2;
+		pCanvas.width = this.collisionRadius * 2;
+
+		let x = Math.floor(pCanvas.width / 2),
+			y = Math.floor(pCanvas.height / 2);
+
+		setCanvas(pCanvas, pCanvas.ctx);
+		ctx.translate(x, y);
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 1;
+		drawPolygon(0, this.collisionRadius / 2,
+			[{ x: 0, y: -this.collisionRadius / 2 }, { x: this.collisionRadius, y: 0 }, { x: 0, y: this.collisionRadius / 2 }], 'dimgrey', true);
+		ctx.stroke();
+
+		drawPolygon(0, -this.collisionRadius / 2,
+			[{ x: 0, y: -this.collisionRadius / 2 }, { x: this.collisionRadius, y: 0 }, { x: 0, y: this.collisionRadius / 2 }], 'dimgrey', true);
+		ctx.stroke();
+		setCanvas(gameCanvas, gameCtx);
+
+		this.sprite = pCanvas;
+		this.sprite.chunks = divideSprite(pCanvas, 6);
+	}
+
 	draw() {
 		drawLine(this.x + Math.cos(this.ang + Math.PI / 2), this.y + Math.sin(this.ang + Math.PI / 2), 
 				this.parent.x + Math.cos(this.parent.ang + Math.PI / 2), this.parent.y + Math.sin(this.parent.ang + Math.PI / 2), 1, this.color);
@@ -140,15 +167,7 @@ class GrapplingHook extends WrapPosition {
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.rotate(this.ang);
-		ctx.strokeStyle = 'white';
-		ctx.lineWidth = 1;
-		drawPolygon(offset, this.collisionRadius / 2,
-			[{ x: 0, y: -this.collisionRadius / 2 }, { x: this.collisionRadius, y: 0 }, { x: 0, y: this.collisionRadius / 2 }], 'dimgrey', true);
-		ctx.stroke();
-
-		drawPolygon(offset, -this.collisionRadius / 2,
-			[{ x: 0, y: -this.collisionRadius / 2 }, { x: this.collisionRadius, y: 0 }, { x: 0, y: this.collisionRadius / 2 }], 'dimgrey', true);
-		ctx.stroke();
+		drawBitmapCenteredWithRotation(this.sprite, offset, 0, 0);
 		ctx.restore();
 	}
 }

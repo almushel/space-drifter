@@ -57,7 +57,7 @@ class Drifter extends WrapPosition {
 		pCanvas.width = this.radius * 2;
 		
 		setCanvas(pCanvas, pCanvas.ctx);
-		drawPolygon(Math.floor(pCanvas.width / 2), Math.floor(pCanvas.height / 2), this.polyPoints, 'dimgrey', true)
+		drawPolygon(Math.floor(pCanvas.width / 2), Math.floor(pCanvas.height / 2), this.polyPoints, 'dimgrey', true);
 		setCanvas(gameCanvas, gameCtx);
 
 		this.sprite = pCanvas;
