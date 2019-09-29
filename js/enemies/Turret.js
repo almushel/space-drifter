@@ -21,6 +21,7 @@ class Turret extends WrapPosition {
 		this.fTimer = 0; //Fire animation
 		this.rTimer = 0; //Recovery animation
 		this.fireOffset = 2;//Animation offset multiplier
+		this.createSprite();
 	}
 
 	reset(x, y) {
@@ -96,6 +97,22 @@ class Turret extends WrapPosition {
 	draw() {
 		this.drawSprite(this.x, this.y);
 		this.drawWrap();
+	}
+
+	createSprite() {
+		let pCanvas = document.createElement('canvas');
+		pCanvas.ctx = pCanvas.getContext('2d');
+		pCanvas.height = this.collisionRadius * 2;
+		pCanvas.width = this.collisionRadius * 2;
+
+		let x = Math.floor(pCanvas.width / 2),
+			y = Math.floor(pCanvas.height / 2);
+		
+		setCanvas(pCanvas, pCanvas.ctx);
+		this.drawSprite(x, y);
+		this.sprite = pCanvas;
+		setCanvas(gameCanvas, gameCtx);
+		this.sprite.chunks = divideSprite(this.sprite, 6);
 	}
 
 	drawSprite(x, y) {
