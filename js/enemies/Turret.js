@@ -1,8 +1,8 @@
 const TURRET_RADIUS = 15;
 const TURRET_SHOT_MAX = 1;
-const TURRET_SHOT_RADIUS = 6;
-const TURRET_SHOT_SPEED = 2;
-const TURRET_SHOT_LIFE = 160;
+const TURRET_SHOT_RADIUS = 4;
+const TURRET_SHOT_SPEED = 3;
+const TURRET_SHOT_LIFE = 320;
 const TURRET_AIM_TOLERANCE = 15;
 const TURRET_TURN_SPEED = Math.PI / 300;
 const TURRET_FIRE_ANIM_SPEED = 5; //83ms
@@ -33,6 +33,14 @@ class Turret extends WrapPosition {
 		this.aimAng = Math.random() * (Math.PI * 2);
 	}
 
+	die() {
+		super.die();
+
+		this.fTimer = 0; //Fire animation
+		this.rTimer = 0; //Recovery animation
+		this.fireOffset = 2;//Animation offset multiplier
+	}
+
 	move() {
 		this.updateAim(p1);
 		this.xv *= 1 - 0.03 * deltaT;
@@ -60,8 +68,19 @@ class Turret extends WrapPosition {
 	}
 
 	fire() {
-		let newShot = new Projectile(TURRET_SHOT_SPEED, 'red', TURRET_SHOT_RADIUS, TURRET_SHOT_LIFE);
+		let offsetX = Math.cos(this.ang + Math.PI / 2) * TURRET_RADIUS,
+			offsetY = Math.sin(this.ang + Math.PI / 2) * TURRET_RADIUS;
+
+		let newShot = new Projectile(TURRET_SHOT_SPEED, 'orange', TURRET_SHOT_RADIUS, TURRET_SHOT_LIFE);
 		newShot.shootFrom(this);
+		newShot.x += offsetX;
+		newShot.y += offsetY;
+		allEntities.push(newShot);
+
+		newShot = new Projectile(TURRET_SHOT_SPEED, 'orange', TURRET_SHOT_RADIUS, TURRET_SHOT_LIFE);
+		newShot.shootFrom(this);
+		newShot.x -= offsetX;
+		newShot.y -= offsetY;
 		allEntities.push(newShot);
 	}
 
@@ -107,7 +126,7 @@ class Turret extends WrapPosition {
 
 		let x = Math.floor(pCanvas.width / 2),
 			y = Math.floor(pCanvas.height / 2);
-		
+
 		setCanvas(pCanvas, pCanvas.ctx);
 		this.drawSprite(x, y);
 		this.sprite = pCanvas;
@@ -118,43 +137,25 @@ class Turret extends WrapPosition {
 	drawSprite(x, y) {
 		let cannonOffsetX = -(Math.cos(this.ang) * TURRET_RADIUS * 2) + Math.cos(this.ang) * (TURRET_RADIUS * this.fireOffset),
 			cannonOffsetY = -(Math.sin(this.ang) * TURRET_RADIUS * 2) + Math.sin(this.ang) * (TURRET_RADIUS * this.fireOffset),
-			halfRad = TURRET_RADIUS / 2;
+			qRad = TURRET_RADIUS / 5;
 
+		drawBitmapCenteredWithRotation(turretBasePic, x, y, 0);
 
-		colorCircle(x, y, TURRET_RADIUS, 'dimgrey');
+		let cW = turretCannonPic.width,
+			cH = turretCannonPic.height;
 
-		ctx.save();
-		ctx.translate(x, y);
-		ctx.rotate(this.ang)
-		colorRect(-TURRET_RADIUS / 2, -TURRET_RADIUS, TURRET_RADIUS / 2, TURRET_RADIUS * 2, '#494949');
-		ctx.restore();
-
+		//Right side
 		ctx.save();
 		ctx.translate(x + cannonOffsetX, y + cannonOffsetY);
-		ctx.rotate(this.ang)
-		colorRect(-TURRET_RADIUS / 3, -TURRET_RADIUS / 2, TURRET_RADIUS * 1.5, TURRET_RADIUS, '#494949');
+		ctx.rotate(this.ang);
+		ctx.drawImage(turretCannonPic, 0, 0, cW, cH / 2, -cW / 2, -cH / 4 + qRad * this.fireOffset, cW, cH / 2)
 		ctx.restore();
 
-		colorCircle(x, y, TURRET_RADIUS - 5, '#d87300');
-		colorCircle(x, y, TURRET_RADIUS - 9, 'orange');
-		colorCircle(x, y, TURRET_RADIUS - 12, 'white');
-
-		drawPolygon(x + cannonOffsetX + Math.cos(this.ang + Math.PI / 2) * (halfRad * this.fireOffset),
-			y + cannonOffsetY + Math.sin(this.ang + Math.PI / 2) * (halfRad * this.fireOffset),
-
-			[{ x: Math.cos(this.ang) * TURRET_RADIUS, y: Math.sin(this.ang) * TURRET_RADIUS },
-			{ x: Math.cos(this.ang + Math.PI / 2) * halfRad, y: Math.sin(this.ang + Math.PI / 2) * halfRad },
-			{ x: Math.cos(this.ang - Math.PI / 2) * halfRad, y: Math.sin(this.ang - Math.PI / 2) * halfRad }],
-
-			'red', true);
-
-		drawPolygon(x + cannonOffsetX + Math.cos(this.ang - Math.PI / 2) * (halfRad * this.fireOffset),
-			y + cannonOffsetY + Math.sin(this.ang - Math.PI / 2) * (halfRad * this.fireOffset),
-
-			[{ x: Math.cos(this.ang) * TURRET_RADIUS, y: Math.sin(this.ang) * TURRET_RADIUS },
-			{ x: Math.cos(this.ang + Math.PI / 2) * halfRad, y: Math.sin(this.ang + Math.PI / 2) * halfRad },
-			{ x: Math.cos(this.ang - Math.PI / 2) * halfRad, y: Math.sin(this.ang - Math.PI / 2) * halfRad }],
-
-			'red', true);
+		//Left side
+		ctx.save();
+		ctx.translate(x + cannonOffsetX, y + cannonOffsetY);
+		ctx.rotate(this.ang);
+		ctx.drawImage(turretCannonPic, 0, cH / 2 + 1, cW, cH / 2, -cW / 2, -cH / 4 - qRad * this.fireOffset, cW, cH / 2)
+		ctx.restore();
 	}
 }

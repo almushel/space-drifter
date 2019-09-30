@@ -5,6 +5,8 @@ let playerPic = document.createElement("img"),
 	mgHUD = document.createElement("img"),
 	missileHUD = document.createElement("img"),
 	laserHUD = document.createElement("img");
+	turretBasePic = document.createElement("img");
+	turretCannonPic = document.createElement("img");
 
 var picsToLoad = 0;
 
@@ -26,6 +28,8 @@ function loadImages() {
 	var imageList = [
 		{ varName: playerPic, theFile: "player1.png" },
 		{ varName: UFOPic, theFile: "ufo.png" },
+		{ varName: turretBasePic, theFile: "turretBase.png" },
+		{ varName: turretCannonPic, theFile: "turretCannon.png" },
 		{ varName: trackerPic, theFile: "tracker.png" },
 		{ varName: missilePic, theFile: "missile.png" },
 		{ varName: mgHUD, theFile: "mgHUD.png" },
