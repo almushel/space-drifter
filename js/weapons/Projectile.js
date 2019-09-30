@@ -30,7 +30,7 @@ class Projectile extends WrapPosition {
 	}
 
 	collide(thisEnemy) {
-		if (this.parent == null || thisEnemy === this.parent || thisEnemy.invulnerabilityTime > 0) {
+		if (this.parent == null || thisEnemy === this.parent || thisEnemy.invulnerabilityTime > 0 || thisEnemy.isDead || this.isDead) {
 			return false;
 		}
 

@@ -68,7 +68,7 @@ class Ship extends WrapPosition {
 	}
 
 	collideEnemy(thisEnemy) {
-		if (this.isDead || this.invulnerabilityTime > 0) {
+		if (this.invulnerabilityTime > 0) {
 			return;
 		}
 		if (super.collide(thisEnemy)) {
