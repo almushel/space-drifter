@@ -51,6 +51,9 @@ class SpawnWarp extends WrapPosition {
 			ctx.translate(this.x, this.y)
 			ctx.scale(this.radius / this.maxRadius, this.radius / this.maxRadius);
 			this.target.drawSprite(0, 0);
+			if (this.target.gHook !== undefined) {
+				this.target.gHook.drawSprite(0, 0);
+			}
 			ctx.restore();
 		}
 	}

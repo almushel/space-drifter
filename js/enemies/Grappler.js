@@ -8,7 +8,7 @@ class Grappler extends WrapPosition {
 		this.ang = Math.random() * (Math.PI * 2);
 		this.firing = false;
 		this.gHook = new GrapplingHook(0.5, 'lime', this.collisionRadius / 1.5, this);
-		this.createSprite();
+		this.sprite = grapplerPic;
 	}
 
 	reset(x, y) {
@@ -42,32 +42,9 @@ class Grappler extends WrapPosition {
 		}
 	}
 
-	createSprite() {
-		let pCanvas = document.createElement('canvas');
-		pCanvas.ctx = pCanvas.getContext('2d');
-		pCanvas.height = this.collisionRadius * 2;
-		pCanvas.width = this.collisionRadius * 2;
-
-		let x = Math.floor(pCanvas.width / 2),
-			y = Math.floor(pCanvas.height / 2);
-
-		setCanvas(pCanvas, pCanvas.ctx);
-		colorCircle(x, y, this.collisionRadius, 'lime');
-		drawLine(x, y, x + this.collisionRadius, y, 4, 'red');
-		colorCircle(x, y, this.collisionRadius - 3, 'dimgrey');
-		colorCircle(x, y, this.collisionRadius / 3, 'lime');
-		setCanvas(gameCanvas, gameCtx);
-
-		this.sprite = pCanvas;
-		this.sprite.chunks = divideSprite(pCanvas, 6);
-	}
-
 	die() {
-		let gParticle = instantiateParticle(this.gHook.sprite, 'sprite');
-
-		gParticle.reset(this.gHook.x, this.gHook.y, this.ang, this.gHook.sprite.width, null, this.gHook.sprite, 'sprite');
-
 		super.die();
+		explodeSprite(this.gHook.x, this.gHook.y, this.gHook.sprite.chunks, this.gHook.ang);
 	}
 
 	draw() {

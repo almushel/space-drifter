@@ -7,6 +7,8 @@ let playerPic = document.createElement("img"),
 	laserHUD = document.createElement("img");
 	turretBasePic = document.createElement("img");
 	turretCannonPic = document.createElement("img");
+	grapplerPic = document.createElement("img");
+	gHookPic = document.createElement("img");
 
 var picsToLoad = 0;
 
@@ -34,7 +36,9 @@ function loadImages() {
 		{ varName: missilePic, theFile: "missile.png" },
 		{ varName: mgHUD, theFile: "mgHUD.png" },
 		{ varName: missileHUD, theFile: "missileHUD.png" },
-		{ varName: laserHUD, theFile: "laserHUD.png" }
+		{ varName: laserHUD, theFile: "laserHUD.png" },
+		{ varName: grapplerPic, theFile: "grappler.png" },
+		{ varName: gHookPic, theFile: "gHook.png"}
 	];
 
 	picsToLoad = imageList.length;
