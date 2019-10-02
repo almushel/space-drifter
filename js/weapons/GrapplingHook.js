@@ -95,8 +95,6 @@ class GrapplingHook extends WrapPosition {
 				//Stop and retract from screen boundaries
 			} else if (this.x < this.collisionRadius || this.x > gameCanvas.width - this.collisionRadius ||
 				this.y < this.collisionRadius || this.y > gameCanvas.height - this.collisionRadius) {
-				this.xv = 0;
-				this.yv = 0;
 				this.extending = false;
 				this.retract();
 			}
@@ -126,25 +124,30 @@ class GrapplingHook extends WrapPosition {
 	}
 
 	draw() {
-		drawLine(this.x + Math.cos(this.ang + Math.PI / 2), this.y + Math.sin(this.ang + Math.PI / 2),
-			this.parent.x + Math.cos(this.parent.ang + Math.PI / 2), this.parent.y + Math.sin(this.parent.ang + Math.PI / 2), 1, this.color);
+		let offset = this.target == null ? 0 : -this.sprite.width / 2 + 6,
+			deltaX = this.x - this.parent.x,
+			deltaY = this.y - this.parent.y,
+			deltaAng = Math.atan2(deltaY, deltaX),
+			offsetX = this.x + Math.cos(deltaAng) * (offset - 3),
+			offsetY = this.y + Math.sin(deltaAng) * (offset - 3);
 
-		drawLine(this.x + Math.cos(this.ang - Math.PI / 2), this.y + Math.sin(this.ang - Math.PI / 2),
-			this.parent.x + Math.cos(this.parent.ang - Math.PI / 2), this.parent.y + Math.sin(this.parent.ang - Math.PI / 2), 1, this.color);
-		this.drawSprite(this.x, this.y);
+		drawLine(offsetX + Math.cos(this.ang + Math.PI / 2), offsetY + Math.sin(this.ang + Math.PI / 2),
+				this.parent.x + Math.cos(this.parent.ang + Math.PI / 2), this.parent.y + Math.sin(this.parent.ang + Math.PI / 2), 1, this.color);
+
+		drawLine(offsetX + Math.cos(this.ang - Math.PI / 2), offsetY + Math.sin(this.ang - Math.PI / 2),
+				this.parent.x + Math.cos(this.parent.ang - Math.PI / 2), this.parent.y + Math.sin(this.parent.ang - Math.PI / 2), 1, this.color);
+		
+		offsetX = this.x + Math.cos(deltaAng) * offset;
+		offsetY = this.y + Math.sin(deltaAng) * offset;
+		this.drawSprite(offsetX, offsetY);
 		//this.drawWrap();
 	}
 
 	drawSprite(x, y) {
-		let offset = 0;
-		if (!this.extending && !this.retracting) {
-			offset = this.target == null ? 0 : -this.target.collisionRadius * 2;
-		}
-
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.rotate(this.ang);
-		drawBitmapCenteredWithRotation(this.sprite, offset, 0, 0);
+		drawBitmapCenteredWithRotation(this.sprite, 0, 0, 0);
 		ctx.restore();
 	}
 }
