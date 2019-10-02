@@ -28,8 +28,18 @@ class Grappler extends WrapPosition {
 		if (target.isDead) {
 			return;
 		}
-		let deltaX = target.x + target.xv - this.x;
-		let deltaY = target.y + target.yv - this.y;
+
+		let deltaX, deltaY;
+
+		if (this.gHook.target !== null || this.gHook.extending || this.gHook.retracting) {
+			deltaX = this.gHook.x - this.x,
+			deltaY = this.gHook.y - this.y;
+			this.ang = Math.atan2(deltaY, deltaX);
+			return;
+		}
+
+		deltaX = target.x + target.xv - this.x,
+		deltaY = target.y + target.yv - this.y;
 
 		let turnAngDelta = deltaX * Math.sin(this.ang) - deltaY * Math.cos(this.ang);
 
