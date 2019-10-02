@@ -35,7 +35,7 @@ class GrapplingHook extends WrapPosition {
 	}
 
 	retract() {
-		if (this.retracting == false) {
+		if (!this.retracting) {
 			this.xv = 0;
 			this.yv = 0;
 
@@ -46,7 +46,7 @@ class GrapplingHook extends WrapPosition {
 
 			target.xv += Math.cos(deltaAng);
 			target.yv += Math.sin(deltaAng);
-			this.extending = true;
+			this.extending = false;
 			this.retracting = true;
 		}
 	}
@@ -70,8 +70,8 @@ class GrapplingHook extends WrapPosition {
 			deltaAng = Math.atan2(deltaY, deltaX);
 
 		if (this.target != null) {
-			if (this.target.x < this.target.collisionRadius/2 || this.target.x > gameCanvas.wdth - this.target.collisionRadius/2 ||
-				this.target.y < this.target.collisionRadius/2 || this.target.y > gameCanvas.width - this.target.collisionRadius/2 || this.target.isDead) {
+			if (this.target.isDead || this.target.x < this.target.collisionRadius / 2 || this.target.x > gameCanvas.wdth - this.target.collisionRadius / 2 ||
+				this.target.y < this.target.collisionRadius / 2 || this.target.y > gameCanvas.width - this.target.collisionRadius / 2) {
 				this.target = null;
 				this.retract();
 				return;
@@ -83,7 +83,7 @@ class GrapplingHook extends WrapPosition {
 
 			this.parent.xv += Math.cos(this.ang) * GRAPPLE_RETRACT_ACCEL * deltaT;
 			this.parent.yv += Math.sin(this.ang) * GRAPPLE_RETRACT_ACCEL * deltaT;
-		
+
 		} else if (this.extending) {
 			this.xv += Math.cos(this.ang) * this.speed * deltaT;
 			this.yv += Math.sin(this.ang) * this.speed * deltaT;
@@ -92,9 +92,11 @@ class GrapplingHook extends WrapPosition {
 			if (this.collide(p1)) {
 				this.attach(p1);
 				this.extending = false;
-			//Stop and retract from screen boundaries
+				//Stop and retract from screen boundaries
 			} else if (this.x < this.collisionRadius || this.x > gameCanvas.width - this.collisionRadius ||
 				this.y < this.collisionRadius || this.y > gameCanvas.height - this.collisionRadius) {
+				this.xv = 0;
+				this.yv = 0;
 				this.extending = false;
 				this.retract();
 			}
@@ -114,7 +116,7 @@ class GrapplingHook extends WrapPosition {
 		} else if (this.target != null) {
 			//Follow target when attached
 			this.x = this.target.x;
-			this.y = this.target.y; 
+			this.y = this.target.y;
 		} else {
 			//Follow parent when inactive
 			this.ang = this.parent.ang;
@@ -124,13 +126,13 @@ class GrapplingHook extends WrapPosition {
 	}
 
 	draw() {
-		drawLine(this.x + Math.cos(this.ang + Math.PI / 2), this.y + Math.sin(this.ang + Math.PI / 2), 
-				this.parent.x + Math.cos(this.parent.ang + Math.PI / 2), this.parent.y + Math.sin(this.parent.ang + Math.PI / 2), 1, this.color);
-		
-		drawLine(this.x + Math.cos(this.ang - Math.PI / 2), this.y + Math.sin(this.ang - Math.PI / 2), 
-				this.parent.x + Math.cos(this.parent.ang - Math.PI / 2), this.parent.y + Math.sin(this.parent.ang - Math.PI / 2), 1, this.color);
+		drawLine(this.x + Math.cos(this.ang + Math.PI / 2), this.y + Math.sin(this.ang + Math.PI / 2),
+			this.parent.x + Math.cos(this.parent.ang + Math.PI / 2), this.parent.y + Math.sin(this.parent.ang + Math.PI / 2), 1, this.color);
+
+		drawLine(this.x + Math.cos(this.ang - Math.PI / 2), this.y + Math.sin(this.ang - Math.PI / 2),
+			this.parent.x + Math.cos(this.parent.ang - Math.PI / 2), this.parent.y + Math.sin(this.parent.ang - Math.PI / 2), 1, this.color);
 		this.drawSprite(this.x, this.y);
-		this.drawWrap();
+		//this.drawWrap();
 	}
 
 	drawSprite(x, y) {
