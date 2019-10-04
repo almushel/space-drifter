@@ -28,6 +28,8 @@ let scoreBG = [{ x: -125, y: 32 },
 { x: 113, y: -32 },
 { x: 125, y: 32 }];
 
+let weaponBG = scoreBG;
+
 let tmColorOuter = '#111111';
 let tmColorInner = '#6DC2FF';
 
@@ -48,7 +50,7 @@ function initHUD() {
 	ctx.globalAlpha = 0.6;
 	drawPolygon(100, canvas.height - 30, scoreBG, '#383838', true);
 	drawPolygon(canvas.width / 2, canvas.height - 22, meterBG, '#383838', true);
-	drawPolygon(canvas.width, canvas.height - 30, scoreBG, '#383838', true);
+	//drawPolygon(canvas.width - 100, canvas.height - 30, weaponBG, '#383838', true);
 	ctx.restore();
 
 	//Text
@@ -141,7 +143,7 @@ function drawScore() {
 		ctx.fillStyle = 'white';
 		scoreMetrics = ctx.measureText(currentScore);
 		lastScore = currentScore;
-		ctx.fillText(currentScore, 88, canvas.height - 8);
+		ctx.fillText(currentScore, 88, canvas.height - 7.5);
 		ctx.restore();
 	}
 
@@ -186,15 +188,22 @@ function drawScore() {
 function drawActiveWeapon() {
 	ctx.save();
 	ctx.globalAlpha = 0.6;
-	ctx.clearRect(canvas.width - 100, canvas.height - 60, 100, 60);
-	colorRect(canvas.width - 100, canvas.height - 60, 100, 60, '#383838');
-	//drawPolygon(canvas.width, canvas.height - 30, scoreBG, '#383838', true);
+	//ctx.clearRect(canvas.width - 100, canvas.height - 60, 100, 60);
+	//colorRect(canvas.width - 100, canvas.height - 60, 100, 60, '#383838');
+	ctx.clearRect(canvas.width - 250, 0, 250, canvas.height);
+	drawPolygon(canvas.width - 100, canvas.height - 30, weaponBG, '#383838', true);
 	ctx.restore();
 
-	let wHUD = getWeaponHUD(p1.activeWeapon);
+	let wHUD = getWeaponHUD(p1.activeWeapon),
+		wDuration = activeItems[0] != undefined ? Math.ceil(activeItems[0].duration / 60) : '∞';
 
-	colorAlignedText(canvas.width - wHUD.width / 2 - 6, canvas.height - wHUD.height + 5, 'center', '12px Orbitron', '#6DC2FF', getWeaponName(p1.activeWeapon));
-	ctx.drawImage(wHUD, canvas.width - wHUD.width - 6, canvas.height - wHUD.height + 5);
+	ctx.save();
+	ctx.textBaseline = 'middle'
+	colorAlignedText(canvas.width - 160, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', 'Ammo');
+	colorAlignedText(canvas.width - 160, canvas.height - 16, 'center', '34px Orbitron', '#6DC2FF', wDuration);
+
+	colorAlignedText(canvas.width - wHUD.width / 2 - 6, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', getWeaponName(p1.activeWeapon));
+	ctx.drawImage(wHUD, canvas.width - wHUD.width - 6, canvas.height - wHUD.height + 6);
 	ctx.restore();
 }
 

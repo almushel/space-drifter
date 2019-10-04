@@ -79,6 +79,7 @@ class Ship extends WrapPosition {
 
 	die() {
 		this.isDead = true;
+		activeItems.length = 0;
 		endChaintimer();
 		screenShake();
 		playerThrustSFX.pause();

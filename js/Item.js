@@ -97,7 +97,10 @@ class Item extends WrapPosition {
                 activeItems.splice(i, 1);
             }
         }
-        activeItems.push(this);
+
+        if (this.type !== "Life Up") {
+            activeItems.push(this);
+        }
 
         explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
         this.activated = true;
@@ -108,6 +111,7 @@ class Item extends WrapPosition {
             this.duration -= deltaT;
             return false;
         } else if (this.target != null) {
+            this.duration = 0;
             switch (this.type) {
                 case "Missile":
                     this.target.activeWeapon = MG_ACTIVE;
