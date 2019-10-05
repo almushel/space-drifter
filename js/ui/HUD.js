@@ -195,14 +195,14 @@ function drawActiveWeapon() {
 	ctx.restore();
 
 	let wHUD = getWeaponHUD(p1.activeWeapon),
-		wDuration = activeItems[0] != undefined ? Math.ceil(activeItems[0].duration / 60) : '∞';
+		wDuration = p1.activeWeapon != 'Machine Gun' ? p1.ammo : '∞';
 
 	ctx.save();
 	ctx.textBaseline = 'middle'
 	colorAlignedText(canvas.width - 160, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', 'Ammo');
 	colorAlignedText(canvas.width - 160, canvas.height - 16, 'center', '34px Orbitron', '#6DC2FF', wDuration);
 
-	colorAlignedText(canvas.width - wHUD.width / 2 - 6, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', getWeaponName(p1.activeWeapon));
+	colorAlignedText(canvas.width - wHUD.width / 2 - 6, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', p1.activeWeapon);
 	ctx.drawImage(wHUD, canvas.width - wHUD.width - 6, canvas.height - wHUD.height + 6);
 	ctx.restore();
 }
@@ -225,26 +225,13 @@ function drawWeaponHeat() {
 	}
 }
 
-function getWeaponName(type) {
-	switch (type) {
-		case MG_ACTIVE:
-			return 'Machine Gun'
-		case LASER_ACTIVE:
-			return 'Laser'
-		case MISSILES_ACTIVE:
-			return 'Missiles'
-		default:
-			return '';
-	}
-}
-
 function getWeaponHUD(type) {
 	switch (type) {
-		case MG_ACTIVE:
+		case 'Machine Gun':
 			return mgHUD;
-		case LASER_ACTIVE:
+		case 'Laser':
 			return laserHUD;
-		case MISSILES_ACTIVE:
+		case 'Missile':
 			return missileHUD;
 		default:
 			return null;

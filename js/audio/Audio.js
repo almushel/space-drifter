@@ -25,7 +25,7 @@ function loadAudioAssets() {
 	playerMissileSFX = new AudioOneShot('./audio/PlayerMissile' + audioFormat, 7);
 	playerDeathSFX = new AudioOneShot('./audio/PlayerDeath' + audioFormat, 2);
 	lifeUpSFX = new AudioOneShot('./audio/LifeUp' + audioFormat, 1);
-	pickUpSFX = new AudioOneShot('./audio/WeaponPickup' + audioFormat, 1);
+	pickUpSFX = new AudioOneShot('./audio/WeaponPickup' + audioFormat, 3);
 	playerThrustSFX = new CrossFadeAudioLoop('./audio/PlayerThrust' + audioFormat, 7, 3);
 }
 

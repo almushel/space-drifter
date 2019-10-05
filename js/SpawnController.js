@@ -260,11 +260,12 @@ function spawnItems(enemy) {
 		let pickup;
 		if (roll > 55) {
 			pickup = new Item(enemy.x, enemy.y, 'Missile');
-		} else if (roll > 10) {
-			pickup = new Item(enemy.x, enemy.y, 'Laser');
 		} else {
-			pickup = new Item(enemy.x, enemy.y, 'Life Up');
-		}
+			pickup = new Item(enemy.x, enemy.y, 'Laser');
+		} 
+		// else {
+		// 	pickup = new Item(enemy.x, enemy.y, 'Life Up');
+		// }
 		allEntities.push(pickup);
 		pickUpAccumulator = 0;
 	}

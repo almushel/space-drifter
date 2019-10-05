@@ -13,11 +13,6 @@ const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
 const PLAYER_STARTING_LIVES = 3;
 
-const MG_ACTIVE = 0
-const MISSILES_ACTIVE = 1;
-const LASER_ACTIVE = 2;
-const LASER_RANGE = 400;
-
 class Ship extends WrapPosition {
 	constructor(sprite) {
 		super();
@@ -28,8 +23,9 @@ class Ship extends WrapPosition {
 
 		this.name = 'player';
 		this.canShoot = true;
-		this.activeWeapon = MG_ACTIVE;
+		this.activeWeapon = 'Machine Gun';
 		this.thrustEnergy = THRUST_MAX;
+		this.ammo = 0;
 		this.weaponHeat = 0;
 
 		this.rearThrustEmitter = new particleEmitter(this, Math.PI, 16, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
@@ -56,7 +52,6 @@ class Ship extends WrapPosition {
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
-		this.activeWeapon = MISSILES_ACTIVE;
 		this.invulnerabilityTime = 180;
 
 		activeItems.length = 0;
@@ -91,6 +86,7 @@ class Ship extends WrapPosition {
 		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
 
 		explodeSprite(this.x, this.y, this.sprite.chunks, this.ang);
+		this.dropAmmo();
 
 		this.lives--;
 		if (this.lives < 0) {
@@ -161,13 +157,13 @@ class Ship extends WrapPosition {
 	updateWeapons() {
 		if (this.controlCannonFire.isPressed() && this.weaponHeat < 100) {
 			switch (this.activeWeapon) {
-				case MG_ACTIVE:
+				case 'Machine Gun':
 					this.fireCannon();
 					break;
-				case MISSILES_ACTIVE:
+				case 'Missile':
 					this.fireMissile();
 					break;
-				case LASER_ACTIVE:
+				case 'Laser':
 					this.fireLaser();
 					break;
 				default:
@@ -207,6 +203,7 @@ class Ship extends WrapPosition {
 		}
 
 		this.weaponHeat += 30;
+		this.depleteAmmo(1);
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 
 		playerLaserSFX.play();
@@ -232,6 +229,7 @@ class Ship extends WrapPosition {
 		}
 
 		this.weaponHeat += 40;
+		this.depleteAmmo(1);
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 		playerMissileSFX.play();
 
@@ -251,10 +249,29 @@ class Ship extends WrapPosition {
 		setTimeout(function (self) { self.canShoot = true }, 800, this);
 	}
 
+	depleteAmmo(amount) {
+		this.ammo -= amount;
+		if (this.ammo <= 0) {
+			this.activeWeapon = 'Machine Gun';
+		}
+	}
+
+	dropAmmo() {
+		let amount = Math.round(this.ammo / 20);
+
+		for (let i = 0; i < amount; i++) {
+			let pickup = new Item(this.x, this.y, this.activeWeapon);
+			allEntities.push(pickup);
+		}
+
+		this.ammo = 0;
+		this.activeWeapon = 'Machine Gun';
+	}
+
 	draw() {
 		if (this.isDead && gameStart) {
 			let confirmControl = controllerEnabled ? 'START' : 'ENTER';
-			colorAlignedText(canvas.width / 2, canvas.height/2, 'center', 'bold 20px Orbitron', 'orange',
+			colorAlignedText(canvas.width / 2, canvas.height / 2, 'center', 'bold 20px Orbitron', 'orange',
 				'Press ' + confirmControl + ' to respawn');
 			return;
 		} else if (!gameStart) {
