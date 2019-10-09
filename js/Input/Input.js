@@ -26,6 +26,7 @@ function pollInput() {
 function menuControl() {
 	if (menuConfirm.isReleased()) {
 		if (gameOver) {
+			titleMusic.play();
 			gameOver = false;
 			showHighScores = true;
 		} else if (showHighScores) {

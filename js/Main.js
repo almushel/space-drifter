@@ -28,6 +28,7 @@ function loadingDoneSoStartGame() {
 	createStarField();
 	initInput();
 	setupAudio();
+	titleMusic.play();
 
 	initialFrame();
 	requestAnimationFrame(update);

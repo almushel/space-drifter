@@ -18,6 +18,7 @@ let pickUpAccumulator = 0;
 
 function resetGame() {
 	initHUD();
+	titleMusic.pause();
 	musicLoop.play();
 	currentWave = 1;
 	pointMax = 1;
