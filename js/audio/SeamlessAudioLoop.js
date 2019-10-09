@@ -16,13 +16,27 @@ class SeamlessAudioLoop {
     }
 
     pause() {
-        if (this.firstTrack.paused == false) {
-            this.firstTrack.pause();
-            this.firstTrack.currentTime = 0;
-        } else if (this.secondTrack.paused == false) {
-            this.secondTrack.pause();
-            this.secondTrack.currentTime = 0;
+        let pausePoint = 0;
+
+        if (this.firstTrack.currentTime > 0 && this.firstTrack.currentTime < this.loopPoint) {
+            pausePoint = this.firstTrack.currentTime;
+        } else if (this.secondTrack.currentTime > 0 && this.secondTrack.currentTime < this.loopPoint) {
+            pausePoint = this.secondTrack.currentTime;
         }
+
+        this.firstTrack.pause();
+        this.firstTrack.currentTime = pausePoint;
+
+        this.secondTrack.pause();
+        this.secondTrack.currentTime = 0;
+    }
+
+    stop() {
+        this.firstTrack.pause();
+        this.firstTrack.currentTime = 0;
+
+        this.secondTrack.pause();
+        this.secondTrack.currentTime = 0;
     }
 
     initLoop() {
