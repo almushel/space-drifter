@@ -18,22 +18,24 @@ function initInput() {
 
 function pollInput() {
 	pollGamepads();
-	if (!gameStart) {
-		menuControl();
-	}
+	menuControl();
 }
 
 function menuControl() {
 	if (menuConfirm.isReleased()) {
-		if (gameOver) {
+		if (gameState === gameStarted) {
+			gameState = gamePaused;
+		} else if (gameState === gamePaused) {
+			gameState = gameStarted;
+		} else if (gameState === gameOver) {
 			titleMusic.play();
 			gameOver = false;
 			showHighScores = true;
-		} else if (showHighScores) {
+		} else if (gameState === highScores) {
 			showHighScores = false;
 		} else {
 			resetGame();
-			gameStart = true;
+			gameState = gameStarted;
 		}
 	} 
 }

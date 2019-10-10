@@ -1,6 +1,10 @@
-let gameStart = false,
-	gameOver = false,
-	showHighScores = false;
+let titleScreen = 0,
+	gameStarted = 1,
+	gamePaused = 2,
+	gameOver = 3,
+	highScores = 4;
+
+let gameState = titleScreen;
 
 function clearHUD() {
 	setCanvas(hud, hudContext);
@@ -9,9 +13,9 @@ function clearHUD() {
 }
 
 function drawTitleScreen() {
-	if (gameOver) {
+	if (gameState === gameOver) {
 		drawGameOver();
-	} else if (showHighScores) {
+	} else if (gameState === highScores) {
 		drawScoreTable();
 	} else {
 		let yOffset = canvas.height / 2.5,
@@ -31,6 +35,17 @@ function drawTitleScreen() {
 
 		drawTitleControls(xOffset, yOffset);
 	}
+}
+
+function drawPauseScreen() {
+	ctx.globalAlpha = 0.4;
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0,0,canvas.width, canvas.height);
+	ctx.globalAlpha = 1;
+	ctx.fillStyle = 'white';
+	ctx.font = '50px Orbitron';
+	ctx.textAlign = 'center';
+	ctx.fillText('Paused', canvas.width/2, canvas.height/2);
 }
 
 function drawTitleShip(x, y) {

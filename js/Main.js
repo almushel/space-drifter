@@ -5,7 +5,6 @@ let gameCanvas, gameCtx, bg, bgContext, hud, hudContext;
 const p1 = new Ship(playerPic);
 
 const allEntities = [];
-const activeItems = [];
 
 function loadGame() {
 	let startbutton = document.getElementById('startButton');
@@ -44,6 +43,9 @@ function update() {
 }
 
 function moveAll() {
+	if (gameState === gamePaused) {
+		return;
+	}
 	p1.move();
 
 	for (let e = allEntities.length - 1; e >= 0; e--) {
@@ -71,8 +73,10 @@ function drawAll() {
 
 	p1.draw();
 
-	if (gameStart) {
+	if (gameState === gameStarted) {
 		drawHUD();
+	} else if (gameState === gamePaused) {
+		drawPauseScreen();
 	} else {
 		drawTitleScreen();
 	}

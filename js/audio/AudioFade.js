@@ -62,5 +62,6 @@ class AudioFade {
 
     abort() {
         clearInterval(this.fadeInterval);
+        this.fadeInterval = null;
     }
 }

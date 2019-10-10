@@ -45,8 +45,7 @@ function endGame() {
 	if (currentScore > Number(localStorage.sdHighScore)) {
 		localStorage.sdHighScore = currentScore;
 	}
-	gameStart = false;
-	gameOver = true;
+	gameState = gameOver;
 }
 
 function spawnWave(waveList) {

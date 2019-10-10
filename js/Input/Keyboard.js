@@ -35,28 +35,28 @@ function setKeyHoldState(thisKey, setTo) {
 
 function titleKeys(key) {
 	if (key == KEY_SPACEBAR && keysHeld[KEY_SPACEBAR] == true) {
-		if (gameOver) {
+		if (gameState === gameOver) {
 			gameOver = false;
 			showHighScores = true;
-		} else if (showHighScores) {
+		} else if (gameState === highScores) {
 			showHighScores = false;
 		} else {
 			resetGame();
-			gameStart = true;
+			gameState = gameStarted;
 		}
 	}
 }
 
 function keyPressed(evt) {
 	evt.preventDefault(); // without this, arrow keys scroll the browser
-	if (!gameStart) {
+	if (gameState !== gameStarted) {
 		//titleKeys(evt.keyCode);
 	}
 	setKeyHoldState(evt.keyCode, true);
 }
 
 function keyReleased(evt) {
-	if (!gameStart) {
+	if (gameState !== gameStarted) {
 		//titleKeys(evt.keyCode);
 	}
 	setKeyHoldState(evt.keyCode, false);

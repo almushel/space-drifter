@@ -65,10 +65,6 @@ function pollGamepads() {
             } else {
                 continue;
             }
-
-            if (!gameStart) {
-                //titlePad(gp);
-            }
             
             //Update all gamepad buttons
             for (let b = 0; b < gp.buttons.length; b++) {
@@ -100,14 +96,13 @@ function pollGamepads() {
 
 function titlePad(pad) {
 	if (pad.buttons[0].pressed && padButtonsHeld[0] == false) {
-		if (gameOver) {
-			gameOver = false;
-			showHighScores = true;
-		} else if (showHighScores) {
-			showHighScores = false;
+		if (gameState === gameOver) {
+            gameState = highScores;
+		} else if (gameState === highScores) {
+			gameState = titleScreen;
 		} else {
 			resetGame();
-			gameStart = true;
+			gameState = gameStarted;
 		}
 	}
 }

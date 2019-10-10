@@ -54,8 +54,6 @@ class Ship extends WrapPosition {
 		this.weaponHeat = 0;
 		this.invulnerabilityTime = 180;
 
-		activeItems.length = 0;
-
 		forceCircle(this.x, this.y, canvas.width / 6, 5);
 		explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
 		let spawnMarker = instantiateParticle(null, 'circle');
@@ -74,7 +72,6 @@ class Ship extends WrapPosition {
 
 	die() {
 		this.isDead = true;
-		activeItems.length = 0;
 		endChaintimer();
 		screenShake();
 		playerThrustSFX.pause();
@@ -95,7 +92,7 @@ class Ship extends WrapPosition {
 	}
 
 	move() {
-		if (!gameStart) {
+		if (gameState !== gameStarted) {
 			return;
 		}
 
@@ -269,12 +266,12 @@ class Ship extends WrapPosition {
 	}
 
 	draw() {
-		if (this.isDead && gameStart) {
+		if (this.isDead && gameState === gameStarted) {
 			let confirmControl = controllerEnabled ? 'START' : 'ENTER';
 			colorAlignedText(canvas.width / 2, canvas.height / 2, 'center', 'bold 20px Orbitron', 'orange',
 				'Press ' + confirmControl + ' to respawn');
 			return;
-		} else if (!gameStart) {
+		} else if (gameState !== gameStarted && gameState !== gamePaused) {
 			return;
 		}
 
