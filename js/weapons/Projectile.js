@@ -30,25 +30,43 @@ class Projectile extends WrapPosition {
 	}
 
 	collide(thisEnemy) {
-		if (this.parent == null || thisEnemy === this.parent || thisEnemy.invulnerabilityTime > 0 || thisEnemy.isDead || this.isDead) {
+		if (this.parent == null || thisEnemy.isDead || this.isDead) {
 			return false;
 		}
 
 		if (circleIntersect(this.x, this.y, this.collisionRadius, thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
+			if (thisEnemy === this.parent || thisEnemy.invulnerabilityTime > 0) {
+				let deltaX = this.x - thisEnemy.x,
+					deltaY = this.y - thisEnemy.y;
+				
+				this.xv += deltaX/2;
+				this.yv += deltaY/2;
+				return false;
+			}
+
 			let enemyValue = getEnemyValue(thisEnemy.constructor.name);
 			//Bullets fired from player ships
-			if (this.parent.constructor.name == Ship.name && enemyValue > 0) {
+			if (this.parent.constructor.name === Ship.name && enemyValue > 0) {
 				this.die();
 				thisEnemy.die();
 				updateScore(enemyValue);
 			//Bullets fired from enemies
-			} else if (getEnemyValue(this.parent.constructor.name) > 0 && thisEnemy.constructor.name == Ship.name) {
+			} else if (getEnemyValue(this.parent.constructor.name) > 0) {
+				if (thisEnemy.constructor.name === Ship.name) {
+					this.die();
+					thisEnemy.die();
+				} else if (enemyValue > 0) {
+					let deltaX = this.x - thisEnemy.x,
+						deltaY = this.y - thisEnemy.y;
+				
+					this.xv += deltaX/2;
+					this.yv += deltaY/2;
+				}
+			} else if (thisEnemy.constructor.name === Projectile.name) {
+				explodeAtPoint(this.x, this.y, 0, this.color, this.color, this.color, null, 'circle');
 				this.die();
+				explodeAtPoint(thisEnemy.x, thisEnemy.y, 0, thisEnemy.color, thisEnemy.color, thisEnemy.color, null, 'circle');
 				thisEnemy.die();
-			} else if (thisEnemy.constructor.name == Projectile.name) {
-				explodeAtPoint(this.x, this.y, 0, 'white', 'white', 'white', null, 'circle');
-				this.die();
-				thisEnemy.reset();
 			}
 			return true;
 		}
@@ -72,7 +90,11 @@ class Projectile extends WrapPosition {
 
 	drawSprite(x, y) {
 		if (this.isDead == false) {
+			ctx.save();
+            ctx.shadowColor = this.color;
+            ctx.shadowBlur = 4;
 			colorCircle(x, y, this.collisionRadius, this.color);
+			ctx.restore();
 		}
 	}
 

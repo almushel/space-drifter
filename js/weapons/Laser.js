@@ -20,10 +20,13 @@ class Laser extends Projectile {
         if (this.isDead == false) {
             let offsetX = x + Math.cos(this.ang + Math.PI) * this.length, 
                 offsetY = y + Math.sin(this.ang + Math.PI) * this.length;
-            
+            ctx.save();
+            ctx.shadowColor = this.color;
+            ctx.shadowBlur = 4;
             drawLine(x, y, offsetX, offsetY, this.collisionRadius*2, this.color)
             colorCircle(offsetX, offsetY, this.collisionRadius, this.color);
             colorCircle(x, y, this.collisionRadius, this.color);
-		}
+            ctx.restore();
+        }
     }
 }
