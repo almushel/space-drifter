@@ -1,5 +1,6 @@
 let audioFormat;
-let titleMusic, musicLoop, enemyDeath, playerDeathSFX, playerShotSFX, playerLaserSFX, playerMissileSFX, lifeUpSFX, pickUpSFX;
+let titleMusic, musicLoop, enemyDeath, playerDeathSFX, 
+	playerShotSFX, playerLaserSFX, playerMissileSFX, lifeUpSFX, pickUpSFX, turretFireSFX;
 //let audioCtx, musicSource1, musicSource2, gainNode;
 
 //TO DO:
@@ -24,6 +25,7 @@ function loadAudioAssets() {
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot' + audioFormat, 4);
 	playerLaserSFX = new AudioOneShot('./audio/PlayerLaser' + audioFormat, 6);
 	playerMissileSFX = new AudioOneShot('./audio/PlayerMissile' + audioFormat, 7);
+	turretFireSFX = new AudioOneShot('./audio/TurretFire' + audioFormat, 7);
 	playerDeathSFX = new AudioOneShot('./audio/PlayerDeath' + audioFormat, 2);
 	lifeUpSFX = new AudioOneShot('./audio/LifeUp' + audioFormat, 1);
 	pickUpSFX = new AudioOneShot('./audio/WeaponPickup' + audioFormat, 3);
@@ -35,6 +37,7 @@ function initAudioVolume() {
 	playerShotSFX.volume = 0.7;
 	playerMissileSFX.volume = 0.4;
 	playerLaserSFX.volume = 0.25;
+	turretFireSFX.volume = 0.6;
 	pickUpSFX.volume = 0.3;
 	lifeUpSFX.volume = 0.3;
 	playerDeathSFX.volume = 0.4;

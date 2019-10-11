@@ -68,6 +68,7 @@ class Turret extends WrapPosition {
 	}
 
 	fire() {
+		turretFireSFX.play();
 		let offsetX = Math.cos(this.ang + Math.PI / 2) * TURRET_RADIUS,
 			offsetY = Math.sin(this.ang + Math.PI / 2) * TURRET_RADIUS;
 
