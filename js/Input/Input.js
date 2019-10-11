@@ -23,19 +23,32 @@ function pollInput() {
 
 function menuControl() {
 	if (menuConfirm.isReleased()) {
-		if (gameState === gameStarted) {
-			gameState = gamePaused;
-		} else if (gameState === gamePaused) {
-			gameState = gameStarted;
-		} else if (gameState === gameOver) {
-			titleMusic.play();
-			gameOver = false;
-			showHighScores = true;
-		} else if (gameState === highScores) {
-			showHighScores = false;
-		} else {
-			resetGame();
-			gameState = gameStarted;
+		switch(gameState) {
+			case gameStarted:
+				if (p1.isDead && p1.lives >= 0) {
+					p1.respawn();
+				} else {
+					gameState = gamePaused;
+					togglePauseScreen();
+				}
+				break;
+			case gamePaused:
+				gameState = gameStarted;
+				togglePauseScreen();
+				break;
+			case gameOver:
+				titleMusic.play();
+				gameState = highScores;
+				break;
+			case highScores:
+				gameState = titleScreen;
+				break;
+			case titleScreen:
+				resetGame();
+				gameState = gameStarted;
+				break;
+			default: 
+				break;
 		}
 	} 
 }

@@ -1,8 +1,8 @@
-const SCORE_CHAIN_TIME = 5000;
+const SCORE_CHAIN_TIME = 5;
 const SCORE_MULTI_MILESTONES = [10, 25, 50, 100]
 const HIGH_SCORE_TABLE_LENGTH = 10;
 
-var currentScore = 0,
+let currentScore = 0,
     currentChain = 0,
     currentMultiplier = 1,
     currentTimeCount = null,
@@ -21,17 +21,15 @@ function updateScore(baseValue) {
 }
 
 function updateChainTimer() {
-    if (currentTimeCount == null || currentTimeCount >= 1) {
-        currentTimeCount = Math.round((SCORE_CHAIN_TIME - (performance.now() - timerStart))/1000);
-    } else {
-        currentTimeCount = 0;
+    currentTimeCount -= deltaT/60;
+    if (currentTimeCount <= 0) {
         currentChain = 0;
-        updateMultiplier();
-    }
+    } 
+    updateMultiplier();
 }
 
 function updateMultiplier() {
-    for (var i = SCORE_MULTI_MILESTONES.length - 1; i >= 0; i--) {
+    for (let i = SCORE_MULTI_MILESTONES.length - 1; i >= 0; i--) {
         if (currentChain >= SCORE_MULTI_MILESTONES[i]) {
             currentMultiplier = i + 2;
             break;
@@ -43,16 +41,15 @@ function updateMultiplier() {
 }
 
 function startChainTimer() {
-    if (timerStart != null && performance.now() - timerStart > SCORE_CHAIN_TIME) {
+    if (currentTimeCount <= 0) {
         currentMultiplier = 1;
     }
 
-    timerStart = performance.now();
-    currentTimeCount = Math.round((SCORE_CHAIN_TIME - (performance.now() - timerStart))/1000);
+    currentTimeCount = SCORE_CHAIN_TIME;
 }
 
 function endChaintimer() {
-    timerStart -= 5000;
+    currentTimeCount = 0;
     currentMultiplier = 1;
 }
 

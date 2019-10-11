@@ -7,8 +7,21 @@ let titleScreen = 0,
 let gameState = titleScreen;
 
 function clearHUD() {
-	setCanvas(hud, hudContext);
+	setCanvas(hud, hud.ctx);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	setCanvas(gameCanvas, gameCtx);
+}
+
+function initPauseScreen() {
+	setCanvas(pause, pause.ctx);
+	ctx.globalAlpha = 0.4;
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0,0,canvas.width, canvas.height);
+	ctx.globalAlpha = 1;
+	ctx.fillStyle = 'white';
+	ctx.font = '50px Orbitron';
+	ctx.textAlign = 'center';
+	ctx.fillText('Paused', canvas.width/2, canvas.height/2);
 	setCanvas(gameCanvas, gameCtx);
 }
 
@@ -37,15 +50,8 @@ function drawTitleScreen() {
 	}
 }
 
-function drawPauseScreen() {
-	ctx.globalAlpha = 0.4;
-	ctx.fillStyle = 'black';
-	ctx.fillRect(0,0,canvas.width, canvas.height);
-	ctx.globalAlpha = 1;
-	ctx.fillStyle = 'white';
-	ctx.font = '50px Orbitron';
-	ctx.textAlign = 'center';
-	ctx.fillText('Paused', canvas.width/2, canvas.height/2);
+function togglePauseScreen() {
+	pause.style.display = pause.style.display === 'none' ? 'initial' : 'none';
 }
 
 function drawTitleShip(x, y) {

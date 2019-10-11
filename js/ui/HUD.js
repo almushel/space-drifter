@@ -42,7 +42,7 @@ let scoreMetrics = null;
 let multiMetrics = null;
 
 function initHUD() {
-	setCanvas(hud, hudContext);
+	setCanvas(hud, hud.ctx);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	//Backgrounds
@@ -70,7 +70,7 @@ function initHUD() {
 }
 
 function drawHUD() {
-	setCanvas(hud, hudContext);
+	setCanvas(hud, hud.ctx);
 	drawPlayerLives();
 	drawThrustMeter();
 	drawWeaponHeat();
@@ -169,19 +169,13 @@ function drawScore() {
 		ctx.restore();
 	}
 
-	for (let t = 0; t < 5; t++) {
+	for (let t = 0; t < SCORE_CHAIN_TIME; t++) {
 		if (currentTimeCount > t) {
 			colorRect(8 + 32 * t, canvas.height - 56, 26, 26, '#6DC2FF');
 		} else {
 			colorRect(8 + 32 * t, canvas.height - 56, 26, 26, 'grey');
 		}
 	}
-
-	//Testing values
-	// ctx.textAlign = 'left';
-	// ctx.fillText('Chain: ' + currentChain, 10, 30);
-	// ctx.fillText('Timer: ' + currentTimeCount, 10, 50);
-
 	ctx.restore();
 }
 

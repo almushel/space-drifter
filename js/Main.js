@@ -1,6 +1,6 @@
 //Canvas and context for play area and starfield
 let canvas, ctx
-let gameCanvas, gameCtx, bg, bgContext, hud, hudContext;
+let gameCanvas, gameCtx, bg, hud, pause;
 
 const p1 = new Ship(playerPic);
 
@@ -11,13 +11,16 @@ function loadGame() {
 	startbutton.style.display = "none";
 
 	bg = document.getElementById('bg');
-	bgContext = bg.getContext('2d');
+	bg.ctx = bg.getContext('2d');
 
 	gameCanvas = document.getElementById('gameCanvas');
 	gameCtx = gameCanvas.getContext('2d');
 
 	hud = document.getElementById('hud');
-	hudContext = hud.getContext('2d');
+	hud.ctx = hud.getContext('2d');
+
+	pause = document.getElementById('pause');
+	pause.ctx = pause.getContext('2d');
 
 	setCanvas(gameCanvas, gameCtx);
 	loadImages();
@@ -25,6 +28,7 @@ function loadGame() {
 
 function loadingDoneSoStartGame() {
 	createStarField();
+	initPauseScreen();
 	initInput();
 	setupAudio();
 	titleMusic.play();
@@ -76,7 +80,7 @@ function drawAll() {
 	if (gameState === gameStarted) {
 		drawHUD();
 	} else if (gameState === gamePaused) {
-		drawPauseScreen();
+		//drawPauseScreen();
 	} else {
 		drawTitleScreen();
 	}

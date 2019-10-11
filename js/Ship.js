@@ -92,16 +92,10 @@ class Ship extends WrapPosition {
 	}
 
 	move() {
-		if (gameState !== gameStarted) {
+		if (gameState !== gameStarted || this.isDead) {
 			return;
 		}
 
-		if (this.isDead) {
-			if (menuConfirm.isReleased() && this.lives >= 0) {
-				this.respawn();
-			}
-			return;
-		}
 		//Turning
 		if (this.controlTurnLeft.isPressed()) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;

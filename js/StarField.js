@@ -17,7 +17,7 @@ function createStarField() {
 }
 
 function drawStarField() {
-	setCanvas(bg, bgContext);
+	setCanvas(bg, bg.ctx);
 	for (let x = 0; x < bg.width; x++) {
 		for (let y = 0; y < bg.height; y++) {
 			if (starField[x * bg.height + y] != 0) {
