@@ -58,11 +58,15 @@ class Ship extends WrapPosition {
 		explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
 		let spawnMarker = instantiateParticle(null, 'circle');
 		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, '#6DC2FF', null, 'circle');
+
+		this.collisionRadius = SHIP_RADIUS*2;
 	}
 
 	collideEnemy(thisEnemy) {
 		if (this.invulnerabilityTime > 0) {
 			return;
+		} else if (this.collisionRadius > SHIP_RADIUS) {
+			this.collisionRadius -= deltaT;
 		}
 		if (super.collide(thisEnemy)) {
 			thisEnemy.die();
@@ -80,7 +84,7 @@ class Ship extends WrapPosition {
 		explodeAtPoint(this.x, this.y, 2, 'white', 'orange', '#6DC2FF', null, 'circle');
 
 		let splodeOrigin = instantiateParticle(null, 'circle');
-		splodeOrigin.reset(this.x, this.y, 0, this.collisionRadius, 'orange', null, 'circle');
+		splodeOrigin.reset(this.x, this.y, 0, SHIP_RADIUS, 'orange', null, 'circle');
 
 		explodeSprite(this.x, this.y, this.sprite.chunks, this.ang);
 		this.dropAmmo();
@@ -200,14 +204,14 @@ class Ship extends WrapPosition {
 		playerLaserSFX.play();
 		let newShot = new Laser(PLAYER_SHOT_SPEED * 2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang - Math.PI / 7) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang - Math.PI / 7) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang - Math.PI / 7) * SHIP_RADIUS;
+		newShot.y += Math.sin(this.ang - Math.PI / 7) * SHIP_RADIUS;
 		allEntities.push(newShot);
 
 		newShot = new Laser(PLAYER_SHOT_SPEED * 2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang + Math.PI / 7) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang + Math.PI / 7) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang + Math.PI / 7) * SHIP_RADIUS;
+		newShot.y += Math.sin(this.ang + Math.PI / 7) * SHIP_RADIUS;
 		allEntities.push(newShot);
 
 		this.canShoot = false;
@@ -226,14 +230,14 @@ class Ship extends WrapPosition {
 
 		let newShot = new Missile(0.2, 4, 120);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang - Math.PI / 3) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang - Math.PI / 3) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang - Math.PI / 3) * SHIP_RADIUS;
+		newShot.y += Math.sin(this.ang - Math.PI / 3) * SHIP_RADIUS;
 		allEntities.push(newShot);
 
 		newShot = new Missile(0.2, 4, 120);
 		newShot.shootFrom(this);
-		newShot.x += Math.cos(this.ang + Math.PI / 3) * this.collisionRadius;
-		newShot.y += Math.sin(this.ang + Math.PI / 3) * this.collisionRadius;
+		newShot.x += Math.cos(this.ang + Math.PI / 3) * SHIP_RADIUS;
+		newShot.y += Math.sin(this.ang + Math.PI / 3) * SHIP_RADIUS;
 		allEntities.push(newShot);
 
 		this.canShoot = false;
@@ -276,12 +280,12 @@ class Ship extends WrapPosition {
 	drawSprite(x, y) {
 		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
 
-		if (this.invulnerabilityTime > 0) {
-			let bubble = ctx.createRadialGradient(x, y, this.sprite.width / 4, x, y, this.sprite.width / 2);
+		if (this.collisionRadius > SHIP_RADIUS) {
+			let bubble = ctx.createRadialGradient(x, y, this.collisionRadius/2, x, y, this.collisionRadius);
 			bubble.addColorStop(0, 'rgba(0,0,0,0)');
 			bubble.addColorStop(0.9, 'rgba(109, 194, 255, 0.6');
 
-			colorCircle(x, y, this.sprite.width / 2, bubble);
+			colorCircle(x, y, this.collisionRadius, bubble);
 			ctx.lineWidth = 2;
 			ctx.strokeStyle = '#6DC2FF';
 			ctx.stroke();
