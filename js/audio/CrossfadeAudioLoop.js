@@ -27,11 +27,21 @@ class CrossFadeAudioLoop {
     }
 
     pause() {
-        if (!this.firstTrack.paused || !this.secondTrack.paused) {
-            this.crossfade.abort();
-            this.fade.linearFade(this.firstTrack, -1, 0.1);
-            this.crossfade.linearFade(this.secondTrack, -1, 0.1);
-        }
+        this.crossfade.abort();
+        this.fade.linearFade(this.firstTrack, -1, 0.1);
+        this.crossfade.linearFade(this.secondTrack, -1, 0.1);
+    }
+
+    stop() {
+        this.crossfade.abort();
+        this.fade.abort();
+        this.firstTrack.pause();
+        this.secondTrack.pause();
+        
+        this.firstTrack.currentTime = 0;
+        this.secondTrack.currentTime = 0;
+
+        this.volume = 0;
     }
 
     initLoop() {
@@ -72,7 +82,8 @@ class CrossFadeAudioLoop {
     }
 
     set volume(vol) {
-        
+        this.firstTrack.volume = vol > 1 ? 1 : vol < 0 ? 0 : vol;
+        this.secondTrack.volume = this.firstTrack.volume;
     }
 
     get volume () {

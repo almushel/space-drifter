@@ -78,7 +78,7 @@ class Ship extends WrapPosition {
 		this.isDead = true;
 		endChaintimer();
 		screenShake();
-		playerThrustSFX.pause();
+		playerThrustSFX.stop();
 		playerDeathSFX.play();
 
 		explodeAtPoint(this.x, this.y, 2, 'white', 'orange', '#6DC2FF', null, 'circle');
