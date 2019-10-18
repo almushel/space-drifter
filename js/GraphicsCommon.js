@@ -75,10 +75,10 @@ function screenShake() {
 		}, 150);
 	}
 
-	let left = parseInt(canvas.style.left);
-	let top = parseInt(canvas.style.top);
-	let xOffset = (5 - Math.ceil(Math.random() * 10));
-	let yOffset = (5 - Math.ceil(Math.random() * 10));
+	let left = parseInt(canvas.style.left),
+		top = parseInt(canvas.style.top),
+		xOffset = (5 - Math.ceil(Math.random() * 10)),
+		yOffset = (5 - Math.ceil(Math.random() * 10));
 
 	if (xOffset < 0) {
 		xOffset -= 1;

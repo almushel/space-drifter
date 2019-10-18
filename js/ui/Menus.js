@@ -1,3 +1,5 @@
+const MENU_TRANSITION_SPEED = 0.085;
+
 let titleScreen = 0,
 	gameStarted = 1,
 	gamePaused = 2,
@@ -6,14 +8,49 @@ let titleScreen = 0,
 
 let gameState = titleScreen;
 
-function clearHUD() {
-	setCanvas(hud, hud.ctx);
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	setCanvas(gameCanvas, gameCtx);
+let transDir = 0,
+	transState = 0;
+
+//For transitions
+function drawMenus() {
+	if (transState < 0) {
+		transState = transDir = 0;
+		updateTransition();
+		toggleMenuLayer();
+	} else if (transState > 1) {
+		transState = 1;
+		transDir = 0;
+		updateTransition();
+	}
+
+	if (transDir > 0 || transDir < 0) {
+		transState += transDir * MENU_TRANSITION_SPEED * deltaT;
+		updateTransition();
+	}
 }
 
-function initPauseScreen() {
-	setCanvas(pause, pause.ctx);
+function startTransition(dir) {
+	transDir = dir;
+	transState = 0.5 - transDir / 2;
+	if (dir > 0) {
+		toggleMenuLayer();
+	}
+}
+
+function updateTransition() {
+	//Both axes
+	//menu.style.transform = 'scale(' + transState + ', ' + transState + ')';
+	
+	//Y axis
+	menu.style.transform = 'scale(1, ' + transState + ')';
+	
+	//X axis
+	//menu.style.transform = 'scale(' + transState + ', 1)';
+}
+
+function drawPauseScreen() {
+	setCanvas(menu, menu.ctx);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.globalAlpha = 0.4;
 	ctx.fillStyle = 'black';
 	ctx.fillRect(0,0,canvas.width, canvas.height);
@@ -26,6 +63,8 @@ function initPauseScreen() {
 }
 
 function drawTitleScreen() {
+	setCanvas(menu, menu.ctx);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (gameState === gameOver) {
 		drawGameOver();
 	} else if (gameState === highScores) {
@@ -48,10 +87,11 @@ function drawTitleScreen() {
 
 		drawTitleControls(xOffset, yOffset);
 	}
+	setCanvas(gameCanvas, gameCtx);
 }
 
-function togglePauseScreen() {
-	pause.style.display = pause.style.display === 'none' ? 'initial' : 'none';
+function toggleMenuLayer() {
+	menu.style.display = menu.style.display === 'none' ? 'initial' : 'none';
 }
 
 function drawTitleShip(x, y) {

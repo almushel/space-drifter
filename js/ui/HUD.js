@@ -41,6 +41,12 @@ let lastScore = lastMulti = lastLives = null;
 let scoreMetrics = null;
 let multiMetrics = null;
 
+function clearHUD() {
+	setCanvas(hud, hud.ctx);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	setCanvas(gameCanvas, gameCtx);
+}
+
 function initHUD() {
 	setCanvas(hud, hud.ctx);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);

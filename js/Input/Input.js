@@ -29,23 +29,27 @@ function menuControl() {
 					p1.respawn();
 				} else {
 					gameState = gamePaused;
-					togglePauseScreen();
+					drawPauseScreen();
+					startTransition(1);
 				}
 				break;
 			case gamePaused:
 				gameState = gameStarted;
-				togglePauseScreen();
+				startTransition(-1);
 				break;
 			case gameOver:
 				titleMusic.play();
 				gameState = highScores;
+				drawTitleScreen();
 				break;
 			case highScores:
 				gameState = titleScreen;
+				drawTitleScreen();
 				break;
 			case titleScreen:
 				resetGame();
 				gameState = gameStarted;
+				startTransition(-1);
 				break;
 			default: 
 				break;

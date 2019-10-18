@@ -1,6 +1,6 @@
 //Canvas and context for play area and starfield
 let canvas, ctx
-let gameCanvas, gameCtx, bg, hud, pause;
+let gameCanvas, gameCtx, bg, hud, menu;
 
 const p1 = new Ship(playerPic);
 
@@ -10,17 +10,9 @@ function loadGame() {
 	let startbutton = document.getElementById('startButton');
 	startbutton.style.display = "none";
 
-	bg = document.getElementById('bg');
-	bg.ctx = bg.getContext('2d');
-
-	gameCanvas = document.getElementById('gameCanvas');
-	gameCtx = gameCanvas.getContext('2d');
-
-	hud = document.getElementById('hud');
-	hud.ctx = hud.getContext('2d');
-
-	pause = document.getElementById('pause');
-	pause.ctx = pause.getContext('2d');
+	initCanvases();
+	drawTitleScreen();
+	toggleMenuLayer();
 
 	setCanvas(gameCanvas, gameCtx);
 	loadImages();
@@ -28,7 +20,6 @@ function loadGame() {
 
 function loadingDoneSoStartGame() {
 	createStarField();
-	initPauseScreen();
 	initInput();
 	setupAudio();
 	titleMusic.play();
@@ -79,11 +70,10 @@ function drawAll() {
 
 	if (gameState === gameStarted) {
 		drawHUD();
-	} else if (gameState === gamePaused) {
-		//drawPauseScreen();
-	} else {
-		drawTitleScreen();
 	}
+	
+	drawMenus();
+
 }
 
 function collide() {
@@ -113,6 +103,20 @@ function removeDead() {
 	}
 	removeDeadEnemies();
 	removeDeadParticles();
+}
+
+function initCanvases() {
+	bg = document.getElementById('bg');
+	bg.ctx = bg.getContext('2d');
+
+	gameCanvas = document.getElementById('gameCanvas');
+	gameCtx = gameCanvas.getContext('2d');
+
+	hud = document.getElementById('hud');
+	hud.ctx = hud.getContext('2d');
+
+	menu = document.getElementById('menu');
+	menu.ctx = menu.getContext('2d');
 }
 
 function setCanvas(newCanvas, newContext) {

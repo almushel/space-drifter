@@ -25,7 +25,7 @@
 <canvas id="bg" width="800" height="600" style="position: absolute; z-index: 1; top: 0px; left: 0px"></canvas>
 <canvas id="gameCanvas" width="800" height="600" style="position: absolute; z-index: 2; top: 0px; left: 0px;"></canvas>
 <canvas id='hud' width ="800" height="64" style="position: absolute; z-index: 3; top: 536px; left: 0px;"></canvas>
-<canvas id="pause" width="800" height="600" style="position: absolute; z-index: 4; top: 0px; left: 0px; display:none;"></canvas>
+<canvas id="menu" width="800" height="600" style="position: absolute; z-index: 4; top: 0px; left: 0px; display:none;"></canvas>
 <button type="button" id="startButton" onclick="loadGame()">Load Game</button>
 </div>
 
@@ -46,12 +46,10 @@
 <script src="js/weapons/Laser.js"></script>
 <script src="js/weapons/Missile.js"></script>
 <script src="js/weapons/GrapplingHook.js"></script>
-<script src="js/SpawnController.js"></script>
-<script src="js/ScoreManager.js"></script>
 <script src="js/StarField.js"></script>
 <script src="js/Ship.js"></script>
 <script src="js/Item.js"></script>
-<script src="js/Enemies/SpawnWarp.js"></script>
+<script src="js/enemies/SpawnWarp.js"></script>
 <script src="js/enemies/Drifter.js"></script>
 <script src="js/enemies/Grappler.js"></script>
 <script src="js/enemies/Tracker.js"></script>
@@ -64,6 +62,8 @@
 <script src="js/particles/Particle.js"></script>
 <script src="js/particles/ParticleEmitter.js"></script>
 <script src="js/particles/ParticleManager.js"></script>
+<script src="js/SpawnController.js"></script>
+<script src="js/ScoreManager.js"></script>
 <script src="js/Main.js"></script>
 
 

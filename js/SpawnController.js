@@ -5,7 +5,7 @@ const ENEMY_TURRET = 3;
 const ENEMY_GRAPPLER = 4;
 
 const WAVE_ESCALATION_RATE = 4;
-const ITEM_ACCUMLATE_RATE = 0.5;
+const ITEM_ACCUMLATE_RATE = 1;
 
 const enemyList = [];
 const enemyPool = [];
@@ -46,6 +46,9 @@ function endGame() {
 		localStorage.sdHighScore = currentScore;
 	}
 	gameState = gameOver;
+	drawTitleScreen();
+	startTransition(1);
+	//toggleMenuLayer();
 }
 
 function spawnWave(waveList) {
