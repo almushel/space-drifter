@@ -273,3 +273,8 @@ function spawnItems(enemy) {
 		pickUpAccumulator = 0;
 	}
 }
+
+function spawnDemoShip(){
+	let ds = new DemoShip(400, 300, playerPic, 1, Math.PI/360);
+	allEntities.push(ds);
+}

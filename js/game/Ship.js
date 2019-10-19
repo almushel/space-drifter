@@ -11,7 +11,7 @@ const HEAT_MAX = 100;
 const THRUST_MAX = 100;
 const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
-const PLAYER_STARTING_LIVES = 3;
+const PLAYER_STARTING_LIVES = 1;
 
 class Ship extends WrapPosition {
 	constructor(sprite) {
@@ -48,6 +48,7 @@ class Ship extends WrapPosition {
 	} // end of reset
 
 	respawn() {
+		startTransition(-1);
 		super.reset(gameCanvas.width / 2, gameCanvas.height / 2);
 		this.ang = -0.5 * Math.PI;
 		this.thrustEnergy = THRUST_MAX;
@@ -92,6 +93,12 @@ class Ship extends WrapPosition {
 		this.lives--;
 		if (this.lives < 0) {
 			endGame();
+		} else {
+			setCanvas(menu, menu.ctx);
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			drawPressStart(canvas.width / 2, canvas.height / 2, 'respawn');
+			setCanvas(gameCanvas, gameCtx);
+			startTransition(1);
 		}
 	}
 
@@ -265,9 +272,6 @@ class Ship extends WrapPosition {
 
 	draw() {
 		if (this.isDead && gameState === gameStarted) {
-			let confirmControl = controllerEnabled ? 'START' : 'ENTER';
-			colorAlignedText(canvas.width / 2, canvas.height / 2, 'center', 'bold 20px Orbitron', 'orange',
-				'Press ' + confirmControl + ' to respawn');
 			return;
 		} else if (gameState !== gameStarted && gameState !== gamePaused) {
 			return;

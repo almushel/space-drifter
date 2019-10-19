@@ -25,6 +25,7 @@ function loadingDoneSoStartGame() {
 	titleMusic.play();
 
 	initialFrame();
+	spawnDemoShip();
 	requestAnimationFrame(update);
 }
 

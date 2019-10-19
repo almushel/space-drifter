@@ -1,4 +1,4 @@
-const MENU_TRANSITION_SPEED = 0.085;
+const MENU_TRANSITION_SPEED = 0.1;
 
 let titleScreen = 0,
 	gameStarted = 1,
@@ -71,10 +71,9 @@ function drawTitleScreen() {
 		drawScoreTable();
 	} else {
 		let yOffset = canvas.height / 2.5,
-			xOffset = canvas.width / 1.25,
-			confirmControl = controllerEnabled ? 'START' : 'ENTER';
+			xOffset = canvas.width / 1.25;
 		
-		drawTitleShip(xOffset, yOffset);
+		//drawTitleShip(xOffset, yOffset);
 
 		xOffset = canvas.width / 2;
 
@@ -82,7 +81,7 @@ function drawTitleScreen() {
 		ctx.shadowBlur = 10;
 		ctx.shadowColor = 'black';
 		colorAlignedText(xOffset, yOffset, 'center', '50px Orbitron', '#6DC2FF', 'Space Drifter');
-		colorAlignedText(xOffset, yOffset + 40, 'center', 'bold 20px Orbitron', 'orange', 'Press ' + confirmControl + ' to begin!');
+		drawPressStart(xOffset, yOffset + 50, 'begin!');
 		ctx.restore();
 
 		drawTitleControls(xOffset, yOffset);
@@ -155,19 +154,17 @@ function drawTitleControls(x, y) {
 
 function drawGameOver() {
 	let yOffset = canvas.height / 2,
-		xOffset = canvas.width / 2,
-		confirmControl = controllerEnabled ? 'START' : 'ENTER';
+		xOffset = canvas.width / 2;
 
 	colorAlignedText(xOffset, yOffset * 0.5, 'center', '50px Orbitron', 'orange', 'GAME OVER');
 	drawLine(0, yOffset, canvas.width, yOffset, 2, 'white');
 	colorAlignedText(xOffset, yOffset * 1.5, 'center', 'bold 30px Orbitron', 'white', 'Final Score: ' + currentScore);
-	colorAlignedText(xOffset, yOffset * 1.75, 'center', 'bold 20px Orbitron', 'orange', 'Press ' + confirmControl + ' to view high scores.');
+	drawPressStart(xOffset, yOffset * 1.75, 'view high scores')
 }
 
 function drawScoreTable() {
 	let yOffset = canvas.height / 4,
 		xOffset = canvas.width / 2,
-		confirmControl = controllerEnabled ? 'START' : 'ENTER',
 		hsTable = JSON.parse(localStorage.sdHighScoreTable);
 
 	ctx.translate(0, yOffset);
@@ -184,7 +181,16 @@ function drawScoreTable() {
 		colorAlignedText(xOffset + canvas.width / 8, 50 + (25 * newHighScoreIndex), 'left', 'bold 16px Orbitron', 'white', 'NEW HIGH SCORE!');
 	}
 
-	colorAlignedText(xOffset, 325, 'center', 'bold 20px Orbitron', 'orange', 'Press ' + confirmControl + ' to return to title screen');
+	drawPressStart(xOffset, 325, 'return to title screen');
 
 	ctx.translate(0, -yOffset);
+}
+
+function drawPressStart(x, y, action) {
+	let confirmControl = controllerEnabled ? 'START' : 'ENTER';
+	ctx.save();
+	ctx.shadowBlur = 10;
+	ctx.shadowColor = 'orange';
+	colorAlignedText(x, y, 'center', 'bold 20px Orbitron', 'orange', 'Press ' + confirmControl + ' to ' + action);
+	ctx.restore();
 }
