@@ -30,6 +30,7 @@ function drawMenus() {
 }
 
 function startTransition(dir) {
+	if (transDir != 0) return;
 	transDir = dir;
 	transState = 0.5 - transDir / 2;
 	if (dir > 0) {
