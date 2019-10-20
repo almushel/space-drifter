@@ -39,7 +39,7 @@ function initAudioVolume() {
 	playerShotSFX.volume = 0.7;
 	playerMissileSFX.volume = 0.4;
 	playerLaserSFX.volume = 0.25;
-	playerSpawnSFX.volume = 0.5;
+	playerSpawnSFX.volume = 0.7;
 	turretFireSFX.volume = 0.6;
 	pickUpSFX.volume = 0.3;
 	lifeUpSFX.volume = 0.3;

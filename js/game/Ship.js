@@ -11,7 +11,7 @@ const HEAT_MAX = 100;
 const THRUST_MAX = 100;
 const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
-const PLAYER_STARTING_LIVES = 1;
+const PLAYER_STARTING_LIVES = 3;
 
 class Ship extends WrapPosition {
 	constructor(sprite) {
@@ -82,6 +82,7 @@ class Ship extends WrapPosition {
 		this.isDead = true;
 		endChaintimer();
 		screenShake();
+		transitionHUD(1);
 		playerThrustSFX.stop();
 		playerDeathSFX.play();
 
@@ -159,14 +160,15 @@ class Ship extends WrapPosition {
 		this.z = Math.sin(vert);
 		this.collisionRadius = this.z * SHIP_RADIUS * 2;
 		
-		this.x += this.xv * (1.15 - this.z);
-		this.y += this.yv * (1.15 - this.z);
+		this.x += this.xv * (1.25 - this.z);
+		this.y += this.yv * (1.25 - this.z);
 
-		forceCircle(this.x, this.y, this.z * SHIP_RADIUS * 4, 2);
+		forceCircle(this.x, this.y, this.z * SHIP_RADIUS * 3, 0.25);
 
 		//this.y -= 4 * deltaT;
 		if (this.y <= canvas.height/2) {
 			startTransition(-1);
+			transitionHUD(-1);
 			this.isDead = false;
 			this.spawning = false;
 			this.z = 1;
@@ -312,6 +314,10 @@ class Ship extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
+		if (!this.canShoot) {
+			colorCircle(x + Math.cos(this.ang) * 20, y + Math.sin(this.ang) * 20, PLAYER_SHOT_RADIUS, 'gold');
+		}
+		
 		if (this.z != 1) {
 			ctx.save();
 			ctx.globalAlpha = this.z * 2;

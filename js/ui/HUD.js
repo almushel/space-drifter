@@ -1,3 +1,8 @@
+const HUD_TOP = 536;
+const HUD_SPEED = 4;
+
+let hudDir = 0, hudAccumulator = 0;
+
 let meterOuterPoly = [{ x: -50, y: 10 },
 { x: -44, y: -10 },
 { x: +52, y: -10 },
@@ -75,7 +80,44 @@ function initHUD() {
 	setCanvas(gameCanvas, gameCtx);
 }
 
+function transitionHUD(dir) {
+	hudDir = dir;
+}
+
+function updateHUDTransition() {
+	if (hudDir === 0) {
+		return;
+	}
+	
+	let currentPos = parseInt(hud.style.top);
+	
+	if (hudDir > 0) {
+		hudAccumulator += HUD_SPEED * deltaT;
+	} else if (hudDir < 0) {
+		hudAccumulator -= HUD_SPEED * deltaT;
+	}
+
+	if (Math.abs(hudAccumulator) >= HUD_SPEED) {
+		let add = hudAccumulator > 0 ? HUD_SPEED : -HUD_SPEED;
+		currentPos += add;
+		hudAccumulator += -add;
+	}
+
+	if (currentPos > 600) {
+		currentPos = 600;
+		hudDir = 0;
+		hudAccumulator = 0;
+	} else if (currentPos < HUD_TOP) {
+		currentPos = HUD_TOP;
+		hudDir = 0;
+		hudAccumulator = 0;
+	}
+	
+	hud.style.top = currentPos + 'px';
+}
+
 function drawHUD() {
+	updateHUDTransition();
 	setCanvas(hud, hud.ctx);
 	drawPlayerLives();
 	drawThrustMeter();

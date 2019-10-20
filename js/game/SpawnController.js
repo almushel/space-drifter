@@ -17,6 +17,7 @@ let currentWave = 1,
 let pickUpAccumulator = 0;
 
 function resetGame() {
+	clearHUD();
 	initHUD();
 	titleMusic.stop();
 	musicLoop.play();
@@ -35,7 +36,7 @@ function resetGame() {
 }
 
 function endGame() {
-	clearHUD()
+	transitionHUD(1);
 	musicLoop.stop();
 	updateScoreTable();
 	if (localStorage.sdHighScore == undefined) {
