@@ -29,12 +29,14 @@ function menuControl() {
 					p1.respawn();
 				} else {
 					gameState = gamePaused;
+					gamePauseSFX.play();
 					drawPauseScreen();
 					startTransition(1);
 				}
 				break;
 			case gamePaused:
 				gameState = gameStarted;
+				gamePauseSFX.play();
 				startTransition(-1);
 				break;
 			case gameOver:
@@ -49,7 +51,6 @@ function menuControl() {
 			case titleScreen:
 				resetGame();
 				gameState = gameStarted;
-				startTransition(-1);
 				break;
 			default: 
 				break;

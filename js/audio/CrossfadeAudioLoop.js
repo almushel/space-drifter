@@ -19,7 +19,7 @@ class CrossFadeAudioLoop {
         if (this.firstTrack.paused && this.secondTrack.paused) {
             this.firstTrack.volume = 0;
             if (this.firstTrack.currentTime >= this.loopPoint) {
-                this.firstTrack.currentTime = this.loopPoint - 2;
+                this.firstTrack.currentTime = this.loopPoint - this.fadeDuration * 2;
             }
             this.firstTrack.play();
             this.fade.linearFade(this.firstTrack, 1, 0.1);
@@ -41,7 +41,8 @@ class CrossFadeAudioLoop {
         this.firstTrack.currentTime = 0;
         this.secondTrack.currentTime = 0;
 
-        this.volume = 0;
+        this.firstTrack.volume = 0;
+        this.secondTrack.volume = 0;
     }
 
     initLoop() {
@@ -82,8 +83,8 @@ class CrossFadeAudioLoop {
     }
 
     set volume(vol) {
-        this.firstTrack.volume = vol > 1 ? 1 : vol < 0 ? 0 : vol;
-        this.secondTrack.volume = this.firstTrack.volume;
+        //this.firstTrack.volume = vol > 1 ? 1 : vol < 0 ? 0 : vol;
+        //this.secondTrack.volume = this.firstTrack.volume;
     }
 
     get volume () {

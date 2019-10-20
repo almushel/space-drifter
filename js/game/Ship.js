@@ -18,6 +18,8 @@ class Ship extends WrapPosition {
 		super();
 		this.collisionRadius = SHIP_RADIUS;
 		this.lives = PLAYER_STARTING_LIVES;
+		this.isDead = true;
+		this.spawning = false;
 
 		this.sprite = sprite;
 
@@ -48,19 +50,20 @@ class Ship extends WrapPosition {
 	} // end of reset
 
 	respawn() {
-		startTransition(-1);
-		super.reset(gameCanvas.width / 2, gameCanvas.height / 2);
-		this.ang = -0.5 * Math.PI;
+		if (this.spawning) return; //Don't stack respawns
+
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
 		this.invulnerabilityTime = 180;
 
-		forceCircle(this.x, this.y, canvas.width / 6, 5);
-		explodeAtPoint(this.x, this.y, 0, '#6DC2FF', '#6DC2FF', '#6DC2FF', null, 'circle');
-		let spawnMarker = instantiateParticle(null, 'circle');
-		spawnMarker.reset(this.x, this.y, 0, this.collisionRadius, '#6DC2FF', null, 'circle');
+		this.spawning = true;
+		this.x = canvas.width/2;
+		this.y = canvas.height - 1;
+		this.xv = this.yv = 0;
+		this.z = 0; //Sprite scaling for impression of vertical distance.
+		this.ang = Math.PI * 1.5;
 
-		this.collisionRadius = SHIP_RADIUS*2;
+		playerSpawnSFX.play();
 	}
 
 	collideEnemy(thisEnemy) {
@@ -104,6 +107,9 @@ class Ship extends WrapPosition {
 
 	move() {
 		if (gameState !== gameStarted || this.isDead) {
+			if (this.spawning) {
+				this.swoop();
+			}
 			return;
 		}
 
@@ -147,13 +153,37 @@ class Ship extends WrapPosition {
 		this.updateWeapons();
 	}
 
+	swoop() {
+		this.thrust(this.ang, THRUST_POWER/2, this.rearThrustEmitter);
+		let vert = (canvas.height - this.y) / (canvas.height/2) * (Math.PI/2);
+		this.z = Math.sin(vert);
+		this.collisionRadius = this.z * SHIP_RADIUS * 2;
+		
+		this.x += this.xv * (1.15 - this.z);
+		this.y += this.yv * (1.15 - this.z);
+
+		forceCircle(this.x, this.y, this.z * SHIP_RADIUS * 4, 2);
+
+		//this.y -= 4 * deltaT;
+		if (this.y <= canvas.height/2) {
+			startTransition(-1);
+			this.isDead = false;
+			this.spawning = false;
+			this.z = 1;
+			this.collisionRadius = SHIP_RADIUS * 2;
+			this.xv = this.yv = 0;
+		}
+	}
+
 	thrust(angle, acceleration, emitter) {
-		playerThrustSFX.play();
 		this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
 		this.xv += Math.cos(angle) * (acceleration * deltaT);
 		this.yv += Math.sin(angle) * (acceleration * deltaT);
 
-		emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)
+		if (emitter != null & emitter != undefined) {
+			playerThrustSFX.play();
+			emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)
+		}
 	}
 
 	updateWeapons() {
@@ -271,7 +301,7 @@ class Ship extends WrapPosition {
 	}
 
 	draw() {
-		if (this.isDead && gameState === gameStarted) {
+		if (this.isDead && gameState === gameStarted && !this.spawning) {
 			return;
 		} else if (gameState !== gameStarted && gameState !== gamePaused) {
 			return;
@@ -282,9 +312,18 @@ class Ship extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
+		if (this.z != 1) {
+			ctx.save();
+			ctx.globalAlpha = this.z * 2;
+			ctx.translate(x, y);
+			ctx.scale(this.z, this.z);
+			drawBitmapCenteredWithRotation(this.sprite, 0, 0, this.ang);
+			ctx.restore();
+		} else {
+			drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
+		}
 
-		if (this.collisionRadius > SHIP_RADIUS) {
+		if (this.collisionRadius > SHIP_RADIUS || this.spawning) {
 			let bubble = ctx.createRadialGradient(x, y, this.collisionRadius/2, x, y, this.collisionRadius);
 			bubble.addColorStop(0, 'rgba(0,0,0,0)');
 			bubble.addColorStop(0.9, 'rgba(109, 194, 255, 0.6');
