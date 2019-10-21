@@ -161,17 +161,23 @@ class Ship extends WrapPosition {
 	}
 
 	swoop() {
-		this.thrust(this.ang, THRUST_POWER/2, this.rearThrustEmitter);
+		if (this.z > 0.4 && this.z < 0.9) {
+			this.thrust(this.ang, 0, this.rearThrustEmitter);
+		}
+
+		if (this.z > 0.6) {
+			this.thrust(this.ang - Math.PI/1.25, 0, this.lateralThrustEmitter);
+			this.thrust(this.ang + Math.PI/1.25, 0, this.lateralThrustEmitter);
+		}
+
+		this.y -= (8 - 6 * this.z) * deltaT;
+
 		let vert = (canvas.height - this.y) / (canvas.height/2) * (Math.PI/2);
 		this.z = Math.sin(vert);
 		this.collisionRadius = this.z * SHIP_RADIUS * 2;
-		
-		this.x += this.xv * (2.5 - this.z) * deltaT;
-		this.y += this.yv * (2.5 - this.z) * deltaT;
 
 		forceCircle(this.x, this.y, this.z * SHIP_RADIUS * 3, 0.25);
 
-		//this.y -= 4 * deltaT;
 		if (this.y <= canvas.height/2) {
 			startTransition(-1);
 			transitionHUD(-1);
@@ -190,7 +196,7 @@ class Ship extends WrapPosition {
 
 		if (emitter != null & emitter != undefined) {
 			playerThrustSFX.play();
-			emitter.emitDirection(-Math.cos(angle) * 5, -Math.sin(angle) * 5)
+			emitter.emitDirection(-Math.cos(angle) * 4, -Math.sin(angle) * 4)
 		}
 	}
 

@@ -32,12 +32,14 @@ function menuControl() {
 					gamePauseSFX.play();
 					drawPauseScreen();
 					startTransition(1);
+					transitionHUD(1);
 				}
 				break;
 			case gamePaused:
 				gameState = gameStarted;
 				gamePauseSFX.play();
 				startTransition(-1);
+				transitionHUD(-1);
 				break;
 			case gameOver:
 				titleMusic.play();

@@ -28,7 +28,7 @@ class particleEmitter {
         while(this.counter >= 1) {
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(this.parent.x, this.parent.y, this.colors[0], this.colors[1], this.colors[2]);
-            particle.setVelocity(Math.cos(particle.getAng()) * speed, Math.sin(particle.getAng()) * speed);
+            particle.setVelocity(Math.cos(particle.ang) * speed, Math.sin(particle.ang) * speed);
             this.counter--;
         }
     }
@@ -109,11 +109,11 @@ class particleEmitter {
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
             
-            let coneAng = particle.getAng();
+            let coneAng = particle.ang;
             if (coneAng < minAng || coneAng > maxAng) {
                 let range = maxAng - minAng;
                 coneAng = minAng + Math.random() * range;
-                particle.setAng(coneAng);
+                particle.ang = coneAng;
             }
             
             particle.setVelocity(Math.cos(coneAng) * speed, Math.sin(coneAng) * speed);

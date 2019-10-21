@@ -107,14 +107,6 @@ class Particle extends WrapPosition{
 			this.sprite = sprite;
 		}
 	}
-	
-	getAng() {
-		return this.ang;
-	}
-
-	setAng(newAng) {
-		this.ang = newAng;
-	}
     
     setVelocity(xVel, yVel) {
         this.xv = xVel;

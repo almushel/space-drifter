@@ -45,7 +45,7 @@ function explodeSprite(x, y, chunks, ang) {
 		particle.randomReset(x, y);
 		particle.collisionRadius = radius;
 		particle.lifeLeft = 30;
-		particle.setAng(ang);
+		particle.ang = ang;
 		particle.setVelocity(pxv, pyv);
 	}
 }
