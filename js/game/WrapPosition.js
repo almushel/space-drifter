@@ -70,12 +70,16 @@ class WrapPosition {
 			deltaY = this.y - from.y,
 			deltaAng = Math.atan2(deltaY, deltaX),
 			speed = Math.sqrt(Math.pow(this.xv, 2) + Math.pow(this.yv, 2));
-				
-		this.xv *= 0.5;
-		this.yv *= 0.5;
 
-		this.xv += Math.cos(deltaAng) * (speed*1.5);
-		this.yv += Math.sin(deltaAng) * (speed*1.5);
+		this.xv += Math.cos(deltaAng) * speed;
+		this.yv += Math.sin(deltaAng) * speed;
+
+		deltaAng = Math.atan2(this.yv, this.xv);
+
+		this.ang = deltaAng;
+
+		this.xv = Math.cos(deltaAng) * speed;
+		this.yv = Math.sin(deltaAng) * speed;
 	}
 
 	draw() {

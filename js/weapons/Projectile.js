@@ -35,7 +35,7 @@ class Projectile extends WrapPosition {
 		}
 
 		if (circleIntersect(this.x, this.y, this.collisionRadius, thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
-			if (thisEnemy === this.parent || thisEnemy.invulnerabilityTime > 0) {
+			if (thisEnemy === this.parent) {
 				this.deflect(thisEnemy);
 				return false;
 			}
@@ -49,11 +49,16 @@ class Projectile extends WrapPosition {
 			//Bullets fired from enemies
 			} else if (getEnemyValue(this.parent.constructor.name) > 0) {
 				if (thisEnemy.constructor.name === Ship.name) {
-					this.die();
-					thisEnemy.die();
+					if (thisEnemy.invulnerabilityTime > 0) {
+						this.deflect(thisEnemy);
+					} else {
+						this.die();
+						thisEnemy.die();
+					}
 				} else if (enemyValue > 0) {
 					this.deflect(thisEnemy);
 				}
+			//Projectiles destroy other projectiles
 			} else if (thisEnemy.constructor.name === Projectile.name) {
 				explodeAtPoint(this.x, this.y, 0, this.color, this.color, this.color, null, 'circle');
 				this.die();
