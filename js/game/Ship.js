@@ -69,9 +69,8 @@ class Ship extends WrapPosition {
 	collideEnemy(thisEnemy) {
 		if (this.invulnerabilityTime > 0) {
 			return;
-		} else if (this.collisionRadius > SHIP_RADIUS) {
-			this.collisionRadius -= deltaT;
 		}
+
 		if (super.collide(thisEnemy)) {
 			thisEnemy.die();
 			this.die();
@@ -82,7 +81,6 @@ class Ship extends WrapPosition {
 		this.isDead = true;
 		endChaintimer();
 		screenShake();
-		transitionHUD(1);
 		playerThrustSFX.stop();
 		playerDeathSFX.play();
 
@@ -96,6 +94,7 @@ class Ship extends WrapPosition {
 
 		this.lives--;
 		if (this.lives < 0) {
+			transitionHUD(1);
 			endGame();
 		} else {
 			setCanvas(menu, menu.ctx);
@@ -112,6 +111,13 @@ class Ship extends WrapPosition {
 				this.swoop();
 			}
 			return;
+		}
+
+		if (this.invulnerabilityTime <= 0 && this.collisionRadius > SHIP_RADIUS) {
+			this.collisionRadius -= deltaT;
+			if (this.collisionRadius < SHIP_RADIUS) {
+				this.collisionRadius = SHIP_RADIUS;
+			}
 		}
 
 		//Turning
@@ -160,8 +166,8 @@ class Ship extends WrapPosition {
 		this.z = Math.sin(vert);
 		this.collisionRadius = this.z * SHIP_RADIUS * 2;
 		
-		this.x += this.xv * (1.25 - this.z);
-		this.y += this.yv * (1.25 - this.z);
+		this.x += this.xv * (2.5 - this.z) * deltaT;
+		this.y += this.yv * (2.5 - this.z) * deltaT;
 
 		forceCircle(this.x, this.y, this.z * SHIP_RADIUS * 3, 0.25);
 

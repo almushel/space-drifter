@@ -36,7 +36,6 @@ function resetGame() {
 }
 
 function endGame() {
-	transitionHUD(1);
 	musicLoop.stop();
 	updateScoreTable();
 	if (localStorage.sdHighScore == undefined) {
@@ -49,7 +48,6 @@ function endGame() {
 	gameState = gameOver;
 	drawTitleScreen();
 	startTransition(1);
-	//toggleMenuLayer();
 }
 
 function spawnWave(waveList) {

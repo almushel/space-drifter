@@ -69,10 +69,7 @@ function drawAll() {
 
 	p1.draw();
 
-	if (gameState === gameStarted) {
-		drawHUD();
-	}
-	
+	drawHUD();
 	drawMenus();
 
 }

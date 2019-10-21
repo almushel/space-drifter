@@ -118,13 +118,16 @@ function updateHUDTransition() {
 
 function drawHUD() {
 	updateHUDTransition();
-	setCanvas(hud, hud.ctx);
-	drawPlayerLives();
-	drawThrustMeter();
-	drawWeaponHeat();
-	drawScore();
-	drawActiveWeapon();
-	setCanvas(gameCanvas, gameCtx);
+
+	if (gameState === gameStarted) {
+		setCanvas(hud, hud.ctx);
+		drawPlayerLives();
+		drawThrustMeter();
+		drawWeaponHeat();
+		drawScore();
+		drawActiveWeapon();
+		setCanvas(gameCanvas, gameCtx);
+	}
 }
 
 function drawPlayerLives() {
