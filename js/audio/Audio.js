@@ -1,5 +1,5 @@
 let audioFormat;
-let titleMusic, musicLoop, gamePauseSFX, enemyDeath, playerDeathSFX, playerSpawnSFX,
+let titleMusic, musicLoop, gameOverMusic, gamePauseSFX, enemyDeath, playerDeathSFX, playerSpawnSFX,
 	playerShotSFX, playerLaserSFX, playerMissileSFX, lifeUpSFX, pickUpSFX, turretFireSFX;
 //let audioCtx, musicSource1, musicSource2, gainNode;
 
@@ -21,6 +21,7 @@ function setupAudio() {
 function loadAudioAssets() {
 	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter' + audioFormat, 106.6);
 	titleMusic = new SeamlessAudioLoop('./audio/TitleMusic' + audioFormat, 95.9);
+	gameOverMusic = new AudioOneShot('./audio/GameOverMusic' + audioFormat, 1);
 	gamePauseSFX = new AudioOneShot('./audio/GamePause' + audioFormat, 2);
 	enemyDeath = new AudioOneShot('./audio/EnemyDeath' + audioFormat, 14);
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot' + audioFormat, 4);
@@ -35,7 +36,8 @@ function loadAudioAssets() {
 }
 
 function initAudioVolume() {
-	musicLoop.volume = 0.45;
+	musicLoop.volume = 0.5;
+	gamePauseSFX.volume = 0.8;
 	playerShotSFX.volume = 0.7;
 	playerMissileSFX.volume = 0.4;
 	playerLaserSFX.volume = 0.25;

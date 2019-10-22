@@ -54,7 +54,7 @@ class Ship extends WrapPosition {
 
 		this.thrustEnergy = THRUST_MAX;
 		this.weaponHeat = 0;
-		this.invulnerabilityTime = 180;
+		this.invulnerabilityTime = 120;
 
 		this.spawning = true;
 		this.x = canvas.width/2;

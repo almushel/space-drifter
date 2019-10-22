@@ -37,6 +37,7 @@ function resetGame() {
 
 function endGame() {
 	musicLoop.stop();
+	gameOverMusic.play();
 	updateScoreTable();
 	if (localStorage.sdHighScore == undefined) {
 		localStorage.sdHighScore = 0;
