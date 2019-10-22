@@ -3,6 +3,7 @@ const PARTICLE_MIN_START_RADIUS = 3;
 const PARTICLE_SPEED = 6;
 const PARTICLE_DECAY = .75;
 
+
 class Particle extends WrapPosition{
 	constructor(sprite, shape) {
 		super();

@@ -27,7 +27,6 @@ function resetGame() {
 	newHighScoreIndex = -1;
 
 	allEntities.length = 0;
-	particleList.length = 0;
 	enemyList.length = 0;
 
 	p1.reset();
@@ -277,4 +276,5 @@ function spawnItems(enemy) {
 function spawnDemoShip(){
 	let ds = new DemoShip(400, 300, playerPic, 1, Math.PI/360);
 	allEntities.push(ds);
+	ds.respawn();
 }

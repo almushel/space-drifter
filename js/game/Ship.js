@@ -11,7 +11,7 @@ const HEAT_MAX = 100;
 const THRUST_MAX = 100;
 const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
-const PLAYER_STARTING_LIVES = 3;
+const PLAYER_STARTING_LIVES = 1;
 
 class Ship extends WrapPosition {
 	constructor(sprite) {
@@ -62,6 +62,10 @@ class Ship extends WrapPosition {
 		this.xv = this.yv = 0;
 		this.z = 0; //Sprite scaling for impression of vertical distance.
 		this.ang = Math.PI * 1.5;
+
+		let wink = instantiateParticle(null, 'circle')
+		wink.randomReset(this.x, this.y, 'white', 'white', 'white');
+		wink.xv = wink.yv = 0;
 
 		playerSpawnSFX.play();
 	}

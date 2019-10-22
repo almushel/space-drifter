@@ -20,8 +20,12 @@ class particleEmitter {
         this.offset = offsetDist
     
         this.counter = 0;
+        this.scale = 1;
     }
 
+    setScale(scale) {
+        this.scale = scale;
+    }
 
     emitRandom(speed) {
         this.counter += this.density * deltaT;
@@ -29,6 +33,7 @@ class particleEmitter {
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(this.parent.x, this.parent.y, this.colors[0], this.colors[1], this.colors[2]);
             particle.setVelocity(Math.cos(particle.ang) * speed, Math.sin(particle.ang) * speed);
+            particle.collisionRadius *= this.scale;
             this.counter--;
         }
     }
@@ -45,6 +50,7 @@ class particleEmitter {
         for (let i=0; i < Math.floor(this.counter); i++) {
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
+            particle.collisionRadius *= this.scale;
             particle.setVelocity(xv, yv);
         }
 
@@ -68,6 +74,7 @@ class particleEmitter {
                 
                 let particle = instantiateParticle(this.sprite, this.shape);
                 particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
+                particle.collisionRadius *= this.scale;
                 particle.setVelocity(Math.cos(ang) * speed, Math.sin(ang) * speed);
             }
         }
@@ -91,6 +98,7 @@ class particleEmitter {
             let ang = this.parent.ang + this.angOffset;
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
+            particle.collisionRadius *= this.scale;
             particle.setVelocity(Math.cos(ang) * speed, Math.sin(ang) * speed);
         }
         this.counter -= Math.floor(this.counter);
@@ -108,6 +116,7 @@ class particleEmitter {
         for (let i=0; i < Math.floor(this.counter); i++) {
             let particle = instantiateParticle(this.sprite, this.shape);
             particle.randomReset(relX, relY, this.colors[0], this.colors[1], this.colors[2]);
+            particle.collisionRadius *= this.scale;
             
             let coneAng = particle.ang;
             if (coneAng < minAng || coneAng > maxAng) {

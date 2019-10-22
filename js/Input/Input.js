@@ -51,7 +51,9 @@ function menuControl() {
 				drawTitleScreen();
 				break;
 			case titleScreen:
-				resetGame();
+				//resetGame();
+				if (allEntities[0].despawn != undefined) allEntities[0].despawn();
+				else resetGame();
 				gameState = gameStarted;
 				break;
 			default: 
