@@ -47,6 +47,7 @@ let scoreMetrics = null;
 let multiMetrics = null;
 
 function clearHUD() {
+	lastScore = lastMulti = lastLives = scoreMetrics = multiMetrics = null;
 	setCanvas(hud, hud.ctx);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	setCanvas(gameCanvas, gameCtx);
@@ -61,7 +62,6 @@ function initHUD() {
 	ctx.globalAlpha = 0.6;
 	drawPolygon(100, canvas.height - 30, scoreBG, '#383838', true);
 	drawPolygon(canvas.width / 2, canvas.height - 22, meterBG, '#383838', true);
-	//drawPolygon(canvas.width - 100, canvas.height - 30, weaponBG, '#383838', true);
 	ctx.restore();
 
 	//Text
@@ -76,6 +76,8 @@ function initHUD() {
 	ctx.fillText('Score: ', 8, canvas.height - 8);
 	ctx.textAlign = 'right';
 	ctx.restore();
+	drawScore();
+	drawPlayerLives();
 
 	setCanvas(gameCanvas, gameCtx);
 }
@@ -131,7 +133,7 @@ function drawHUD() {
 }
 
 function drawPlayerLives() {
-	if (lastLives != p1.lives) {
+	if (lastLives !== p1.lives) {
 		ctx.clearRect(canvas.width / 2 - 14, 24, 30, 40);
 		ctx.save();
 		ctx.globalAlpha = 0.6;
@@ -177,8 +179,8 @@ function drawThrustMeter() {
 function drawScore() {
 	updateChainTimer();
 
-	if (lastScore != currentScore) {
-		if (scoreMetrics != null) {
+	if (lastScore !== currentScore) {
+		if (scoreMetrics !== null) {
 			ctx.clearRect(82, canvas.height - 24, Math.round(scoreMetrics.width + 12), 18);
 			ctx.save();
 			ctx.globalAlpha = 0.6;
@@ -198,8 +200,8 @@ function drawScore() {
 		ctx.restore();
 	}
 
-	if (lastMulti != currentMultiplier) {
-		if (multiMetrics != null) {
+	if (lastMulti !== currentMultiplier) {
+		if (multiMetrics !== null) {
 			let rectLeft = 186 - Math.round(multiMetrics.width / 2) - 6;
 			ctx.clearRect(rectLeft, canvas.height - 52, Math.round(multiMetrics.width + 12), 18);
 			ctx.save();
