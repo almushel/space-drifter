@@ -16,6 +16,9 @@ let currentWave = 1,
 
 let pickUpAccumulator = 0;
 
+let spawnZones = [new SpawnZone(0, 0, 390, 290), new SpawnZone(410, 0, 390, 290), 
+				  new SpawnZone(0, 310, 390, 290), new SpawnZone(410, 330, 390, 290)];
+
 function resetGame() {
 	clearHUD();
 	initHUD();
@@ -51,15 +54,23 @@ function endGame() {
 }
 
 function spawnWave(waveList) {
-	let enemiesSpawned = [];
+	let enemiesSpawned = [],
+		zones = spawnZones,
+		zoneIndex = Math.round(Math.random() * (zones.length-1));
+
 	for (let i = 0; i < waveList.length; i++) {
-		let newEnemy = spawnEnemy(waveList[i])
-		let enemyPos = getClearSpawn(newEnemy, enemiesSpawned);
+		console.log(zoneIndex);
+		let newEnemy = spawnEnemy(waveList[i]),
+			enemyPos = getClearSpawn(newEnemy, enemiesSpawned, zones[zoneIndex]);
+		
 		newEnemy.reset(enemyPos.x, enemyPos.y);
 		enemiesSpawned.push(newEnemy);
 
 		let enemyWarp = new SpawnWarp(enemyPos.x, enemyPos.y, newEnemy, ENEMY_WARP_SPEED);
 		allEntities.push(enemyWarp);
+
+		zoneIndex++;
+		if (zoneIndex > zones.length - 1) zoneIndex = 0;
 	}
 }
 
@@ -195,37 +206,36 @@ function forceCircle(x, y, radius, force) {
 	}
 }
 
-function getClearSpawn(spawner, avoidList) {
-	let checkX = 60 + Math.random() * (canvas.width - 120),
-		checkY = 60 + Math.random() * (canvas.height - 120),
+function getClearSpawn(spawner, avoidList, boundary) {
+	let checkCoords = boundary.getRandomPos(spawner.collisionRadius);
 		deltaX = 0,
 		deltaY = 0,
 		deltaAng = null;
 
 	for (let i = 0; i < avoidList.length; i++) {
-		if (circleIntersect(checkX, checkY, spawner.collisionRadius,
+		if (circleIntersect(checkCoords.x, checkCoords.y, spawner.collisionRadius,
 			avoidList[i].x, avoidList[i].y, avoidList[i].collisionRadius)) {
 			
-			deltaX = avoidList[i].x - checkX
-			deltaY = avoidList[i].x - checkX
+			deltaX = avoidList[i].x - checkCoords.x
+			deltaY = avoidList[i].x - checkCoords.x
 			deltaAng = Math.atan2(deltaY, deltaX);
 
-			checkX -= Math.cos(deltaAng) * (spawner.collisionRadius + avoidList[i].collisionRadius);
-			checkY -= Math.cos(deltaAng) * (spawner.collisionRadius + avoidList[i].collisionRadius);
+			checkCoords.x -= Math.cos(deltaAng) * (spawner.collisionRadius + avoidList[i].collisionRadius);
+			checkCoords.y -= Math.cos(deltaAng) * (spawner.collisionRadius + avoidList[i].collisionRadius);
 		}
 	}
 
-	if (circleIntersect(checkX, checkY, spawner.collisionRadius,
+	if (circleIntersect(checkCoords.x, checkCoords.y, spawner.collisionRadius,
 		p1.x, p1.y, p1.collisionRadius)) {
 		
-		deltaX = p1.x - checkX
-		deltaY = p1.x - checkX
+		deltaX = p1.x - checkCoords.x
+		deltaY = p1.x - checkCoords.x
 		deltaAng = Math.atan2(deltaY, deltaX);
 
-		checkX -= Math.cos(deltaAng) * (spawner.collisionRadius + p1.collisionRadius);
-		checkY -= Math.cos(deltaAng) * (spawner.collisionRadius + p1.collisionRadius);
+		checkCoords.x -= Math.cos(deltaAng) * (spawner.collisionRadius + p1.collisionRadius);
+		checkCoords.y -= Math.cos(deltaAng) * (spawner.collisionRadius + p1.collisionRadius);
 	}
-	return { x: checkX, y: checkY };
+	return { x: checkCoords.x, y: checkCoords.y };
 }
 
 function removeDeadEnemies() {
