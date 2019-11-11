@@ -54,17 +54,15 @@ function endChaintimer() {
 }
 
 function updateScoreTable() {
-    var hsTable;
     if (localStorage.sdHighScoreTable == undefined || 
         JSON.parse(localStorage.sdHighScoreTable).length < HIGH_SCORE_TABLE_LENGTH) {
-        hsTable = [];
-        hsTable.length = HIGH_SCORE_TABLE_LENGTH;
-        hsTable.fill(0);
-    } else {
-        hsTable = JSON.parse(localStorage.sdHighScoreTable);
+
+        resetScoreTable();
     }
+        
+    let hsTable = JSON.parse(localStorage.sdHighScoreTable);
     
-    for (var h=0; h<hsTable.length; h++) {
+    for (let h=0; h<hsTable.length; h++) {
         if (currentScore > hsTable[h]) {
             hsTable.splice(h, 0, currentScore);
             hsTable.pop();
@@ -72,5 +70,13 @@ function updateScoreTable() {
             break;
         }
     }
+    localStorage.sdHighScoreTable = JSON.stringify(hsTable);
+}
+
+function resetScoreTable() {
+    newHighScoreIndex = -1;
+    let hsTable = [];
+    hsTable.length = HIGH_SCORE_TABLE_LENGTH;
+    hsTable.fill(0);
     localStorage.sdHighScoreTable = JSON.stringify(hsTable);
 }

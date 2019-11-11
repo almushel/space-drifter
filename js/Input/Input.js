@@ -1,4 +1,5 @@
-let menuConfirm = new Control(KEY_ENTER, PAD_START, null, null);
+let menuConfirm = new Control(KEY_ENTER, PAD_START, null, null),
+	scoreClear = new Control(KEY_LETTER_C, PAD_BACK, null, null);
 
 function initInput() {
 	keysHeld.length = 222;
@@ -51,7 +52,6 @@ function menuControl() {
 				drawTitleScreen();
 				break;
 			case titleScreen:
-				//resetGame();
 				if (allEntities[0].despawn != undefined) allEntities[0].despawn();
 				else resetGame();
 				gameState = gameStarted;
@@ -59,5 +59,12 @@ function menuControl() {
 			default: 
 				break;
 		}
-	} 
+	}
+
+	if (gameState === highScores) {
+		if (scoreClear.isReleased()) {
+			resetScoreTable();
+			drawTitleScreen();
+		}
+	}
 }

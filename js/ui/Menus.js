@@ -94,30 +94,6 @@ function toggleMenuLayer() {
 	menu.style.display = menu.style.display === 'none' ? 'initial' : 'none';
 }
 
-function drawTitleShip(x, y) {
-	ctx.lineWidth = 4;
-	colorArc(canvas.width / 2, canvas.height + canvas.height / 3, canvas.width / 1.1, 0, Math.PI * 2, false, 'orange');
-	drawLine(0, y + 12, x, y + 12, 2, 'white');
-	drawLine(0, y + 14, x, y + 14, 3, '#6DC2FF');
-	drawLine(0, y + 16, x, y + 16, 2, 'white');
-
-	drawBitmapCenteredWithRotation(playerPic, x + 40, y + 14, 0);
-
-	ctx.save();
-	ctx.lineWidth = 2;
-	ctx.strokeStyle = 'white'
-	colorCircle(x, y + 14, canvas.width / 35, '#6DC2FF')
-	ctx.stroke();
-	colorCircle(x + canvas.width / 60, y + 14, canvas.width / 70, 'white')
-	ctx.lineWidth = 3;
-	colorArc(-300, canvas.height / 2, 300 + x + canvas.width / 60, Math.PI * 1.8, Math.PI / 6, false, 'white');
-
-	let lineAng = Math.PI / 1.5;
-	drawLine(x + canvas.width / 60, y + 14, x + Math.cos(lineAng) * 400, (y + 14) + Math.sin(lineAng) * 400, 3, 'white');
-	lineAng += Math.PI / 1.5;
-	drawLine(x + canvas.width / 60, y + 14, x + Math.cos(lineAng) * 400, (y + 14) + Math.sin(lineAng) * 400, 3, 'white');
-}
-
 function drawTitleControls(x, y) {
 	ctx.globalAlpha = 0.5;
 	colorRect(x - 130, y + 75, 260, 145, 'dimgrey');
@@ -183,6 +159,7 @@ function drawScoreTable() {
 	}
 
 	drawPressStart(xOffset, 325, 'return to title screen');
+	drawClearScore(xOffset, 425, 'to reset high scores');
 
 	ctx.translate(0, -yOffset);
 }
@@ -191,7 +168,16 @@ function drawPressStart(x, y, action) {
 	let confirmControl = controllerEnabled ? 'START' : 'ENTER';
 	ctx.save();
 	ctx.shadowBlur = 10;
-	ctx.shadowColor = 'orange';
+	ctx.shadowColor = 'red';
 	colorAlignedText(x, y, 'center', 'bold 20px Orbitron', 'orange', 'Press ' + confirmControl + ' to ' + action);
+	ctx.restore();
+}
+
+function drawClearScore(x, y, action) {
+	let confirmControl = controllerEnabled ? 'BACK' : 'C';
+	ctx.save();
+	ctx.shadowBlur = 10;
+	ctx.shadowColor = 'red';
+	colorAlignedText(x, y, 'center', 'bold 15px Orbitron', 'red', 'Press ' + confirmControl + ' to ' + action);
 	ctx.restore();
 }

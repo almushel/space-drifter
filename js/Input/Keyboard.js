@@ -9,6 +9,7 @@ const KEY_LETTER_W = 87;
 const KEY_LETTER_A = 65;
 const KEY_LETTER_S = 83;
 const KEY_LETTER_D = 68;
+const KEY_LETTER_C = 67;
 const KEY_ENTER = 13;
 const KEY_CTRL = 17;
 const KEY_SPACEBAR = 32;
