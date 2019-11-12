@@ -91,8 +91,15 @@ class Drifter extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		//drawPolygon(x, y, this.polyPoints, 'dimgrey', true);
-		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
+		if (this.z !== 1) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(this.z, this.z);
+            drawBitmapCenteredWithRotation(this.sprite, 0, 0, this.ang);
+            ctx.restore();
+        } else {
+            drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
+        }
 	}
 
 	static divide(whichDrifter) {

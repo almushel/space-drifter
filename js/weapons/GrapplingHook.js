@@ -69,6 +69,10 @@ class GrapplingHook extends WrapPosition {
 			deltaY = this.parent.y - this.y,
 			deltaAng = Math.atan2(deltaY, deltaX);
 
+		if (this.despawning) {
+				this.deswoop();
+			}
+
 		if (this.target != null) {
 			if (this.target.isDead || this.target.x < this.target.collisionRadius / 2 || this.target.x > gameCanvas.wdth - this.target.collisionRadius / 2 ||
 				this.target.y < this.target.collisionRadius / 2 || this.target.y > gameCanvas.width - this.target.collisionRadius / 2) {
@@ -146,6 +150,9 @@ class GrapplingHook extends WrapPosition {
 	drawSprite(x, y) {
 		ctx.save();
 		ctx.translate(x, y);
+		if (this.z != 1) {
+			ctx.scale(this.z, this.z);
+		}
 		ctx.rotate(this.ang);
 		drawBitmapCenteredWithRotation(this.sprite, 0, 0, 0);
 		ctx.restore();

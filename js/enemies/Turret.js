@@ -136,27 +136,38 @@ class Turret extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
+		ctx.translate(x, y);
+		if (this.z != 1) {
+			ctx.save();
+			ctx.scale(this.z, this.z);
+		}
+
 		let cannonOffsetX = -(Math.cos(this.ang) * TURRET_RADIUS * 2) + Math.cos(this.ang) * (TURRET_RADIUS * this.fireOffset),
 			cannonOffsetY = -(Math.sin(this.ang) * TURRET_RADIUS * 2) + Math.sin(this.ang) * (TURRET_RADIUS * this.fireOffset),
 			qRad = TURRET_RADIUS / 5;
 
-		drawBitmapCenteredWithRotation(turretBasePic, x, y, 0);
+		drawBitmapCenteredWithRotation(turretBasePic, 0, 0, 0);
 
 		let cW = turretCannonPic.width,
 			cH = turretCannonPic.height;
 
 		//Right side
 		ctx.save();
-		ctx.translate(x + cannonOffsetX, y + cannonOffsetY);
+		ctx.translate(cannonOffsetX, cannonOffsetY);
 		ctx.rotate(this.ang);
 		ctx.drawImage(turretCannonPic, 0, 0, cW, cH / 2, -cW / 2, -cH / 4 + qRad * this.fireOffset, cW, cH / 2)
 		ctx.restore();
 
 		//Left side
 		ctx.save();
-		ctx.translate(x + cannonOffsetX, y + cannonOffsetY);
+		ctx.translate(cannonOffsetX, cannonOffsetY);
 		ctx.rotate(this.ang);
 		ctx.drawImage(turretCannonPic, 0, cH / 2 + 1, cW, cH / 2, -cW / 2, -cH / 4 - qRad * this.fireOffset, cW, cH / 2)
 		ctx.restore();
+
+		if (this.z != 1) {
+			ctx.restore();
+		}
+		ctx.translate(-x, -y);
 	}
 }

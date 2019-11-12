@@ -39,9 +39,7 @@ class DemoShip extends WrapPosition {
     }
 
     move() {
-        if (this.despawning) {
-            this.deswoop();
-        } else {
+        if (!this.despawning) {
             this.swoop();
         }
 
@@ -91,7 +89,6 @@ class DemoShip extends WrapPosition {
             wink.xv = wink.yv = 0;
             this.isDead = true;
             this.z = 0;
-            resetGame();
         }
     }
 

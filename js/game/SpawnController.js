@@ -10,8 +10,8 @@ const ITEM_ACCUMLATE_RATE = 1;
 const enemyList = [];
 const enemyPool = [];
 
-let currentWave = 1,
-	pointMax = 1,
+let currentWave = 0,
+	pointMax = 0,
 	spawnFinished = false;
 
 let pickUpAccumulator = 0;
@@ -24,17 +24,17 @@ function resetGame() {
 	initHUD();
 	titleMusic.stop();
 	musicLoop.play();
-	currentWave = 1;
-	pointMax = 1;
+	currentWave = 0;
+	pointMax = 0;
 	currentScore = 0;
 	newHighScoreIndex = -1;
 
-	allEntities.length = 0;
-	enemyList.length = 0;
+	for (let i = 0; i< allEntities.length; i++) {
+		if (allEntities[0].despawn != undefined) allEntities[i].despawn();
+	}
 
 	p1.reset();
-	spawnFinished = false;
-	spawnWave(generateWave(currentWave, pointMax));
+	spawnFinished = true;
 }
 
 function endGame() {
@@ -240,14 +240,16 @@ function getClearSpawn(spawner, avoidList, boundary) {
 function removeDeadEnemies() {
 	for (let i = enemyList.length - 1; i >= 0; i--) {
 		if (enemyList[i].isDead) {
-			enemyDeath.play();
-			screenShake();
+			if (!enemyList[i].despawning) { //Don't explode on despawn
+				enemyDeath.play();
+				screenShake();
+	
+				spawnItems(enemyList[i]);
+				explodeAtPoint(enemyList[i].x, enemyList[i].y, 1, 'white', 'white', 'white', null, 'circle');
+				let splodeOrigin = instantiateParticle(null, 'circle');
+				splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius / 2, 'orange', null, 'circle');
+			}
 
-			spawnItems(enemyList[i]);
-			explodeAtPoint(enemyList[i].x, enemyList[i].y, 1, 'white', 'white', 'white', null, 'circle');
-			let splodeOrigin = instantiateParticle(null, 'circle');
-			splodeOrigin.reset(enemyList[i].x, enemyList[i].y, 0, enemyList[i].collisionRadius / 2, 'orange', null, 'circle');
-			
 			enemyPool.push(enemyList[i]);
 			enemyList.splice(i, 1);
 		}

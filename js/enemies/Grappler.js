@@ -16,6 +16,11 @@ class Grappler extends WrapPosition {
 		this.gHook.reset();
 	}
 
+	despawn() {
+		this.despawning = true;
+		this.gHook.despawn();
+	}
+
 	move() {
 		this.xv *= 1 - GRAPPLER_SPACE_FRICTION * deltaT;
 		this.yv *= 1 - GRAPPLER_SPACE_FRICTION * deltaT;
@@ -64,6 +69,14 @@ class Grappler extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
+		if (this.z !== 1) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(this.z, this.z);
+            drawBitmapCenteredWithRotation(this.sprite, 0, 0, this.ang);
+            ctx.restore();
+        } else {
+            drawBitmapCenteredWithRotation(this.sprite, x, y, this.ang);
+        }
 	}
 }

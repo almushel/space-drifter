@@ -2,10 +2,12 @@
 class WrapPosition {
 
 	constructor() {
+		this.z = 1;
 		this.mass = 1;
 		this.collisionRadius = 20; 
 		this.isDead = false;
 		this.invulnerabilityTime = 0;
+		this.despawning = false;
 	}
 	
 	reset(x, y) {
@@ -13,9 +15,15 @@ class WrapPosition {
 		this.yv = 0;
 		this.x = x;
 		this.y = y;
+		this.z = 1;
+		this.despawning = false;
 		this.isDead = false;
 		this.invulnerabilityTime = 6;
 	} // end of reset
+
+	despawn() {
+		this.despawning = true;
+	}
 	  
 	handleScreenWrap() {
 		if(this.y > canvas.height){
@@ -33,6 +41,10 @@ class WrapPosition {
 	}
 	  
 	move() {
+		if (this.despawning) {
+			this.deswoop();
+		}
+
 		this.x += this.xv * deltaT;
 		this.y += this.yv * deltaT;
 
@@ -42,6 +54,17 @@ class WrapPosition {
 				
 		this.handleScreenWrap();
 	}
+
+	deswoop() {
+        this.z -= 0.04 * deltaT;
+        if (this.z <= 0) {
+            let wink = instantiateParticle(null, 'circle')
+            wink.randomReset(this.x, this.y, 'white', 'white', 'white');
+            wink.xv = wink.yv = 0;
+            this.isDead = true;
+            this.z = 0;
+        }
+    }
 
 	collide(whichEntity) {
 		if (this.isDead || whichEntity.isDead || whichEntity.mass <= 0 ||
