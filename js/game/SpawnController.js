@@ -59,7 +59,6 @@ function spawnWave(waveList) {
 		zoneIndex = Math.round(Math.random() * (zones.length-1));
 
 	for (let i = 0; i < waveList.length; i++) {
-		console.log(zoneIndex);
 		let newEnemy = spawnEnemy(waveList[i]),
 			enemyPos = getClearSpawn(newEnemy, enemiesSpawned, zones[zoneIndex]);
 		

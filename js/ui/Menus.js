@@ -159,9 +159,10 @@ function drawScoreTable() {
 	}
 
 	drawPressStart(xOffset, 325, 'return to title screen');
-	drawClearScore(xOffset, 425, 'to reset high scores');
 
 	ctx.translate(0, -yOffset);
+
+	drawClearScore(10, canvas.height - 12, 'clear high scores');
 }
 
 function drawPressStart(x, y, action) {
@@ -177,7 +178,7 @@ function drawClearScore(x, y, action) {
 	let confirmControl = controllerEnabled ? 'BACK' : 'C';
 	ctx.save();
 	ctx.shadowBlur = 10;
-	ctx.shadowColor = 'red';
-	colorAlignedText(x, y, 'center', 'bold 15px Orbitron', 'red', 'Press ' + confirmControl + ' to ' + action);
+	ctx.shadowColor = 'black';
+	colorAlignedText(x, y, 'left', 'bold 15px Orbitron', 'red', 'Press ' + confirmControl + ' to ' + action);
 	ctx.restore();
 }
