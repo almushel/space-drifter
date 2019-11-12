@@ -275,12 +275,18 @@ function spawnItems(enemy) {
 		} else {
 			pickup = new Item(enemy.x, enemy.y, 'Laser');
 		} 
-		// else {
-		// 	pickup = new Item(enemy.x, enemy.y, 'Life Up');
-		// }
+
 		allEntities.push(pickup);
 		pickUpAccumulator = 0;
 	}
+}
+
+function spawnLifeUp() {
+	let x = Math.random() * (gameCanvas.width/2),
+		y = Math.random() * (gameCanvas.height/2),
+		pickup = new Item(x, y, 'Life Up');
+	
+	allEntities.push(pickup);
 }
 
 function spawnDemoShip(){

@@ -1,6 +1,7 @@
 const SCORE_CHAIN_TIME = 5;
 const SCORE_MULTI_MILESTONES = [10, 25, 50, 100]
 const HIGH_SCORE_TABLE_LENGTH = 10;
+const LIFE_UP_MILESTONE = 5000;
 
 let currentScore = 0,
     currentChain = 0,
@@ -16,7 +17,11 @@ function updateScore(baseValue) {
         currentChain++;
         updateMultiplier();
     }
-    currentScore += Math.round(baseValue * 100 * currentMultiplier);
+    let addScore = currentScore + Math.round(baseValue * 100 * currentMultiplier);
+    if (Math.floor(addScore / LIFE_UP_MILESTONE) > Math.floor(currentScore / LIFE_UP_MILESTONE)) {
+        spawnLifeUp();
+    }
+    currentScore = addScore;
     startChainTimer();
 }
 
