@@ -16,7 +16,8 @@ const PLAYER_STARTING_LIVES = 1;
 class Ship extends WrapPosition {
 	constructor(sprite) {
 		super();
-		this.collisionRadius = SHIP_RADIUS;
+		this.z = 0;
+		this.collisionRadius = 0;
 		this.lives = PLAYER_STARTING_LIVES;
 		this.isDead = true;
 		this.spawning = false;
