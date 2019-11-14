@@ -83,7 +83,7 @@ class Missile extends Projectile {
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.rotate(this.ang);
-		ctx.drawImage(this.sprite, -this.sprite.width + this.collisionRadius, -this.sprite.width/2-1);
+		ctx.drawImage(this.sprite, -this.sprite.width + this.collisionRadius, -this.sprite.height/2);
 		ctx.restore();
 	}
 }

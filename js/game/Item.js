@@ -17,6 +17,7 @@ class Item extends WrapPosition {
 		this.mass = 0;
 		this.collisionRadius = 15;
 		this.drawRadius = 0;
+		this.drawDiameter = 0;
 		this.spawning = true;
 		this.activated = false;
 		this.duration = this.type == 'Life Up' ? 0 : 600;
@@ -38,12 +39,14 @@ class Item extends WrapPosition {
 			this.drawRadius += ITEM_EXPANSION_RATE * deltaT;
 			if (this.drawRadius >= this.collisionRadius) {
 				this.drawRadius = this.collisionRadius;
+				this.drawDiameter = this.drawRadius * 2;
 				this.spawning = false;
 			}
 			return;
 		} else if (this.activated) {
 			if (this.drawRadius > 0) {
 				this.drawRadius -= ITEM_SHRINK_RATE * deltaT;
+				this.drawDiameter = this.drawRadius * 2;
 			} else {
 				this.isDead = true;
 			}
@@ -110,12 +113,13 @@ class Item extends WrapPosition {
 			case "Life Up":
 				ctx.translate(x, y);
 				ctx.rotate(this.drawAng);
-				ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, -this.drawRadius, -this.drawRadius, this.drawRadius * 2, this.drawRadius * 2)
+				ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, -this.drawRadius, -this.drawRadius, this.drawDiameter, this.drawDiameter);
 				break;
 			case "Missile":
+				let mRatio = missilePic.height / missilePic.width;
 				ctx.translate(x, y);
 				ctx.rotate(this.drawAng);
-				ctx.drawImage(missilePic, 0, 0, missilePic.width, missilePic.height, -this.drawRadius, -this.drawRadius, this.drawRadius * 2, this.drawRadius * 2)
+				ctx.drawImage(missilePic, 0, 0, missilePic.width, missilePic.height, -this.drawRadius, -this.drawRadius * mRatio, this.drawDiameter, this.drawDiameter * mRatio);
 				break;
 			case "Laser":
 				ctx.translate(x, y);

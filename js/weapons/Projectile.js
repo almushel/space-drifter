@@ -10,6 +10,7 @@ class Projectile extends WrapPosition {
 		this.ang = 0;
 		this.color = color;
 		this.parent = null;
+		this.sprite = this.createSprite();
 	}
 
 	isReadyToFire() {
@@ -69,6 +70,24 @@ class Projectile extends WrapPosition {
 		}
 	}
 
+	createSprite() {
+        let pCanvas = document.createElement('canvas');
+		pCanvas.ctx = pCanvas.getContext('2d');
+		pCanvas.height = this.collisionRadius * 4;
+        pCanvas.width = this.collisionRadius * 4;
+        
+        let x = pCanvas.width - this.collisionRadius * 2,
+            y = pCanvas.height - this.collisionRadius * 2;
+
+        setCanvas(pCanvas, pCanvas.ctx);
+		ctx.shadowColor = this.color;
+		ctx.shadowBlur = 4;
+		colorCircle(x, y, this.collisionRadius, this.color);
+        setCanvas(gameCanvas, gameCtx);
+
+        return pCanvas;
+    }
+
 	die() {
 		this.isDead = true;
 	}
@@ -87,11 +106,11 @@ class Projectile extends WrapPosition {
 
 	drawSprite(x, y) {
 		if (this.isDead == false) {
-			ctx.save();
-            ctx.shadowColor = this.color;
-            ctx.shadowBlur = 4;
-			colorCircle(x, y, this.collisionRadius, this.color);
-			ctx.restore();
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(this.ang);
+            ctx.drawImage(this.sprite, -this.sprite.width/2, -this.sprite.height/2);
+            ctx.restore();
 		}
 	}
 
