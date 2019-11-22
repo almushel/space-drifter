@@ -151,18 +151,13 @@ class Turret extends WrapPosition {
 		let cW = turretCannonPic.width,
 			cH = turretCannonPic.height;
 
+		ctx.save();
+		ctx.translate(cannonOffsetX, cannonOffsetY);
+		ctx.rotate(this.ang);
 		//Right side
-		ctx.save();
-		ctx.translate(cannonOffsetX, cannonOffsetY);
-		ctx.rotate(this.ang);
-		ctx.drawImage(turretCannonPic, 0, 0, cW, cH / 2, -cW / 2, -cH / 4 + qRad * this.fireOffset, cW, cH / 2)
-		ctx.restore();
-
+		ctx.drawImage(turretCannonPic, 0, 0, cW, cH / 2, -cW / 2, cH / 2.5 + qRad * this.fireOffset, cW, -cH / 2)
 		//Left side
-		ctx.save();
-		ctx.translate(cannonOffsetX, cannonOffsetY);
-		ctx.rotate(this.ang);
-		ctx.drawImage(turretCannonPic, 0, cH / 2 + 1, cW, cH / 2, -cW / 2, -cH / 4 - qRad * this.fireOffset, cW, cH / 2)
+		ctx.drawImage(turretCannonPic, 0, cH / 2 + 1, cW, cH / 2, -cW / 2, -cH / 2.5 - qRad * this.fireOffset, cW, cH / 2)
 		ctx.restore();
 
 		if (this.z != 1) {
