@@ -141,13 +141,16 @@ function drawPlayerLives() {
 		ctx.restore();
 
 		drawPolygon(canvas.width / 2 + 1, canvas.height - 20, [{ x: 0, y: -20 }, { x: 13, y: 20 }, { x: -13, y: 20 }], '#6DC2FF', true);
+		let wScale = playerPic.width / 1.7,
+			hRatio = playerPic.height / playerPic.width,
+			hScale = wScale * hRatio;
 		ctx.save();
 		ctx.shadowBlur = 2;
 		ctx.shadowColor = 'black';
 		ctx.save();
-		ctx.translate(canvas.width / 2 - 15.5, canvas.height + 1);
+		ctx.translate(canvas.width / 2 - (hScale / 2) + 1, canvas.height + 1);
 		ctx.rotate(-Math.PI / 2);
-		ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, 33, 33)
+		ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, 0, 0, wScale, hScale);
 		ctx.restore();
 		ctx.save();
 		ctx.font = '15px Orbitron';
