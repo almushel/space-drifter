@@ -34,6 +34,10 @@ var lastPadUpdate = null;
 window.addEventListener('gamepadconnected', function(e){
     controllerEnabled = true;
     lastPadUpdate = e.gamepad.timestamp;
+    //Refresh title screen to show gamepad controls
+    if (gameState === titleScreen) {
+        drawTitleScreen();
+    }
 })
 
 window.addEventListener('gamepaddisconnected', function(e){
