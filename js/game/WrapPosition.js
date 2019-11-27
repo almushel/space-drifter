@@ -18,7 +18,7 @@ class WrapPosition {
 		this.z = 1;
 		this.despawning = false;
 		this.isDead = false;
-		this.invulnerabilityTime = 6;
+		this.invulnerabilityTime = 10;
 	} // end of reset
 
 	despawn() {

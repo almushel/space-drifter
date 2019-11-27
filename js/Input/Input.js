@@ -65,6 +65,7 @@ function menuControl() {
 
 	if (gameState === highScores) {
 		if (scoreClear.isReleased()) {
+			menuConfirmSFX.play();
 			resetScoreTable();
 			drawTitleScreen();
 		}

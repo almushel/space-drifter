@@ -73,8 +73,6 @@ function drawTitleScreen() {
 	} else {
 		let yOffset = canvas.height / 2.5,
 			xOffset = canvas.width / 1.25;
-		
-		//drawTitleShip(xOffset, yOffset);
 
 		xOffset = canvas.width / 2;
 
@@ -133,7 +131,12 @@ function drawGameOver() {
 	let yOffset = canvas.height / 2,
 		xOffset = canvas.width / 2;
 
-	colorAlignedText(xOffset, yOffset * 0.5, 'center', '50px Orbitron', 'orange', 'GAME OVER');
+	ctx.save();
+	ctx.shadowBlur = 10;
+	ctx.shadowColor = 'red';
+	colorAlignedText(xOffset, yOffset * 0.45, 'center', '50px Orbitron', 'orange', 'GAME OVER');
+	ctx.restore();
+	colorAlignedText(xOffset, yOffset * 0.7, 'center', 'bold 30px Orbitron', 'white', 'Waves survived: ' + (currentWave - 1));
 	drawLine(0, yOffset, canvas.width, yOffset, 2, 'white');
 	colorAlignedText(xOffset, yOffset * 1.5, 'center', 'bold 30px Orbitron', 'white', 'Final Score: ' + currentScore);
 	drawPressStart(xOffset, yOffset * 1.75, 'view high scores')

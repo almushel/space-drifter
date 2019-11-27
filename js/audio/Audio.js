@@ -23,7 +23,7 @@ function loadAudioAssets() {
 	titleMusic = new SeamlessAudioLoop('./audio/TitleMusic' + audioFormat, 95.9);
 	gameOverMusic = new AudioOneShot('./audio/GameOverMusic' + audioFormat, 1);
 	gamePauseSFX = new AudioOneShot('./audio/GamePause' + audioFormat, 2);
-	menuConfirmSFX = new AudioOneShot('./audio/MenuConfirm' + audioFormat, 2);
+	menuConfirmSFX = new AudioOneShot('./audio/MenuConfirm' + audioFormat, 6);
 	enemyDeath = new AudioOneShot('./audio/EnemyDeath' + audioFormat, 14);
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot' + audioFormat, 4);
 	playerLaserSFX = new AudioOneShot('./audio/PlayerLaser' + audioFormat, 6);
