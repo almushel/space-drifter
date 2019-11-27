@@ -30,6 +30,7 @@ function explodeAtPoint(splodeX, splodeY, force, color1, color2, color3, sprite,
 
 function explodeSprite(x, y, chunks, ang) {
 	let angDiv = (Math.PI * 2) / chunks.length,
+		randomDeviation = angDiv * 1.8;
 		radius = (chunks[0].width + chunks[0].height) / 2,
 		cHalf = Math.floor(chunks.length / 2);
 
@@ -39,6 +40,7 @@ function explodeSprite(x, y, chunks, ang) {
 			colOffset = c > cHalf ? 1 : -1,
 			multiple = c > cHalf ? c - cHalf : c,
 			pAng = ang + (Math.PI * 1.5) + (angDiv * multiple * colOffset),
+			pAng += randomDeviation / 2 - (Math.random() * randomDeviation);
 			pxv = Math.cos(pAng) * 1.5,
 			pyv = Math.sin(pAng) * 1.5;
 
