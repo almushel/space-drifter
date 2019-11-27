@@ -33,7 +33,6 @@ function resetGame() {
 		if (allEntities[0].despawn != undefined) allEntities[i].despawn();
 	}
 
-	p1.reset();
 	spawnFinished = true;
 }
 

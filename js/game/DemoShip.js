@@ -80,16 +80,4 @@ class DemoShip extends WrapPosition {
 		this.z = vert;
 		this.collisionRadius = this.z * SHIP_RADIUS * 2;
 	}
-
-    deswoop() {
-        this.z -= 0.02 * deltaT;
-        if (this.z <= 0) {
-            let wink = instantiateParticle(null, 'circle')
-            wink.randomReset(this.x, this.y, 'white', 'white', 'white');
-            wink.xv = wink.yv = 0;
-            this.isDead = true;
-            this.z = 0;
-        }
-    }
-
 }

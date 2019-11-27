@@ -56,13 +56,14 @@ class WrapPosition {
 	}
 
 	deswoop() {
-        this.z -= 0.04 * deltaT;
+        this.z -= 0.03 * deltaT;
         if (this.z <= 0) {
             let wink = instantiateParticle(null, 'circle')
             wink.randomReset(this.x, this.y, 'white', 'white', 'white');
             wink.xv = wink.yv = 0;
             this.isDead = true;
-            this.z = 0;
+			this.z = 0;
+			p1.reset();
         }
     }
 
