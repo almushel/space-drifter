@@ -239,7 +239,10 @@ class Ship extends WrapPosition {
 		this.weaponHeat += 20;
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 
+		
 		playerShotSFX.play();
+		
+		this.muzzleFlare(this.x + Math.cos(this.ang) * 20, this.y + Math.sin(this.ang) * 20);
 		let newShot = new Projectile(PLAYER_SHOT_SPEED, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE);
 		newShot.shootFrom(this);
 		allEntities.push(newShot);
@@ -300,6 +303,13 @@ class Ship extends WrapPosition {
 		setTimeout(function (self) { self.canShoot = true }, 800, this);
 	}
 
+	muzzleFlare(x, y) {
+		let mFlare = instantiateParticle(null, 'circle');
+        mFlare.randomReset(x, y, '#6DC2FF', '#6DC2FF', '#6DC2FF');
+		mFlare.xv = this.xv;
+		mFlare.yv = this.yv;
+	}
+
 	depleteAmmo(amount) {
 		this.ammo -= amount;
 		if (this.ammo <= 0) {
@@ -332,7 +342,7 @@ class Ship extends WrapPosition {
 
 	drawSprite(x, y) {
 		if (!this.canShoot) {
-			colorCircle(x + Math.cos(this.ang) * 20, y + Math.sin(this.ang) * 20, PLAYER_SHOT_RADIUS, 'gold');
+			//colorCircle(x + Math.cos(this.ang) * 20, y + Math.sin(this.ang) * 20, PLAYER_SHOT_RADIUS, 'gold');
 		}
 		
 		if (this.z != 1) {
