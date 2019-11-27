@@ -1,5 +1,5 @@
 let audioFormat;
-let titleMusic, musicLoop, gameOverMusic, gamePauseSFX, enemyDeath, playerDeathSFX, playerSpawnSFX,
+let titleMusic, musicLoop, gameOverMusic, gamePauseSFX, menuConfirmSFX, enemyDeath, playerDeathSFX, playerSpawnSFX,
 	playerShotSFX, playerLaserSFX, playerMissileSFX, lifeUpSFX, pickUpSFX, turretFireSFX, grapplerFireSFX, gHookImpact;
 //let audioCtx, musicSource1, musicSource2, gainNode;
 
@@ -23,6 +23,7 @@ function loadAudioAssets() {
 	titleMusic = new SeamlessAudioLoop('./audio/TitleMusic' + audioFormat, 95.9);
 	gameOverMusic = new AudioOneShot('./audio/GameOverMusic' + audioFormat, 1);
 	gamePauseSFX = new AudioOneShot('./audio/GamePause' + audioFormat, 2);
+	menuConfirmSFX = new AudioOneShot('./audio/MenuConfirm' + audioFormat, 2);
 	enemyDeath = new AudioOneShot('./audio/EnemyDeath' + audioFormat, 14);
 	playerShotSFX = new AudioOneShot('./audio/PlayerShot' + audioFormat, 4);
 	playerLaserSFX = new AudioOneShot('./audio/PlayerLaser' + audioFormat, 6);
@@ -42,6 +43,7 @@ function initAudioVolume() {
 	grapplerFireSFX.volume = 0.8;
 	musicLoop.volume = 0.5;
 	gamePauseSFX.volume = 0.8;
+	menuConfirmSFX.volume = 0.7;
 	playerShotSFX.volume = 0.7;
 	playerMissileSFX.volume = 0.4;
 	playerLaserSFX.volume = 0.25;

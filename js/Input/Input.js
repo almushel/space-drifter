@@ -43,15 +43,18 @@ function menuControl() {
 				transitionHUD(-1);
 				break;
 			case gameOver:
+				menuConfirmSFX.play();
 				titleMusic.play();
 				gameState = highScores;
 				drawTitleScreen();
 				break;
 			case highScores:
+				menuConfirmSFX.play();
 				gameState = titleScreen;
 				drawTitleScreen();
 				break;
 			case titleScreen:
+				menuConfirmSFX.play();
 				resetGame();
 				gameState = gameStarted;
 				break;
