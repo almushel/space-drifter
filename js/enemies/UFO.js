@@ -64,22 +64,22 @@ class UFO extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		ctx.save();
-		ctx.globalAlpha = 0.3;
-		ctx.shadowBlur = 8;
-		ctx.shadowColor = '#9647FF';
-		colorCircle(x, y + 6, this.collisionRadius * this.z, '#9647FF');
-		ctx.restore();
-
 		if (this.z != 1) {
 			ctx.save();
 			ctx.translate(x, y);
-			ctx.scale(this.z, this.z);
-			drawBitmapCenteredWithRotation(this.sprite, 0, 0, 0);
-			ctx.restore();
-		} else {
-			drawBitmapCenteredWithRotation(this.sprite, Math.floor(x), Math.floor(y), 0);
-		}
+			ctx.scale(this.z, this.z);	
+		} 
+
+		ctx.save();
+		ctx.globalAlpha = 0.7;
+		ctx.shadowBlur = 8;
+		ctx.shadowColor = '#9647FF';
+		//colorCircle(x, y + 6, this.collisionRadius * this.z, '#9647FF');
+		
+		drawBitmapCenteredWithRotation(this.sprite, Math.floor(x), Math.floor(y), 0);
+		ctx.restore();
+
+		if (this.z != 1) ctx.restore();
 	}
 
 } // end of class

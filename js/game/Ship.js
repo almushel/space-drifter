@@ -11,7 +11,7 @@ const HEAT_MAX = 100;
 const THRUST_MAX = 100;
 const THRUST_CONSUMPTION = 0.3;
 const SHIP_RADIUS = 13;
-const PLAYER_STARTING_LIVES = 1;
+const PLAYER_STARTING_LIVES = 3;
 
 class Ship extends WrapPosition {
 	constructor(sprite) {
