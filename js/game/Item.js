@@ -108,12 +108,15 @@ class Item extends WrapPosition {
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = '#6DC2FF';
 		ctx.stroke();
-
+		
 		switch (this.type) {
 			case "Life Up":
+				let p1Ratio = playerPic.height / playerPic.width,
+					r = this.drawRadius * 0.85,
+					d = r * 2;
 				ctx.translate(x, y);
 				ctx.rotate(this.drawAng);
-				ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, -this.drawRadius, -this.drawRadius, this.drawDiameter, this.drawDiameter);
+				ctx.drawImage(playerPic, 0, 0, playerPic.width, playerPic.height, -r, -r * p1Ratio, d, d * p1Ratio);
 				break;
 			case "Missile":
 				let mRatio = missilePic.height / missilePic.width;
