@@ -115,9 +115,9 @@ class WrapPosition {
 		colorCircle(x, y, this.collisionRadius, 'white');
 	}
 
-	drawWrap() {
-		let wrapX = this.x;
-		let wrapY = this.y;
+	checkWrap() {
+		let wrapX = this.x,
+			wrapY = this.y;
 
 		if (this.x < this.collisionRadius) {
 			wrapX = this.x + canvas.width;
@@ -131,14 +131,23 @@ class WrapPosition {
 			wrapY = this.y - canvas.height;
 		}
 
-		if (wrapX != this.x) {
-			this.drawSprite(wrapX, this.y);
-		}
-		if (wrapY != this.y) {
-			this.drawSprite(this.x, wrapY);
-		}
-		if (wrapX != this.x && wrapY != this.y) {
-			this.drawSprite(wrapX, wrapY);
+		if (wrapX == this.x && wrapY == this.y) return false;
+		else return {x: wrapX, y: wrapY}
+	}
+
+	drawWrap() {
+		let wrap = this.checkWrap();
+
+		if (wrap) {
+			if (wrap.x != this.x) {
+				this.drawSprite(wrap.x, this.y);
+			}
+			if (wrap.y != this.y) {
+				this.drawSprite(this.x, wrap.y);
+			}
+			if (wrap.x != this.x && wrap.y != this.y) {
+				this.drawSprite(wrap.x, wrap.y);
+			}
 		}
 	}
 

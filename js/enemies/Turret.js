@@ -1,4 +1,5 @@
 const TURRET_RADIUS = 15;
+const TURRET_ACCEL = 0.06;
 const TURRET_SHOT_MAX = 1;
 const TURRET_SHOT_RADIUS = 4;
 const TURRET_SHOT_SPEED = 3;
@@ -42,6 +43,15 @@ class Turret extends WrapPosition {
 	}
 
 	move() {
+		let wrap = this.checkWrap();
+		if (wrap) {
+			let accelX = wrap.x > gameCanvas.width/2 ? TURRET_ACCEL : -TURRET_ACCEL;
+			let accelY = wrap.y > gameCanvas.height/2 ? TURRET_ACCEL : -TURRET_ACCEL;
+
+			this.xv += accelX;
+			this.yv += accelY;
+		}
+
 		this.updateAim(p1);
 		this.xv *= 1 - 0.03 * deltaT;
 		this.yv *= 1 - 0.03 * deltaT;
@@ -86,7 +96,7 @@ class Turret extends WrapPosition {
 	}
 
 	prepareToFire() {
-		if (this.firing == false && this.recovering == false) {
+		if (!this.firing && !this.recovering && !this.checkWrap()) {
 			this.fire();
 			this.firing = true;
 			this.fTimer = TURRET_FIRE_ANIM_SPEED;
