@@ -8,6 +8,7 @@ class WrapPosition {
 		this.isDead = false;
 		this.invulnerabilityTime = 0;
 		this.despawning = false;
+		this.wrapCoords = [{x: 0, y: 0}];
 	}
 	
 	reset(x, y) {
@@ -38,6 +39,8 @@ class WrapPosition {
 		if(this.x < 0){
 			this.x += canvas.width;
 		}
+
+		this.updateWrapCoords();
 	}
 	  
 	move() {
@@ -115,45 +118,51 @@ class WrapPosition {
 		colorCircle(x, y, this.collisionRadius, 'white');
 	}
 
-	checkWrap() {
+	updateWrapCoords() {
 		let wrapX = this.x,
-			wrapY = this.y;
+			wrapY = this.y,
+			wrapCoords = [{x: this.x, y: this.y}],
+			radius = this.sprite == undefined ? this.collisionRadius : this.sprite.width > this.sprite.height ? this.sprite.width : this.sprite.height;
 
-		if (this.x < this.collisionRadius) {
+		if (this.x < radius) {
 			wrapX = this.x + canvas.width;
-		} else if (this.x > canvas.width - this.collisionRadius) {
+		} else if (this.x > canvas.width - radius) {
 			wrapX = this.x - canvas.width;
 		}
 
-		if (this.y < this.collisionRadius) {
+		if (this.y < radius) {
 			wrapY = this.y + canvas.height;
-		} else if (this.y > canvas.height - this.collisionRadius) {
+		} else if (this.y > canvas.height - radius) {
 			wrapY = this.y - canvas.height;
 		}
 
-		if (wrapX == this.x && wrapY == this.y) return false;
-		else return {x: wrapX, y: wrapY}
+		if (wrapX != this.x) {
+			wrapCoords.push({x: wrapX, y: this.y});
+		}
+		if (wrapY != this.y) {
+			wrapCoords.push({y: wrapY, x: this.x})
+		}
+		if (wrapX != this.x && wrapY != this.y) {
+			wrapCoords.push({x: wrapX, y: wrapY});
+		}
+
+		this.wrapCoords = wrapCoords;
 	}
 
 	drawWrap() {
-		let wrap = this.checkWrap();
-
-		if (wrap) {
-			if (wrap.x != this.x) {
-				this.drawSprite(wrap.x, this.y);
-			}
-			if (wrap.y != this.y) {
-				this.drawSprite(this.x, wrap.y);
-			}
-			if (wrap.x != this.x && wrap.y != this.y) {
-				this.drawSprite(wrap.x, wrap.y);
+		if (this.wrapCoords.length > 1) {
+			let coords = this.wrapCoords;
+			for (let w of coords) {
+				this.drawSprite(w.x, w.y);
 			}
 		}
+
 	}
 
 	die() {
 		this.isDead = true;
 		this.invulnerabilityTime = 1;
+		this.wrapCoords.length = 0;
 
 		if (this.sprite != undefined) {
 			explodeSprite(this.x, this.y, this.sprite.chunks, this.ang);
