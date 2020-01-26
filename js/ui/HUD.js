@@ -41,7 +41,7 @@ let tmColorInner = '#6DC2FF';
 let hmColorOuter = 'grey';
 let hmColorInner = 'red';
 
-let lastScore = lastMulti = lastLives = null;
+let lastScore = lastMulti = lastLives = lastActiveWeapon = lastAmmoCount = null;
 
 let scoreMetrics = null;
 let multiMetrics = null;
@@ -236,25 +236,30 @@ function drawScore() {
 }
 
 function drawActiveWeapon() {
-	ctx.save();
-	ctx.globalAlpha = 0.6;
-	//ctx.clearRect(canvas.width - 100, canvas.height - 60, 100, 60);
-	//colorRect(canvas.width - 100, canvas.height - 60, 100, 60, '#383838');
-	ctx.clearRect(canvas.width - 250, 0, 250, canvas.height);
-	drawPolygon(canvas.width - 100, canvas.height - 30, weaponBG, '#383838', true);
-	ctx.restore();
+	if (p1.activeWeapon === lastActiveWeapon && lastAmmoCount === p1.ammo) {
+		return;
+	} else {
+		lastActiveWeapon = p1.activeWeapon;
+		lastAmmoCount = p1.ammo;
 
-	let wHUD = getWeaponHUD(p1.activeWeapon),
-		wDuration = p1.activeWeapon != 'Machine Gun' ? p1.ammo : '∞';
-
-	ctx.save();
-	ctx.textBaseline = 'middle'
-	colorAlignedText(canvas.width - 160, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', 'Ammo');
-	colorAlignedText(canvas.width - 160, canvas.height - 16, 'center', '34px Orbitron', '#6DC2FF', wDuration);
-
-	colorAlignedText(canvas.width - wHUD.width / 2 - 6, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', p1.activeWeapon);
-	ctx.drawImage(wHUD, canvas.width - wHUD.width - 6, canvas.height - wHUD.height + 6);
-	ctx.restore();
+		//Background polygon
+		ctx.globalAlpha = 0.6;
+		ctx.clearRect(canvas.width - 250, 0, 250, canvas.height);
+		drawPolygon(canvas.width - 100, canvas.height - 30, weaponBG, '#383838', true);
+		ctx.globalAlpha = 1;
+	
+		let wHUD = getWeaponHUD(p1.activeWeapon),
+			wAmmo = p1.activeWeapon != 'Machine Gun' ? p1.ammo : '∞';
+	
+		ctx.save();
+		ctx.textBaseline = 'middle'
+		colorAlignedText(canvas.width - 160, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', 'Ammo');
+		colorAlignedText(canvas.width - 160, canvas.height - 16, 'center', '34px Orbitron', '#6DC2FF', wAmmo);
+	
+		colorAlignedText(canvas.width - wHUD.width / 2 - 6, canvas.height - wHUD.height + 2, 'center', '14px Orbitron', 'white', p1.activeWeapon);
+		ctx.drawImage(wHUD, canvas.width - wHUD.width - 6, canvas.height - wHUD.height + 6);
+		ctx.restore();
+	}
 }
 
 function drawWeaponHeat() {
