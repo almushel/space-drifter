@@ -71,25 +71,33 @@ class WrapPosition {
     }
 
 	collide(whichEntity) {
-		if (this.isDead || whichEntity.isDead || whichEntity.mass <= 0 ||
-			!boundingRects(this.x, this.y, this.collisionRadius, whichEntity.x, whichEntity.y, whichEntity.collisionRadius)) {
+		if (this.isDead || whichEntity.isDead || whichEntity.mass <= 0) {
 			return false;
 		}
 		
-		let deltaX = whichEntity.x - this.x,
-			deltaY = whichEntity.y - this.y,
-			deltaR = deltaX * deltaX + deltaY * deltaY;
-									   
-		if (deltaR <= Math.pow(this.collisionRadius + whichEntity.collisionRadius, 2)) {
-			let hitAng = Math.atan2(deltaY, deltaX),
-				magnitude = deltaR / (this.collisionRadius * whichEntity.collisionRadius) / (2 + whichEntity.mass - this.mass);
+		for (let myCoords of this.wrapCoords) {
+			for (let theirCoords of whichEntity.wrapCoords) {
+				if (!boundingRects(myCoords.x, myCoords.y, this.collisionRadius, theirCoords.x, theirCoords.y, whichEntity.collisionRadius)) {
+					continue;
+				}
 
-			this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
-			this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
-			
-			return true;
+				let deltaX = theirCoords.x - myCoords.x,
+					deltaY = theirCoords.y - myCoords.y,
+					deltaR = deltaX * deltaX + deltaY * deltaY;
+										   
+				if (deltaR <= Math.pow(this.collisionRadius + whichEntity.collisionRadius, 2)) {
+					let hitAng = Math.atan2(deltaY, deltaX),
+						magnitude = deltaR / (this.collisionRadius * whichEntity.collisionRadius) / (2 + whichEntity.mass - this.mass);
+		
+					this.xv += Math.cos(hitAng + Math.PI) * magnitude * deltaT;
+					this.yv += Math.sin(hitAng + Math.PI) * magnitude * deltaT;
+					
+					return true;
+				}
+			}
 		}
-		return false;
+
+		return false;	
 	}
 
 	deflect(from) {
@@ -162,7 +170,7 @@ class WrapPosition {
 	die() {
 		this.isDead = true;
 		this.invulnerabilityTime = 1;
-		this.wrapCoords.length = 0;
+		this.wrapCoords.length = 1;
 
 		if (this.sprite != undefined) {
 			explodeSprite(this.x, this.y, this.sprite.chunks, this.ang);

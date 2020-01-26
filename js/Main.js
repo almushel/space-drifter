@@ -52,7 +52,7 @@ function moveAll() {
 		particleList[p].move();
 	}
 	
-	collide();
+	collideAll();
 }
 
 function drawAll() {
@@ -74,9 +74,9 @@ function drawAll() {
 
 }
 
-function collide() {
-	for (var i = 0; i < allEntities.length; i++) {
-		for (var a = i + 1; a < allEntities.length; a++) {
+function collideAll() {
+	for (let i = 0; i < allEntities.length; i++) {
+		for (let a = i + 1; a < allEntities.length; a++) {
 			allEntities[i].collide(allEntities[a]);
 			allEntities[a].collide(allEntities[i]);
 		}
