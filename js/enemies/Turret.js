@@ -43,10 +43,10 @@ class Turret extends WrapPosition {
 	}
 
 	move() {
-		let wrap = this.checkWrap();
-		if (wrap) {
-			let accelX = wrap.x > gameCanvas.width/2 ? TURRET_ACCEL : -TURRET_ACCEL;
-			let accelY = wrap.y > gameCanvas.height/2 ? TURRET_ACCEL : -TURRET_ACCEL;
+		if (this.wrapCoords.length > 1) {
+			let wrap = this.wrapCoords[this.wrapCoords.length - 1],
+				accelX = wrap.x > gameCanvas.width/2 ? GRAPPLER_ACCEL : -GRAPPLER_ACCEL,
+				accelY = wrap.y > gameCanvas.height/2 ? GRAPPLER_ACCEL : -GRAPPLER_ACCEL;
 
 			this.xv += accelX;
 			this.yv += accelY;
@@ -96,7 +96,7 @@ class Turret extends WrapPosition {
 	}
 
 	prepareToFire() {
-		if (!this.firing && !this.recovering && !this.checkWrap()) {
+		if (!this.firing && !this.recovering && this.wrapCoords.length <= 1) {
 			this.fire();
 			this.firing = true;
 			this.fTimer = TURRET_FIRE_ANIM_SPEED;

@@ -23,10 +23,10 @@ class Grappler extends WrapPosition {
 	}
 
 	move() {
-		let wrap = this.checkWrap();
-		if (wrap) {
-			let accelX = wrap.x > gameCanvas.width/2 ? GRAPPLER_ACCEL : -GRAPPLER_ACCEL;
-			let accelY = wrap.y > gameCanvas.height/2 ? GRAPPLER_ACCEL : -GRAPPLER_ACCEL;
+		if (this.wrapCoords.length > 1) {
+			let wrap = this.wrapCoords[this.wrapCoords.length - 1],
+				accelX = wrap.x > gameCanvas.width/2 ? GRAPPLER_ACCEL : -GRAPPLER_ACCEL,
+				accelY = wrap.y > gameCanvas.height/2 ? GRAPPLER_ACCEL : -GRAPPLER_ACCEL;
 
 			this.xv += accelX;
 			this.yv += accelY;
@@ -58,7 +58,7 @@ class Grappler extends WrapPosition {
 
 		let turnAngDelta = deltaX * Math.sin(this.ang) - deltaY * Math.cos(this.ang);
 
-		if (turnAngDelta >= -GRAPPLER_AIM_TOLERANCE && turnAngDelta <= GRAPPLER_AIM_TOLERANCE && !this.checkWrap()) {
+		if (turnAngDelta >= -GRAPPLER_AIM_TOLERANCE && turnAngDelta <= GRAPPLER_AIM_TOLERANCE && this.wrapCoords.length <= 1) {
 			this.gHook.extend();
 		} else if (turnAngDelta < 0) {
 			this.ang += GRAPPLER_TURN_SPEED * deltaT;
