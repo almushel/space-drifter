@@ -128,7 +128,8 @@ class GrapplingHook extends WrapPosition {
 			this.x = this.parent.x;
 			this.y = this.parent.y;
 		}
-	}
+		this.wrapCoords[0] = {x: this.x, y: this.y};
+	} // End of move
 
 	draw() {
 		let offset = this.target == null ? 0 : -this.sprite.width / 2 + 6,
