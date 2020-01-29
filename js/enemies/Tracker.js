@@ -56,11 +56,6 @@ class Tracker extends WrapPosition {
 		}
 	}
 
-	draw() {
-		this.drawSprite(this.x, this.y);
-		this.drawWrap();
-	}
-
 	drawSprite(x, y) {
 		if (this.z !== 1) {
             ctx.save();

@@ -36,7 +36,7 @@ class SpawnWarp extends WrapPosition {
 		return;
 	}
 
-	draw() {
+	drawSprite(x, y) {
 		if (!this.isDead) {
 			ctx.strokeStyle = '#6DC2FF';
 			ctx.lineWidth = 1;

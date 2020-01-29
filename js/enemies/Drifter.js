@@ -12,23 +12,19 @@ class Drifter extends WrapPosition {
 	}
 
 	reset(x, y, radius) {
-		super.reset();
+		super.reset(x, y);
 		if (radius == undefined || radius == null) {
 			this.radius = DRIFT_RADIUS;
 		} else {
 			this.radius = radius;
 		}
 		this.ang = 0;
-
-		this.x = x;
-		this.y = y;
-
-		var randAng = Math.random() * (Math.PI * 2);
+		
+		let randAng = Math.random() * (Math.PI * 2);
 		this.xv = Math.cos(randAng) * DRIFT_RATE;
 		this.yv = Math.sin(randAng) * DRIFT_RATE;
 
 		this.generatePoly();
-
 	} // end of reset
 
 	generatePoly() {
@@ -83,11 +79,6 @@ class Drifter extends WrapPosition {
 		} else { 
 			super.die();
 		}
-	}
-
-	draw() {
-		this.drawSprite(this.x, this.y);
-		this.drawWrap();
 	}
 
 	drawSprite(x, y) {

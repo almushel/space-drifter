@@ -12,9 +12,7 @@ class UFO extends WrapPosition {
 	}
 
 	reset(x, y) {
-		super.reset();
-		this.x = x;
-		this.y = y;
+		super.reset(x, y);
 
 		this.ang = Math.random() * (Math.PI * 2);
 		this.targetAng = this.ang;
@@ -56,11 +54,6 @@ class UFO extends WrapPosition {
 			this.yv += Math.sin(this.ang) * UFO_SPEED * 0.025;
 		}
 		super.move();
-	}
-
-	draw() {
-		this.drawWrap();
-		this.drawSprite(this.x, this.y);
 	}
 
 	drawSprite(x, y) {

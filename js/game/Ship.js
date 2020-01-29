@@ -114,6 +114,8 @@ class Ship extends WrapPosition {
 		if (gameState !== gameStarted || this.isDead) {
 			if (this.spawning) {
 				this.swoop();
+				this.wrapCoords[0].x = this.x;
+				this.wrapCoords[0].y = this.y;
 			}
 			return;
 		}
@@ -336,7 +338,6 @@ class Ship extends WrapPosition {
 			return;
 		}
 
-		this.drawSprite(this.x, this.y);
 		this.drawWrap();
 	}
 

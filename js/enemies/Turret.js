@@ -26,11 +26,7 @@ class Turret extends WrapPosition {
 	}
 
 	reset(x, y) {
-		super.reset();
-
-		this.x = x
-		this.y = y;
-
+		super.reset(x, y);
 		this.aimAng = Math.random() * (Math.PI * 2);
 	}
 
@@ -122,11 +118,6 @@ class Turret extends WrapPosition {
 				this.fireOffset = 2;
 			}
 		}
-	}
-
-	draw() {
-		this.drawSprite(this.x, this.y);
-		this.drawWrap();
 	}
 
 	createSprite() {

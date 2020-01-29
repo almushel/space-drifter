@@ -16,6 +16,7 @@ class WrapPosition {
 		this.yv = 0;
 		this.x = x;
 		this.y = y;
+		this.wrapCoords[0] = {x: this.x, y: this.y};
 		this.z = 1;
 		this.despawning = false;
 		this.isDead = false;
@@ -118,7 +119,6 @@ class WrapPosition {
 	}
 
 	draw() {
-		this.drawSprite(this.x, this.y);
 		this.drawWrap();
 	}
 
@@ -130,7 +130,7 @@ class WrapPosition {
 		let wrapX = this.x,
 			wrapY = this.y,
 			wrapCoords = [{x: this.x, y: this.y}],
-			radius = this.sprite == undefined ? this.collisionRadius : this.sprite.width > this.sprite.height ? this.sprite.width : this.sprite.height;
+			radius = this.sprite == undefined ? this.collisionRadius : this.sprite.width > this.sprite.height ? this.sprite.width/2 : this.sprite.height/2;
 
 		if (this.x < radius) {
 			wrapX = this.x + canvas.width;
@@ -158,13 +158,10 @@ class WrapPosition {
 	}
 
 	drawWrap() {
-		if (this.wrapCoords.length > 1) {
-			let coords = this.wrapCoords;
-			for (let w of coords) {
-				this.drawSprite(w.x, w.y);
-			}
+		let coords = this.wrapCoords;
+		for (let w of coords) {
+			this.drawSprite(w.x, w.y);
 		}
-
 	}
 
 	die() {

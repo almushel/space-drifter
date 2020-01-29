@@ -73,7 +73,6 @@ class Grappler extends WrapPosition {
 	}
 
 	draw() {
-		this.drawSprite(this.x, this.y);
 		this.drawWrap();
 		this.gHook.draw();
 	}
