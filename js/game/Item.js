@@ -24,35 +24,13 @@ class Item extends WrapPosition {
 	}
 
 	collide(whichEntity) {
-		if (this.activated) {
-			return;
-		}
-		if (whichEntity.constructor.name == Ship.name) {
-			if (super.collide(whichEntity)) {
-				this.activate(whichEntity);
-			}
+		if (this.activated) return;
+		if (whichEntity.constructor.name == Ship.name && super.collide(whichEntity)) {
+			this.activate(whichEntity);
 		}
 	}
 
 	move() {
-		if (this.spawning) {
-			this.drawRadius += ITEM_EXPANSION_RATE * deltaT;
-			if (this.drawRadius >= this.collisionRadius) {
-				this.drawRadius = this.collisionRadius;
-				this.drawDiameter = this.drawRadius * 2;
-				this.spawning = false;
-			}
-			return;
-		} else if (this.activated) {
-			if (this.drawRadius > 0) {
-				this.drawRadius -= ITEM_SHRINK_RATE * deltaT;
-				this.drawDiameter = this.drawRadius * 2;
-			} else {
-				this.isDead = true;
-			}
-			return;
-		}
-
 		this.drawAng += ITEM_ROTATION_SPEED * deltaT;
 		let magnitude = Math.sqrt(this.xv * this.xv + this.yv * this.yv);
 
@@ -61,12 +39,29 @@ class Item extends WrapPosition {
 			this.yv *= 1 - 0.02 * deltaT;
 		}
 		super.move();
+		this.animate();
+	}
+	
+	animate() {
+		if (this.spawning) {
+			this.drawRadius += ITEM_EXPANSION_RATE * deltaT;
+			if (this.drawRadius >= this.collisionRadius) {
+				this.drawRadius = this.collisionRadius;
+				this.spawning = false;
+			}
+			this.drawDiameter = this.drawRadius * 2;
+		} else if (this.activated) {
+			if (this.drawRadius > 0) {
+				this.drawRadius -= ITEM_SHRINK_RATE * deltaT;
+				this.drawDiameter = this.drawRadius * 2;
+			} else {
+				this.isDead = true;
+			}
+		}
 	}
 
 	activate(whichEntity) {
-		if (this.activated) {
-			return;
-		}
+		if (this.activated) return;
 
 		pickUpSFX.play();
 
@@ -95,9 +90,7 @@ class Item extends WrapPosition {
 	}
 
 	drawSprite(x, y) {
-		if (this.drawRadius <= 0) {
-			return;
-		}
+		if (this.drawRadius <= 0) return;
 
 		let bubble = ctx.createRadialGradient(x, y, this.drawRadius / 2, x, y, this.drawRadius);
 		bubble.addColorStop(0, 'rgba(0,0,0,0)');

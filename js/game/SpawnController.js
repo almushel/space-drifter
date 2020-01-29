@@ -5,7 +5,7 @@ const ENEMY_TURRET = 3;
 const ENEMY_GRAPPLER = 4;
 
 const WAVE_ESCALATION_RATE = 4;
-const ITEM_ACCUMLATE_RATE = 1;
+const ITEM_ACCUMULATE_RATE = 1;
 
 const enemyList = [];
 const enemyPool = [];
@@ -263,7 +263,7 @@ function removeDeadEnemies() {
 }
 
 function spawnItems(enemy) {
-	pickUpAccumulator += ITEM_ACCUMLATE_RATE * getEnemyValue(enemy.constructor.name);
+	pickUpAccumulator += ITEM_ACCUMULATE_RATE * getEnemyValue(enemy.constructor.name);
 
 	let roll = 5 + Math.random() * 95;
 
