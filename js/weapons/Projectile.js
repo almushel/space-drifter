@@ -35,38 +35,46 @@ class Projectile extends WrapPosition {
 			return false;
 		}
 
-		if (circleIntersect(this.x, this.y, this.collisionRadius, thisEnemy.x, thisEnemy.y, thisEnemy.collisionRadius)) {
-			if (thisEnemy === this.parent) {
-				this.deflect(thisEnemy);
-				return false;
-			}
-
-			let enemyValue = getEnemyValue(thisEnemy.constructor.name);
-			//Bullets fired from player ships
-			if (this.parent.constructor.name === Ship.name && enemyValue > 0) {
-				this.die();
-				thisEnemy.die();
-				updateScore(enemyValue);
-			//Bullets fired from enemies
-			} else if (getEnemyValue(this.parent.constructor.name) > 0) {
-				if (thisEnemy.constructor.name === Ship.name) {
-					if (thisEnemy.invulnerabilityTime > 0) {
+		for (let myCoords of this.wrapCoords) {
+			for (let theirCoords of thisEnemy.wrapCoords) {
+				if (circleIntersect(myCoords.x, myCoords.y, this.collisionRadius, theirCoords.x, theirCoords.y, thisEnemy.collisionRadius)) {
+					if (thisEnemy === this.parent) {
 						this.deflect(thisEnemy);
-					} else {
-						this.die();
-						thisEnemy.die();
+						return false;
 					}
-				} else if (enemyValue > 0) {
-					this.deflect(thisEnemy);
+					this.reactToCollision(thisEnemy);
+		
+					return true;
 				}
-			//Projectiles destroy other projectiles
-			} else if (thisEnemy.constructor.name === Projectile.name) {
-				explodeAtPoint(this.x, this.y, 0, this.color, this.color, this.color, null, 'circle');
-				this.die();
-				explodeAtPoint(thisEnemy.x, thisEnemy.y, 0, thisEnemy.color, thisEnemy.color, thisEnemy.color, null, 'circle');
-				thisEnemy.die();
 			}
-			return true;
+		}
+	}
+
+	reactToCollision(thisEnemy) {
+		let enemyValue = getEnemyValue(thisEnemy.constructor.name);
+		//Bullets fired from player ships
+		if (this.parent.constructor.name === Ship.name && enemyValue > 0) {
+			this.die();
+			thisEnemy.die();
+			updateScore(enemyValue);
+		//Bullets fired from enemies
+		} else if (getEnemyValue(this.parent.constructor.name) > 0) {
+			if (thisEnemy.constructor.name === Ship.name) {
+				if (thisEnemy.invulnerabilityTime > 0) {
+					this.deflect(thisEnemy);
+				} else {
+					this.die();
+					thisEnemy.die();
+				}
+			} else if (enemyValue > 0) {
+				this.deflect(thisEnemy);
+			}
+		//Projectiles destroy other projectiles
+		} else if (thisEnemy.constructor.name === Projectile.name) {
+			explodeAtPoint(this.x, this.y, 0, this.color, this.color, this.color, null, 'circle');
+			this.die();
+			explodeAtPoint(thisEnemy.x, thisEnemy.y, 0, thisEnemy.color, thisEnemy.color, thisEnemy.color, null, 'circle');
+			thisEnemy.die();
 		}
 	}
 
