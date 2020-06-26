@@ -25,7 +25,7 @@ class GrapplingHook extends WrapPosition {
 
 	extend() {
 		if (this.readyToFire()) {
-			grapplerFireSFX.play();
+			grapplerFireSFX.playAtPosition(this.x);
 			this.extending = true;
 			this.xv = Math.cos(this.parent.ang) * this.speed + this.parent.xv;
 			this.yv = Math.sin(this.parent.ang) * this.speed + this.parent.yv;
@@ -37,7 +37,7 @@ class GrapplingHook extends WrapPosition {
 
 	retract() {
 		if (!this.retracting) {
-			gHookImpact.play();
+			gHookImpact.playAtPosition(this.x);
 			this.xv = 0;
 			this.yv = 0;
 
@@ -54,7 +54,7 @@ class GrapplingHook extends WrapPosition {
 	}
 
 	attach(target) {
-		gHookImpact.play();
+		gHookImpact.playAtPosition(this.x);
 		screenShake();
 		this.target = target;
 	}

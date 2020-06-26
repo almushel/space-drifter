@@ -4,9 +4,11 @@ class AudioOneShot {
         for (let i = 0; i < bufferSize; i++) {
             let clip = new Audio(path);
             clip.sourceNode = audioCtx.createMediaElementSource(clip);
+            clip.panner = audioCtx.createStereoPanner(clip);
             clip.vol = audioCtx.createGain();
 
-            clip.sourceNode.connect(clip.vol);
+            clip.sourceNode.connect(clip.panner);
+            clip.panner.connect(clip.vol);
             clip.vol.connect(MasterGain);
 
             this.buffer.push(clip);
@@ -17,6 +19,12 @@ class AudioOneShot {
     play() {
         this.buffer[this.currentClip].play()
         this.nextClip();
+    }
+
+    playAtPosition(x) {
+        let clip = this.buffer[this.currentClip];
+        clip.panner.pan.value = (x - 400) / 400;
+        this.play(); 
     }
 
     nextClip() {

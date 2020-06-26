@@ -3,6 +3,16 @@ class CrossFadeAudioLoop {
         this.firstTrack = new Audio(path);
         this.secondTrack = new Audio(path);
 
+        this.vol = audioCtx.createGain();
+        this.firstTrack.sourceNode = audioCtx.createMediaElementSource(this.firstTrack);
+        this.secondTrack.sourceNode = audioCtx.createMediaElementSource(this.secondTrack);
+        this.panner = audioCtx.createStereoPanner();
+
+        this.firstTrack.sourceNode.connect(this.panner);
+        this.secondTrack.sourceNode.connect(this.panner);
+        this.panner.connect(this.vol);
+        this.vol.connect(MasterGain);
+
         this.crossfade = new AudioFade();
         this.fade = new AudioFade();
         

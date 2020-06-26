@@ -63,7 +63,7 @@ class Item extends WrapPosition {
 	activate(whichEntity) {
 		if (this.activated) return;
 
-		pickUpSFX.play();
+		pickUpSFX.playAtPosition(this.x);
 
 		if (whichEntity.activeWeapon === this.type) {
 			whichEntity.ammo += 10;

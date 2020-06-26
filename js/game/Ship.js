@@ -16,6 +16,8 @@ const PLAYER_STARTING_LIVES = 3;
 class Ship extends WrapPosition {
 	constructor(sprite) {
 		super();
+		this.x = 0;
+		this.y = 0;
 		this.z = 0;
 		this.collisionRadius = 0;
 		this.lives = PLAYER_STARTING_LIVES;
@@ -68,7 +70,7 @@ class Ship extends WrapPosition {
 		wink.randomReset(this.x, this.y, 'white', 'white', 'white');
 		wink.xv = wink.yv = 0;
 
-		playerSpawnSFX.play();
+		playerSpawnSFX.playAtPosition(this.x);
 	}
 
 	collideEnemy(thisEnemy) {
@@ -87,7 +89,7 @@ class Ship extends WrapPosition {
 		endChaintimer();
 		screenShake();
 		playerThrustSFX.stop();
-		playerDeathSFX.play();
+		playerDeathSFX.playAtPosition(this.x);
 
 		explodeAtPoint(this.x, this.y, 2, 'white', 'orange', '#6DC2FF', null, 'circle');
 
@@ -111,6 +113,9 @@ class Ship extends WrapPosition {
 	}
 
 	move() {
+		let thrustPan = Math.round(this.x - 400) / 400;
+		playerThrustSFX.panner.pan.setTargetAtTime(thrustPan, audioCtx.currentTime, 0.01);
+
 		if (gameState !== gameStarted || this.isDead) {
 			if (this.spawning) {
 				this.swoop();
@@ -242,7 +247,7 @@ class Ship extends WrapPosition {
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 
 		
-		playerShotSFX.play();
+		playerShotSFX.playAtPosition(this.x);
 		
 		this.muzzleFlare(this.x + Math.cos(this.ang) * 20, this.y + Math.sin(this.ang) * 20);
 		let newShot = new Projectile(PLAYER_SHOT_SPEED, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE);
@@ -262,7 +267,7 @@ class Ship extends WrapPosition {
 		this.depleteAmmo(1);
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
 
-		playerLaserSFX.play();
+		playerLaserSFX.playAtPosition(this.x);
 		let newShot = new Laser(PLAYER_SHOT_SPEED * 2, '#6DC2FF', PLAYER_SHOT_RADIUS, PLAYER_SHOT_LIFE, 20);
 		newShot.shootFrom(this);
 		newShot.x += Math.cos(this.ang - Math.PI / 7) * SHIP_RADIUS;
@@ -287,7 +292,7 @@ class Ship extends WrapPosition {
 		this.weaponHeat += 40;
 		this.depleteAmmo(1);
 		if (this.weaponHeat > HEAT_MAX) this.weaponHeat = HEAT_MAX;
-		playerMissileSFX.play();
+		playerMissileSFX.playAtPosition(this.x);
 
 		let newShot = new Missile(0.2, 4, 120);
 		newShot.shootFrom(this);

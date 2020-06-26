@@ -6,9 +6,11 @@ class SeamlessAudioLoop {
 
         this.firstTrack.sourceNode = audioCtx.createMediaElementSource(this.firstTrack);
         this.secondTrack.sourceNode = audioCtx.createMediaElementSource(this.secondTrack);
+        this.panner = audioCtx.createStereoPanner();
 
-        this.firstTrack.sourceNode.connect(this.vol);
-        this.secondTrack.sourceNode.connect(this.vol);
+        this.firstTrack.sourceNode.connect(this.panner);
+        this.secondTrack.sourceNode.connect(this.panner);
+        this.panner.connect(this.vol);
         this.vol.connect(MasterGain);
 
         this.loopPoint = loopPoint;
