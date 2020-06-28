@@ -1,18 +1,13 @@
 class AudioOneShot {
     constructor(path, bufferSize) {
+        this.vol = audioCtx.createGain();
         this.buffer = [];
         for (let i = 0; i < bufferSize; i++) {
-            let clip = new Audio(path);
-            clip.sourceNode = audioCtx.createMediaElementSource(clip);
-            clip.panner = audioCtx.createStereoPanner(clip);
-            clip.vol = audioCtx.createGain();
-
-            clip.sourceNode.connect(clip.panner);
-            clip.panner.connect(clip.vol);
-            clip.vol.connect(MasterGain);
-
+            let clip = new AudioObject2D(path);
+            clip.out.connect(this.vol);
             this.buffer.push(clip);
         }
+        this.vol.connect(MasterGain);
         this.currentClip = 0;
     }
 
@@ -23,7 +18,7 @@ class AudioOneShot {
 
     playAtPosition(x) {
         let clip = this.buffer[this.currentClip];
-        clip.panner.pan.value = (x - 400) / 400;
+        clip.pan = (x - 400) / 400;
         this.play(); 
     }
 
@@ -36,12 +31,10 @@ class AudioOneShot {
     }
 
     set volume(vol) {
-        for (let i = 0; i < this.buffer.length; i++) {
-            this.buffer[i].vol.gain.value = vol;
-        }
+        this.vol.value = vol;
     }
 
     get volume() {
-        return this.buffer[0].volume;
+        return this.vol.value;
     }
 }

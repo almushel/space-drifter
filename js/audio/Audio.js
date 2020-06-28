@@ -60,3 +60,44 @@ function setFormat() {
 		audioFormat = ".mp3";
 	}
 }
+
+class AudioObject2D {
+	constructor(path) {
+		this.audio = new Audio(path);
+		this.sourceNode = audioCtx.createMediaElementSource(this.audio);
+		this.panner = audioCtx.createStereoPanner();
+		this.vol = audioCtx.createGain();
+
+		this.sourceNode.connect(this.panner);
+		this.panner.connect(this.vol);
+		
+		this.out = this.vol;
+
+		this.isPlaying = false;
+	}
+
+	play() {
+		this.audio.play();
+		this.isPlaying = true;
+	}
+
+	pause() {
+		this.audio.pause();
+		this.isPlaying = false;
+	}
+
+	stop() {
+		this.audio.pause();
+		this.audio.currentTime = 0;
+		this.isPlaying = false;
+	}
+
+	get currentTime() {return this.audio.currentTime;}
+	set currentTime(value) {this.audio.currentTime = value;}
+
+	get pan() { return this.panner.pan.value; }
+	set pan(value) { this.panner.pan.value = value; }
+
+	get volume() { return this.vol.gain.value; }
+	set volume(value) { this.vol.gain.value = value; }
+}
