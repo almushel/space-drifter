@@ -11,8 +11,8 @@ function setupAudio() {
 }
 
 function loadAudioAssets() {
-	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter' + audioFormat, 106.6);
-	titleMusic = new SeamlessAudioLoop('./audio/TitleMusic' + audioFormat, 95.9);
+	musicLoop = new SeamlessAudioLoop('./audio/Space Drifter' + audioFormat, 106.666);
+	titleMusic = new SeamlessAudioLoop('./audio/TitleMusic' + audioFormat, 96);
 	gameOverMusic = new AudioOneShot('./audio/GameOverMusic' + audioFormat, 1);
 	gamePauseSFX = new AudioOneShot('./audio/GamePause' + audioFormat, 2);
 	menuConfirmSFX = new AudioOneShot('./audio/MenuConfirm' + audioFormat, 6);

@@ -31,10 +31,10 @@ class AudioOneShot {
     }
 
     set volume(vol) {
-        this.vol.value = vol;
+        this.vol.gain.value = vol;
     }
 
     get volume() {
-        return this.vol.value;
+        return this.vol.gain.value;
     }
 }
