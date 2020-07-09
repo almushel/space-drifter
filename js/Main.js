@@ -15,13 +15,13 @@ function loadGame() {
 	toggleMenuLayer();
 
 	setCanvas(gameCanvas, gameCtx);
+	createStarField();
+	initInput();
 	loadImages();
 }
 
-function loadingDoneSoStartGame() {
-	createStarField();
-	initInput();
-	setupAudio();
+async function loadingDoneSoStartGame() {
+	await setupAudio();
 	titleMusic.play();
 
 	initialFrame();

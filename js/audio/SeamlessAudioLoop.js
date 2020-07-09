@@ -1,21 +1,7 @@
 class SeamlessAudioLoop {
-    constructor(path, loopPoint) {
-        this.buffer;
+    constructor(buffer, loopPoint) {
+        this.buffer = buffer;
         this.bufferSources = [];
-
-        let request = new XMLHttpRequest();
-        request.open('GET', path);
-        request.responseType = 'arraybuffer';
-        
-        request.onload = () => {
-            let audioData = request.response;
-
-            audioCtx.decodeAudioData(audioData, (buffer) => {
-                this.buffer = buffer;
-            })
-        }
-
-        request.send();
 
         this.vol = audioCtx.createGain();
         this.vol.connect(MasterGain);
@@ -26,7 +12,6 @@ class SeamlessAudioLoop {
 
     play() {
         if (!this.buffer) {
-            setTimeout(() => { this.play(); }, 100);
             return;
         }
         let bufferSource = audioCtx.createBufferSource();

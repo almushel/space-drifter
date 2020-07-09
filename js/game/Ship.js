@@ -114,7 +114,7 @@ class Ship extends WrapPosition {
 
 	move() {
 		let thrustPan = Math.round(this.x - 400) / 400;
-		playerThrustSFX.panner.pan.setTargetAtTime(thrustPan, audioCtx.currentTime, 0.01);
+		playerThrustSFX.panner.pan.setTargetAtTime(thrustPan, audioCtx.currentTime, 0.010);
 
 		if (gameState !== gameStarted || this.isDead) {
 			if (this.spawning) {
@@ -202,7 +202,7 @@ class Ship extends WrapPosition {
 	}
 
 	thrust(angle, acceleration, emitter) {
-		this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
+		//this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
 		this.xv += Math.cos(angle) * (acceleration * deltaT);
 		this.yv += Math.sin(angle) * (acceleration * deltaT);
 
