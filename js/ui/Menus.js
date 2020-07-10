@@ -49,6 +49,20 @@ function updateTransition() {
 	//menu.style.transform = 'scale(' + transState + ', 1)';
 }
 
+function drawLoadScreen(title, percentage, currentAsset) {
+	setCanvas(menu, menu.ctx);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	const halfH = canvas.height/2;
+	const halfW = canvas.width/2;
+
+	colorAlignedText(halfW, canvas.height / 2.5, 'center', '30px Orbitron', '#6DC2FF', title);
+	colorAlignedText(halfW, halfH, 'center', '15px Orbitron', 'white', 'Loading ' + currentAsset);
+	colorRect(halfW - 200, halfH + 15, 400, 30, 'black');
+	colorRect(halfW - 199, halfH + 14, 398 * percentage, 28, 'orange');
+
+	setCanvas(gameCanvas, gameCtx);
+}
+
 function drawPauseScreen() {
 	setCanvas(menu, menu.ctx);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);

@@ -11,7 +11,6 @@ function loadGame() {
 	startbutton.style.display = "none";
 
 	initCanvases();
-	drawTitleScreen();
 	toggleMenuLayer();
 
 	setCanvas(gameCanvas, gameCtx);
@@ -22,6 +21,7 @@ function loadGame() {
 
 async function loadingDoneSoStartGame() {
 	await setupAudio();
+	drawTitleScreen();
 	titleMusic.play();
 
 	initialFrame();

@@ -10,24 +10,16 @@ let playerPic = document.createElement("img"),
 	grapplerPic = document.createElement("img");
 	gHookPic = document.createElement("img");
 
-var picsToLoad = 0;
-
-function countLoadedImageAndLaunchIfReady() {
-	picsToLoad--;
-	this.chunks = divideSprite(this, 6);
-	if (picsToLoad == 0) { // last image loaded?
-		loadingDoneSoStartGame();
-	}
+function beginLoadingImage(image, fileName) {
+	return new Promise((resolve, reject) => {
+		image.onload = resolve;
+		image.onerror = reject;
+		image.src = "images/" + fileName;
+	})
 }
 
-function beginLoadingImage(imgVar, fileName) {
-	imgVar.onload = countLoadedImageAndLaunchIfReady;
-	imgVar.src = "images/" + fileName;
-}
-
-function loadImages() {
-
-	var imageList = [
+async function loadImages() {
+	let imageList = [
 		{ varName: playerPic, theFile: "player1.png" },
 		{ varName: UFOPic, theFile: "ufo.png" },
 		{ varName: turretBasePic, theFile: "turretBase.png" },
@@ -44,8 +36,12 @@ function loadImages() {
 	picsToLoad = imageList.length;
 
 	for (let i in imageList) {
-		beginLoadingImage(imageList[i].varName, imageList[i].theFile);
-	} // end of for imageList
+		let nextImage = imageList[i];
+		drawLoadScreen('Loading Sprites', i / (imageList.length - 1), nextImage.theFile);
+		await beginLoadingImage(nextImage.varName, nextImage.theFile);
+		nextImage.varName.chunks = divideSprite(nextImage.varName, 6);
+	}
+	loadingDoneSoStartGame();
 }
 
 function divideSprite(sprite, division) {

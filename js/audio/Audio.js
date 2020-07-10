@@ -11,7 +11,7 @@ async function setupAudio() {
 	initAudioVolume();
 
 	return new Promise((resolve, reject) => {
-		resolve();
+		resolve;
 	});
 }
 
@@ -21,7 +21,7 @@ async function loadAudioAssets() {
 	createAudioEvents();
 	
 	return new Promise((resolve, reject) => {
-		resolve();
+		resolve;
 	});
 }
 
@@ -44,8 +44,11 @@ async function loadAudioBuffers() {
 		{name: 'LifeUp', path: './audio/LifeUp' + audioFormat},
 		{name: 'WeaponPickUp', path: './audio/WeaponPickup' + audioFormat},
 	];
-
-	for (let bufferInfo of bufferList) {
+	const length = bufferList.length;
+	
+	for (let b=0; b<length; b++) {
+		let bufferInfo = bufferList[b];
+		drawLoadScreen('Loading Audio', b / length, bufferInfo.name);
 		let audioData = await loadFile(bufferInfo.path, 'arraybuffer');
 		audioBuffers[bufferInfo.name] = await audioCtx.decodeAudioData(audioData, (buffer) => {
 			this.buffer = buffer;
