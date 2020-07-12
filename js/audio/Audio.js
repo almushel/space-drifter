@@ -127,45 +127,6 @@ function setFormat() {
 	}
 }
 
-class AudioObject2D {
-	constructor(buffer) {
-		this.buffer = buffer;
-		this.bufferSource = null;
-		this.panner = audioCtx.createStereoPanner();
-		this.vol = audioCtx.createGain();
-
-		this.panner.connect(this.vol);
-		this.out = this.vol;
-
-		this.isPlaying = false;
-	}
-
-	play() {
-		this.bufferSource = audioCtx.createBufferSource();
-		this.bufferSource.buffer = this.buffer;
-		this.bufferSource.connect(this.panner);
-		this.bufferSource.start();
-		this.isPlaying = true;
-	}
-
-	pause() {
-		if (this.bufferSource) {
-			this.bufferSource.stop();
-			this.bufferSource = null;
-		}
-	}
-
-	stop() {
-		this.audio.pause();
-	}
-
-	get pan() { return this.panner.pan.value; }
-	set pan(value) { this.panner.pan.value = value; }
-
-	get volume() { return this.vol.gain.value; }
-	set volume(value) { this.vol.gain.value = value; }
-}
-
 function createWhiteNoiseBuffer(length) {
 	let channels = 1;
 	let bufferSize = audioCtx.sampleRate * length * channels;
