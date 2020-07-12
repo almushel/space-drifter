@@ -11,27 +11,28 @@ class SeamlessAudioLoop {
     }
 
     play() {
-        if (!this.buffer) {
-            return;
+        if (!this.buffer) { return; }
+
+        const container = this;
+        let nextLoop = (index) => {
+            let source = container.queueBufferSource(index, container.loopPoint - (container.buffer.duration - container.loopPoint));
+            source.onended = () => { nextLoop(index); }
         }
-        let bufferSource = audioCtx.createBufferSource();
-        bufferSource.buffer = this.buffer;
 
-        bufferSource.onended = () => {
-            this.play();
+        let source1 = this.queueBufferSource(0, 0);
+        source1.onended = () => { nextLoop(0); }
+        let source2 = this.queueBufferSource(1, this.loopPoint);
+        source2.onended = () => { nextLoop(1); }
+    }
 
-            let tail = audioCtx.createBufferSource();
-            tail.buffer = this.buffer;
-            tail.connect(this.vol);
-            tail.start(audioCtx.currentTime, this.loopPoint);
-            this.bufferSources[1] = tail;
-        };
+    queueBufferSource(index, startTime) {
+        let source = audioCtx.createBufferSource();
+        source.buffer = this.buffer;
+        source.connect(this.vol);
+        source.start(audioCtx.currentTime + startTime);
+        this.bufferSources[index] = source;
 
-        bufferSource.connect(this.vol);
-
-        bufferSource.start(audioCtx.currentTime, this.playStart);
-        bufferSource.stop(audioCtx.currentTime + (this.loopPoint - this.playStart));
-        this.bufferSources[0] = bufferSource;
+        return source;
     }
 
     pause() {
@@ -44,8 +45,6 @@ class SeamlessAudioLoop {
 
         this.bufferSources[0] = null;
         this.bufferSources[1] = null;
-
-        //TO DO: calculate pause position (audioCtx.currentTime - startedTime)
     }
 
     stop() {
@@ -53,6 +52,6 @@ class SeamlessAudioLoop {
         this.playStart = 0;
     }
 
-    get volume() {return this.vol.gain.value;}
-    set volume(vol) {this.vol.gain.value = vol;}  
+    get volume() { return this.vol.gain.value; }
+    set volume(vol) { this.vol.gain.value = vol; }
 }

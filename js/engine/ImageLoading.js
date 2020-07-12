@@ -19,7 +19,7 @@ function beginLoadingImage(image, fileName) {
 }
 
 async function loadImages() {
-	let imageList = [
+	const imageList = [
 		{ varName: playerPic, theFile: "player1.png" },
 		{ varName: UFOPic, theFile: "ufo.png" },
 		{ varName: turretBasePic, theFile: "turretBase.png" },
@@ -33,11 +33,11 @@ async function loadImages() {
 		{ varName: gHookPic, theFile: "gHook.png"}
 	];
 
-	picsToLoad = imageList.length;
+	const picsToLoad = imageList.length;
 
 	for (let i in imageList) {
 		let nextImage = imageList[i];
-		drawLoadScreen('Loading Sprites', i / (imageList.length - 1), nextImage.theFile);
+		drawLoadScreen('Loading Sprites', i / (picsToLoad - 1), nextImage.theFile);
 		await beginLoadingImage(nextImage.varName, nextImage.theFile);
 		nextImage.varName.chunks = divideSprite(nextImage.varName, 6);
 	}

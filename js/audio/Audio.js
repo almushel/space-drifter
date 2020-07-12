@@ -11,7 +11,7 @@ async function setupAudio() {
 	initAudioVolume();
 
 	return new Promise((resolve, reject) => {
-		resolve;
+		resolve();
 	});
 }
 
@@ -21,7 +21,7 @@ async function loadAudioAssets() {
 	createAudioEvents();
 	
 	return new Promise((resolve, reject) => {
-		resolve;
+		resolve();
 	});
 }
 
