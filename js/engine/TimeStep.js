@@ -2,7 +2,12 @@ const UPDATE_INTERVAL = 1000 / 60;
 var currentFrame, lastFrame, deltaT;
 
 document.onvisibilitychange = function () {
-	lastFrame = performance.now() - UPDATE_INTERVAL;
+	if (document.visibilityState == 'visible') {
+		audioCtx.resume();
+		lastFrame = performance.now() - UPDATE_INTERVAL;
+	} else {
+		audioCtx.suspend();
+	}
 }
 
 function initialFrame() {

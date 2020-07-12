@@ -11,17 +11,17 @@ function loadGame() {
 	startbutton.style.display = "none";
 
 	initCanvases();
-	drawTitleScreen();
 	toggleMenuLayer();
 
 	setCanvas(gameCanvas, gameCtx);
+	createStarField();
+	initInput();
 	loadImages();
 }
 
-function loadingDoneSoStartGame() {
-	createStarField();
-	initInput();
-	setupAudio();
+async function loadingDoneSoStartGame() {
+	await setupAudio();
+	drawTitleScreen();
 	titleMusic.play();
 
 	initialFrame();

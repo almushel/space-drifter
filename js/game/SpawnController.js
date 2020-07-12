@@ -240,7 +240,7 @@ function removeDeadEnemies() {
 	for (let i = enemyList.length - 1; i >= 0; i--) {
 		if (enemyList[i].isDead) {
 			if (!enemyList[i].despawning) { //Don't explode on despawn
-				enemyDeath.play();
+				enemyDeath.playAtPosition(enemyList[i].x);
 				screenShake();
 	
 				spawnItems(enemyList[i]);

@@ -6,7 +6,7 @@ function colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
 function colorCircle(centerX, centerY, radius, fillColor) {
 	ctx.fillStyle = fillColor;
 	ctx.beginPath();
-	ctx.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+	ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
 	ctx.fill();
 }
 
@@ -16,20 +16,20 @@ function colorArc(centerX, centerY, radius, startAng, endAng, counterclockwise, 
 	ctx.arc(centerX, centerY, radius, startAng, endAng, counterclockwise);
 	ctx.stroke();
 }
-  
+
 function drawBitmapCenteredWithRotation(graphic, atX, atY, withAngle) {
 	ctx.save(); // allows us to undo translate movement and rotate spin
-	ctx.translate(atX,atY); // sets the point where our graphic will go
+	ctx.translate(atX, atY); // sets the point where our graphic will go
 	ctx.rotate(withAngle); // sets the rotation
-	ctx.drawImage(graphic,-graphic.width/2,-graphic.height/2); // center, draw
+	ctx.drawImage(graphic, -graphic.width / 2, -graphic.height / 2); // center, draw
 	ctx.restore(); // undo the translation movement and rotation since save()
 }
 
 function colorAlignedText(textX, textY, textAlign, textFont, textColor, textString) {
 	ctx.save();
 	ctx.font = textFont;
-  	ctx.textAlign = textAlign;
- 	ctx.fillStyle = textColor;
+	ctx.textAlign = textAlign;
+	ctx.fillStyle = textColor;
 	ctx.fillText(textString, textX, textY);
 	ctx.restore();
 }
@@ -49,7 +49,7 @@ function drawPolygon(centerX, centerY, polyPoints, color, isFilled) {
 	ctx.save();
 	ctx.beginPath();
 	ctx.moveTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
-	for (var p=1; p<polyPoints.length; p++) {
+	for (var p = 1; p < polyPoints.length; p++) {
 		ctx.lineTo(centerX + polyPoints[p].x, centerY + polyPoints[p].y);
 	}
 	ctx.lineTo(centerX + polyPoints[0].x, centerY + polyPoints[0].y);
@@ -65,7 +65,7 @@ function drawPolygon(centerX, centerY, polyPoints, color, isFilled) {
 
 function screenShake() {
 	if (canvas.style.top == '0px' && canvas.style.left == '0px') {
-		setTimeout(function() {
+		setTimeout(function () {
 			canvas.style.top = '0px';
 			canvas.style.left = '0px';
 			// canvas.style.transform = 'scale(1, 1)';
@@ -91,7 +91,7 @@ function screenShake() {
 	} else {
 		yOffset += 1;
 	}
-	
+
 	left += xOffset;
 	top += yOffset;
 
