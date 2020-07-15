@@ -14,51 +14,85 @@ const KEY_ENTER = 13;
 const KEY_CTRL = 17;
 const KEY_SPACEBAR = 32;
 
-let keysPressed = [],
-	keysHeld = [],
-	keysReleased = [];
-
-function setKeyHoldState(thisKey, setTo) {
-	if (setTo === true) {
-		if (keysHeld[thisKey] !== setTo) {
-			keysPressed[thisKey] = setTo;
-		} else {
-			keysPressed[thisKey] = !setTo;
-		}
-		keysReleased[thisKey] = !setTo;
-	} else if (setTo === false) {
-		keysPressed[thisKey] = setTo;
-		keysReleased[thisKey] = !setTo;
+class Keyboard {
+	constructor() {
+		this._keysPressed = new Set();
+		this._keysHeld = new Set();
+		this._keysReleased = new Set();
 	}
 
-	keysHeld[thisKey] = setTo;
-}
+	init() {
+		document.addEventListener('keydown', this.keyDown.bind(this));
+		document.addEventListener('keyup', this.keyUp.bind(this));
+	}
 
-function titleKeys(key) {
-	if (key == KEY_SPACEBAR && keysHeld[KEY_SPACEBAR] == true) {
-		if (gameState === gameOver) {
-			gameOver = false;
-			showHighScores = true;
-		} else if (gameState === highScores) {
-			showHighScores = false;
-		} else {
-			resetGame();
-			gameState = gameStarted;
+	keyDown(evt) {
+		if (!this._keysHeld.has(evt.keyCode)) {
+			this._keysPressed.add(evt.keyCode);
 		}
 	}
-}
 
-function keyPressed(evt) {
-	evt.preventDefault(); // without this, arrow keys scroll the browser
-	if (gameState !== gameStarted) {
-		//titleKeys(evt.keyCode);
+	keyUp(evt) {
+		this._keysReleased.add(evt.keyCode);
 	}
-	setKeyHoldState(evt.keyCode, true);
-}
 
-function keyReleased(evt) {
-	if (gameState !== gameStarted) {
-		//titleKeys(evt.keyCode);
+	keyPressed(key) {
+		//key down this frame, but not last frame
+		return (this._keysPressed.has(key));
 	}
-	setKeyHoldState(evt.keyCode, false);
+
+	keyHeld(key) {
+		//key down this frame or last frame
+		return (this._keysHeld.has(key));
+	}
+
+	keyReleased(key) {
+		//key NOT down this frame, but down last frame
+		return (this._keysReleased.has(key));
+	}
+
+	update() {
+		let iterator = this._keysPressed.values();
+		let key;
+		while((key = iterator.next()).done === false) {
+			//Key not held last frame
+			if (!this._keysHeld.has(key.value)) {
+				this._keysHeld.add(key.value);
+			} else {
+				//Remove from pressed next frame
+				this._keysPressed.delete(key.value);
+			}
+		}
+
+		iterator = this._keysReleased.values();
+		while((key = iterator.next()).done === false) {
+			if (this._keysHeld.has(key.value)) {
+				this._keysHeld.delete(key.value);
+			} else {
+				//delete from released the frame after deleting from held
+				this._keysReleased.delete(key.value);
+			}
+		}
+	}
+
+	update2() {
+		for (let key of this._keysPressed) {
+			//Key not held last frame
+			if (!this._keysHeld.has(key.value)) {
+				this._keysHeld.add(key.value);
+			} else {
+				//Remove from pressed next frame
+				this._keysPressed.delete(key.value);
+			}
+		}
+		
+		for (let key of this._keysReleased) {
+			if (this._keysHeld.has(key.value)) {
+				this._keysHeld.delete(key.value);
+			} else {
+				//delete from released the frame after deleting from held
+				this._keysReleased.delete(key.value);
+			}
+		}
+	}
 }

@@ -1,6 +1,5 @@
 class Control {
 	constructor(key, padButton, axis, axisDir, deadzone) {
-		//keysHeld[key]
 		if (key != undefined & key != null) {
 			this.key = key;
 		}
@@ -25,12 +24,11 @@ class Control {
 	}
 
 	isPressed() {
-		return (keysHeld[this.key] || padButtonsHeld[this.padButton] || this.axisTouched(this.axis, this.axisDir));
+		return (keyboard.keyHeld(this.key) || padButtonsHeld[this.padButton] || this.axisTouched(this.axis, this.axisDir));
 	}
 
 	isReleased() {
-		if (keysReleased[this.key] || padButtonsReleased[this.padButton]) {
-			keysReleased[this.key] = false;
+		if (keyboard.keyReleased(this.key) || padButtonsReleased[this.padButton]) {
 			padButtonsReleased[this.padButton] = false;
 			return true;
 		}

@@ -1,9 +1,11 @@
-let menuConfirm = new Control(KEY_ENTER, PAD_START, null, null),
-	scoreClear = new Control(KEY_LETTER_C, PAD_BACK, null, null);
+let menuConfirm, scoreClear, keyboard;
 
 function initInput() {
-	keysHeld.length = 222;
-	keysHeld.fill(false);
+	menuConfirm = new Control(KEY_ENTER, PAD_START, null, null);
+	scoreClear = new Control(KEY_LETTER_C, PAD_BACK, null, null);
+	keyboard = new Keyboard();
+
+	keyboard.init();
 
 	padButtonsHeld.length = 16;
 	padButtonsHeld.fill(false);
@@ -11,13 +13,11 @@ function initInput() {
 	padAxes.length = 4;
 	padAxes.fill(0);
 
-	document.addEventListener("keydown", keyPressed);
-	document.addEventListener("keyup", keyReleased);
-
 	p1.setupControls();
 }
 
 function pollInput() {
+	keyboard.update();
 	pollGamepads();
 	menuControl();
 }

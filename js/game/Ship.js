@@ -202,7 +202,7 @@ class Ship extends WrapPosition {
 	}
 
 	thrust(angle, acceleration, emitter) {
-		//this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
+		this.thrustEnergy -= THRUST_CONSUMPTION * deltaT;
 		this.xv += Math.cos(angle) * (acceleration * deltaT);
 		this.yv += Math.sin(angle) * (acceleration * deltaT);
 
@@ -213,28 +213,28 @@ class Ship extends WrapPosition {
 	}
 
 	updateWeapons() {
-		if (this.controlCannonFire.isPressed() && this.weaponHeat < 100) {
-			switch (this.activeWeapon) {
-				case 'Machine Gun':
-					this.fireCannon();
-					break;
-				case 'Missile':
-					this.fireMissile();
-					break;
-				case 'Laser':
-					this.fireLaser();
-					break;
-				default:
-					this.fireCannon();
+		if (this.controlCannonFire.isPressed()) {
+			if (this.weaponHeat < 100) {
+				this.fireWeapon(this.activeWeapon);
 			}
+		} else if (this.weaponHeat > 0) {
+			this.weaponHeat -= deltaT;
 		}
+	}
 
-		if (this.weaponHeat > 0) {
-			if (this.controlCannonFire.isPressed() && this.weaponHeat >= 100) {
-
-			} else {
-				this.weaponHeat -= deltaT;
-			}
+	fireWeapon(weapon) {
+		switch (weapon) {
+			case 'Machine Gun':
+				this.fireCannon();
+				break;
+			case 'Missile':
+				this.fireMissile();
+				break;
+			case 'Laser':
+				this.fireLaser();
+				break;
+			default:
+				this.fireCannon();
 		}
 	}
 
