@@ -52,8 +52,9 @@ class Keyboard {
 	}
 
 	update() {
-		let iterator = this._keysPressed.values();
-		let key;
+		let iterator, key;
+		
+		iterator = this._keysPressed.values();
 		while((key = iterator.next()).done === false) {
 			//Key not held last frame
 			if (!this._keysHeld.has(key.value)) {
@@ -66,27 +67,6 @@ class Keyboard {
 
 		iterator = this._keysReleased.values();
 		while((key = iterator.next()).done === false) {
-			if (this._keysHeld.has(key.value)) {
-				this._keysHeld.delete(key.value);
-			} else {
-				//delete from released the frame after deleting from held
-				this._keysReleased.delete(key.value);
-			}
-		}
-	}
-
-	update2() {
-		for (let key of this._keysPressed) {
-			//Key not held last frame
-			if (!this._keysHeld.has(key.value)) {
-				this._keysHeld.add(key.value);
-			} else {
-				//Remove from pressed next frame
-				this._keysPressed.delete(key.value);
-			}
-		}
-		
-		for (let key of this._keysReleased) {
 			if (this._keysHeld.has(key.value)) {
 				this._keysHeld.delete(key.value);
 			} else {

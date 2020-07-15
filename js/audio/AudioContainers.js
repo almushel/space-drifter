@@ -192,7 +192,13 @@ class SeamlessAudioLoop {
     }
 
     play() {
-        if (!this.buffer) { return; }
+		if (!this.buffer) { return; }
+		//If no loop point specified, use default BufferSource loop
+		if (!this.loopPoint) {
+			this.queueBufferSource(0,0);
+			this.bufferSources[0].loop = true;
+			return;
+		}
 
         const container = this;
         let nextLoop = (index) => {

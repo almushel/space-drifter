@@ -27,8 +27,8 @@ async function loadAudioAssets() {
 
 async function loadAudioBuffers() {
 	const bufferList = [
-		{name: 'GameMusic', path: './audio/Space Drifter' + audioFormat},
-		{name: 'TitleMusic', path: './audio/TitleMusic' + audioFormat},
+		{name: 'GameMusic', path: './audio/WrappingAction' + audioFormat},
+		{name: 'TitleMusic', path: './audio/SpaceDrifter' + audioFormat},
 		{name: 'GameOverMusic', path: './audio/GameOverMusic' + audioFormat},
 		{name: 'GamePause', path: './audio/GamePause' + audioFormat},
 		{name: 'MenuConfirm', path: './audio/MenuConfirm' + audioFormat},
@@ -61,8 +61,8 @@ async function loadAudioBuffers() {
 }
 
 function createAudioEvents() {
-	musicLoop = new SeamlessAudioLoop(audioBuffers['GameMusic'], 106.666);
-	titleMusic = new SeamlessAudioLoop(audioBuffers['TitleMusic'], 96);
+	musicLoop = new SeamlessAudioLoop(audioBuffers['GameMusic'], 192);
+	titleMusic = new SeamlessAudioLoop(audioBuffers['TitleMusic'], 0);
 	gameOverMusic = new AudioOneShot(audioBuffers['GameOverMusic'], 1);
 	gamePauseSFX = new AudioOneShot(audioBuffers['GamePause'], 2);
 	menuConfirmSFX = new AudioOneShot(audioBuffers['MenuConfirm'], 6);
@@ -97,8 +97,8 @@ function loadFile(path, responseType) {
 function initAudioVolume() {
 	gHookImpact.volume = 0.8;
 	grapplerFireSFX.volume = 0.8;
-	titleMusic.volume = 1;
-	musicLoop.volume = 0.8;
+	titleMusic.volume = 0.9;
+	musicLoop.volume = 0.75;
 	gamePauseSFX.volume = 0.8;
 	menuConfirmSFX.volume = 0.7;
 	playerShotSFX.volume = 0.7;
