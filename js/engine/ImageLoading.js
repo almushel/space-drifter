@@ -20,28 +20,40 @@ function beginLoadingImage(image, fileName) {
 
 async function loadImages() {
 	const imageList = [
-		{ varName: playerPic, theFile: "player1.png" },
-		{ varName: UFOPic, theFile: "ufo.png" },
-		{ varName: turretBasePic, theFile: "turretBase.png" },
-		{ varName: turretCannonPic, theFile: "turretCannon.png" },
-		{ varName: trackerPic, theFile: "tracker.png" },
-		{ varName: missilePic, theFile: "missile.png" },
-		{ varName: mgHUD, theFile: "mgHUD.png" },
-		{ varName: missileHUD, theFile: "missileHUD.png" },
-		{ varName: laserHUD, theFile: "laserHUD.png" },
-		{ varName: grapplerPic, theFile: "grappler.png" },
-		{ varName: gHookPic, theFile: "gHook.png"}
+		{ varName: playerPic, theFile: "player1" },
+		{ varName: UFOPic, theFile: "ufo" },
+		{ varName: turretBasePic, theFile: "turretBase" },
+		{ varName: turretCannonPic, theFile: "turretCannon" },
+		{ varName: trackerPic, theFile: "tracker" },
+		{ varName: missilePic, theFile: "missile" },
+		{ varName: mgHUD, theFile: "mgHUD" },
+		{ varName: missileHUD, theFile: "missileHUD" },
+		{ varName: laserHUD, theFile: "laserHUD" },
+		{ varName: grapplerPic, theFile: "grappler" },
+		{ varName: gHookPic, theFile: "gHook"}
 	];
 
 	const picsToLoad = imageList.length;
+	let promises = [];
+	let picsLoaded = 0;
 
-	for (let i in imageList) {
-		let nextImage = imageList[i];
-		drawLoadScreen('Loading Sprites', i / (picsToLoad - 1), nextImage.theFile);
-		await beginLoadingImage(nextImage.varName, nextImage.theFile);
-		nextImage.varName.chunks = divideSprite(nextImage.varName, 6);
+	for (let nextImage of imageList) {
+		let image = nextImage.varName;
+		let fileName = nextImage.theFile;
+
+		promises.push(new Promise((resolve, reject) => {
+			image.onload = () => {
+					picsLoaded++;
+					drawLoadScreen('Loading Sprites', picsLoaded / (picsToLoad - 1), fileName);
+					image.chunks = divideSprite(image, 6);
+					resolve();
+				}
+			image.onerror = reject;
+			image.src = "images/" + fileName + '.png';
+		}));
 	}
-	loadingDoneSoStartGame();
+
+	return Promise.all(promises);
 }
 
 function divideSprite(sprite, division) {

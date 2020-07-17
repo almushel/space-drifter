@@ -45,19 +45,20 @@ async function loadAudioBuffers() {
 		{name: 'WeaponPickUp', path: './audio/WeaponPickup' + audioFormat},
 	];
 	const length = bufferList.length;
+	let promises = [];
+	let loaded = 0;
 	
+	drawLoadScreen('Loading Audio', 0, '');
 	for (let b=0; b<length; b++) {
 		let bufferInfo = bufferList[b];
-		drawLoadScreen('Loading Audio', b / length, bufferInfo.name);
-		let audioData = await loadFile(bufferInfo.path, 'arraybuffer');
-		audioBuffers[bufferInfo.name] = await audioCtx.decodeAudioData(audioData, (buffer) => {
-			this.buffer = buffer;
+		promises[b] = await audioCtx.decodeAudioData(await loadFile(bufferInfo.path, 'arraybuffer'), (buffer) => {
+			loaded++;
+			drawLoadScreen('Loading Audio', loaded / length, bufferInfo.name);
+			
+			audioBuffers[bufferInfo.name] = buffer;
 		})
 	}
-
-	return new Promise((resolve, reject) => {
-		resolve();
-	});
+	return Promise.all(promises);
 }
 
 function createAudioEvents() {

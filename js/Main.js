@@ -6,7 +6,7 @@ const p1 = new Ship(playerPic);
 
 const allEntities = [];
 
-function loadGame() {
+async function loadGame() {
 	let startbutton = document.getElementById('startButton');
 	startbutton.style.display = "none";
 
@@ -16,11 +16,12 @@ function loadGame() {
 	setCanvas(gameCanvas, gameCtx);
 	createStarField();
 	initInput();
-	loadImages();
+	await loadImages();
+	await setupAudio();
+	startGame();
 }
 
-async function loadingDoneSoStartGame() {
-	await setupAudio();
+function startGame() {
 	drawTitleScreen();
 	titleMusic.play();
 
