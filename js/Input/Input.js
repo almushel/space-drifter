@@ -1,24 +1,21 @@
-let menuConfirm, scoreClear, keyboard;
+let menuConfirm, scoreClear, keyboard, gamepads;
 
 function initInput() {
-	menuConfirm = new Control(KEY_ENTER, PAD_START, null, null);
-	scoreClear = new Control(KEY_LETTER_C, PAD_BACK, null, null);
 	keyboard = new Keyboard();
+	gamepads = new GamePadManager();
 
 	keyboard.init();
-
-	padButtonsHeld.length = 16;
-	padButtonsHeld.fill(false);
-
-	padAxes.length = 4;
-	padAxes.fill(0);
-
+	gamepads.init();
+	console.log(gamepads.pads);
+	
+	menuConfirm = new Control(KEY_ENTER, PAD_START, null, null);
+	scoreClear = new Control(KEY_LETTER_C, PAD_BACK, null, null);
 	p1.setupControls();
 }
 
 function pollInput() {
 	keyboard.update();
-	pollGamepads();
+	gamepads.update(deltaT);
 	menuControl();
 }
 
@@ -28,7 +25,7 @@ function menuControl() {
 			case gameStarted:
 				if (p1.isDead && p1.lives >= 0) {
 					p1.respawn();
-				} else {
+				} else if (transDir == 0) {
 					gameState = gamePaused;
 					gamePauseSFX.play();
 					drawPauseScreen();
@@ -37,10 +34,12 @@ function menuControl() {
 				}
 				break;
 			case gamePaused:
-				gameState = gameStarted;
-				gamePauseSFX.play();
-				startTransition(-1);
-				transitionHUD(-1);
+				if (transDir == 0) {
+					gameState = gameStarted;
+					gamePauseSFX.play();
+					startTransition(-1);
+					transitionHUD(-1);
+				}
 				break;
 			case gameOver:
 				menuConfirmSFX.play();

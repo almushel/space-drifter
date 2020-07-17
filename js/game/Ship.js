@@ -133,23 +133,23 @@ class Ship extends WrapPosition {
 		}
 
 		//Turning
-		if (this.controlTurnLeft.isPressed()) {
+		if (this.controlTurnLeft.isHeld()) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;
 		}
-		if (this.controlTurnRight.isPressed()) {
+		if (this.controlTurnRight.isHeld()) {
 			this.ang += (TURN_RATE * deltaT) * Math.PI;
 		}
 
 		//Thrust
 		if (this.thrustEnergy > 0) {
-			if (this.controlGas.isPressed()) {
+			if (this.controlGas.isHeld()) {
 				this.thrust(this.ang, THRUST_POWER, this.rearThrustEmitter);
 			}
-			if (this.controlThrustLeft.isPressed()) {
+			if (this.controlThrustLeft.isHeld()) {
 				let tAng = this.ang - Math.PI / 2;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
-			if (this.controlThrustRight.isPressed()) {
+			if (this.controlThrustRight.isHeld()) {
 				let tAng = this.ang + Math.PI / 2;;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
@@ -158,7 +158,7 @@ class Ship extends WrapPosition {
 		}
 
 		//Engine power regeneration
-		if (!this.controlGas.isPressed() && !this.controlThrustLeft.isPressed() && !this.controlThrustRight.isPressed()) {
+		if (!this.controlGas.isHeld() && !this.controlThrustLeft.isHeld() && !this.controlThrustRight.isHeld()) {
 			playerThrustSFX.pause();
 			if (this.thrustEnergy < 100) {
 				this.thrustEnergy += 1 * deltaT;
@@ -213,7 +213,7 @@ class Ship extends WrapPosition {
 	}
 
 	updateWeapons() {
-		if (this.controlCannonFire.isPressed()) {
+		if (this.controlCannonFire.isHeld()) {
 			if (this.weaponHeat < 100) {
 				this.fireWeapon(this.activeWeapon);
 			}

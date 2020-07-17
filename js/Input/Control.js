@@ -1,52 +1,45 @@
 class Control {
 	constructor(key, padButton, axis, axisDir, deadzone) {
-		if (key != undefined & key != null) {
-			this.key = key;
-		}
-
+		this.key = key ? key : 0;
 		//padButtonsHeld[padButton]
-		if (padButton != undefined & padButton != null) {
-			this.padButton = padButton;
-		}
+		this.padButton = padButton ? padButton : 0;
 
 		//padAxes[axis]
-		if (axis != undefined & axis != null) {
-			this.axis = axis;
-		}
-		//Axis direction: 1 or -1
-		if (axisDir != undefined & axisDir != null) {
-			this.axisDir = axisDir;
-		}
+		this.axis = axis ? axis : 0;
 
-		if (deadzone != undefined & deadzone != null) {
-			this.deadzone = deadzone;
-		}
+		//Axis direction: 1 or -1
+		this.axisDir = axisDir ? axisDir : null;
+		this.deadzone = deadzone ? deadzone : null;
 	}
 
 	isPressed() {
-		return (keyboard.keyHeld(this.key) || padButtonsHeld[this.padButton] || this.axisTouched(this.axis, this.axisDir));
+		return (keyboard.keyPressed(this.key) || 
+				gamepads.buttonHeld(this.padButton, 0) ||
+				this.axisTouched(this.axis, this.axisDir));
+	}
+
+	isHeld() {
+		return (keyboard.keyHeld(this.key) || 
+				gamepads.buttonHeld(this.padButton, 0) ||
+				this.axisTouched(this.axis, this.axisDir));
 	}
 
 	isReleased() {
-		if (keyboard.keyReleased(this.key) || padButtonsReleased[this.padButton]) {
-			padButtonsReleased[this.padButton] = false;
-			return true;
-		}
-		return false;
+		return (keyboard.keyReleased(this.key) || gamepads.buttonReleased(this.padButton, 0));
 	}
 
 	axisTouched() {
 		if (this.axisDir == 1) {
-			return padAxes[this.axis] > this.deadzone;
+			return gamepads.padAxis(this.axis, 0) > this.deadzone;
 		} else if (this.axisDir == -1) {
-			return padAxes[this.axis] < -this.deadzone;
+			return gamepads.padAxis(this.axis, 0) < -this.deadzone;
 		} else {
 			return false;
 		}
 	}
 
 	getAxisValue() {
-		return padAxes[this.axis];
+		return gamepads.padAxis(this.axis, 0);
 	}
 
 	getButtonValue() {
