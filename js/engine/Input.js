@@ -22,7 +22,95 @@ const PAD_AXIS_LV = 1;
 const PAD_AXIS_RH = 2;
 const PAD_AXIS_RV = 3;
 
+// keyboard keycode constants
+const KEY_LEFT_ARROW = 37;
+const KEY_UP_ARROW = 38;
+const KEY_RIGHT_ARROW = 39;
+const KEY_DOWN_ARROW = 40;
+const KEY_LETTER_Q = 81;
+const KEY_LETTER_E = 69;
+const KEY_LETTER_W = 87;
+const KEY_LETTER_A = 65;
+const KEY_LETTER_S = 83;
+const KEY_LETTER_D = 68;
+const KEY_LETTER_C = 67;
+const KEY_ENTER = 13;
+const KEY_CTRL = 17;
+const KEY_SPACEBAR = 32;
+
 let controllerEnabled = false;
+
+let menuConfirm, scoreClear, keyboard, gamepads;
+
+function initInput() {
+	keyboard = new Keyboard();
+	gamepads = new GamePadManager();
+
+	keyboard.init();
+	gamepads.init();
+	
+	menuConfirm = new Control(KEY_ENTER, PAD_START, null, null);
+	scoreClear = new Control(KEY_LETTER_C, PAD_BACK, null, null);
+	p1.setupControls();
+}
+
+function pollInput() {
+	keyboard.update();
+	gamepads.update(deltaT);
+	menuControl();
+}
+
+function menuControl() {
+	if (menuConfirm.isReleased()) {
+		switch(gameState) {
+			case gameStarted:
+				if (p1.isDead && p1.lives >= 0) {
+					p1.respawn();
+				} else if (transDir == 0) {
+					gameState = gamePaused;
+					gamePauseSFX.play();
+					drawPauseScreen();
+					startTransition(1);
+					transitionHUD(1);
+				}
+				break;
+			case gamePaused:
+				if (transDir == 0) {
+					gameState = gameStarted;
+					gamePauseSFX.play();
+					startTransition(-1);
+					transitionHUD(-1);
+				}
+				break;
+			case gameOver:
+				menuConfirmSFX.play();
+				titleMusic.play();
+				gameState = highScores;
+				drawTitleScreen();
+				break;
+			case highScores:
+				menuConfirmSFX.play();
+				gameState = titleScreen;
+				drawTitleScreen();
+				break;
+			case titleScreen:
+				menuConfirmSFX.play();
+				resetGame();
+				gameState = gameStarted;
+				break;
+			default: 
+				break;
+		}
+	}
+
+	if (gameState === highScores) {
+		if (scoreClear.isReleased()) {
+			menuConfirmSFX.play();
+			resetScoreTable();
+			drawTitleScreen();
+		}
+	}
+}
 
 class GamePadManager {
 	constructor() {
@@ -39,7 +127,6 @@ class GamePadManager {
 		}
 
 		window.addEventListener('gamepadconnected', function (e) {
-            console.log('connected');
             let gamepads = navigator.getGamepads();
 			for (let g = 0; g < gamepads.length; g++) {
 				if (!this.pads[g]) { //No GamePad object current created for this index
@@ -56,7 +143,6 @@ class GamePadManager {
         }.bind(this));
 
 		window.addEventListener('gamepaddisconnected', function (e) {
-            console.log('disconnected');
 			let gamepads = navigator.getGamepads();
 			for (let i = 0; i < gamepads.length; i++) {
 				if (!gamepads[i]) {
@@ -110,17 +196,14 @@ class GamePad {
 	}
 
 	buttonPressed(button) {
-		//button down this frame, but not last frame
 		return (this._buttonsPressed.has(button));
 	}
 
 	buttonHeld(button) {
-		//button down this frame or last frame
 		return (this._buttonsHeld.has(button));
 	}
 
 	buttonReleased(button) {
-		//button NOT down this frame, but down last frame
 		return (this._buttonsReleased.has(button));
 	}
 
@@ -171,59 +254,114 @@ class GamePad {
 	}
 }
 
-function gamepadButtonToString(index) {
-    switch(index) {
-        case 0:
-            return 'A';
-        case 1:
-            return 'B';
-        case 2:
-            return 'X';
-        case 3:
-            return 'Y';
-        case 4:
-            return 'LB';
-        case 5:
-            return 'RB';
-        case 6:
-            return 'LT';
-        case 7:
-            return 'RT';
-        case 8:
-            return 'Back';
-        case 9:
-            return 'Start';
-        case 10:
-            return 'L3';
-        case 11:
-            return 'R3';
-        case 12:
-            return 'Up';
-        case 13:
-            return 'Down';
-        case 14:
-            return 'Left';
-        case 15:
-            return 'Right';
-        default:
-            return null;
-    }
+class Keyboard {
+	constructor() {
+		this._keysPressed = new Set();
+		this._keysHeld = new Set();
+		this._keysReleased = new Set();
+	}
+
+	init() {
+		document.addEventListener('keydown', this.keyDown.bind(this));
+		document.addEventListener('keyup', this.keyUp.bind(this));
+	}
+
+	keyDown(evt) {
+		if (!this._keysHeld.has(evt.keyCode)) {
+			this._keysPressed.add(evt.keyCode);
+		}
+	}
+
+	keyUp(evt) {
+		this._keysReleased.add(evt.keyCode);
+	}
+
+	keyPressed(key) {
+		//key down this frame, but not last frame
+		return (this._keysPressed.has(key));
+	}
+
+	keyHeld(key) {
+		//key down this frame or last frame
+		return (this._keysHeld.has(key));
+	}
+
+	keyReleased(key) {
+		//key NOT down this frame, but down last frame
+		return (this._keysReleased.has(key));
+	}
+
+	update() {
+		let iterator, key;
+		
+		iterator = this._keysPressed.values();
+		while((key = iterator.next()).done === false) {
+			//Key not held last frame
+			if (!this._keysHeld.has(key.value)) {
+				this._keysHeld.add(key.value);
+			} else {
+				//Remove from pressed next frame
+				this._keysPressed.delete(key.value);
+			}
+		}
+
+		iterator = this._keysReleased.values();
+		while((key = iterator.next()).done === false) {
+			if (this._keysHeld.has(key.value)) {
+				this._keysHeld.delete(key.value);
+			} else {
+				//delete from released the frame after deleting from held
+				this._keysReleased.delete(key.value);
+			}
+		}
+	}
 }
 
-// axes[0] = 'LS Horizontal'
-// axes[1] = 'LS Vertical'
-// axes[2] = 'RS Horizontal'
-// axes[3] = 'LS Vertical'
+class Control {
+	constructor(key, padButton, axis, axisDir, deadzone) {
+		this.key = key ? key : 0;
+		//padButtonsHeld[padButton]
+		this.padButton = padButton ? padButton : 0;
 
-function gamepadAxesToString(index) {
-    switch (index) {
-        case 0:
-            return 'LS Horizontal';
-        case 1:
-            return 'LS Vertical';
-        case 2:
-            return 'RS Horizontal';
-        case 3:
-            return 'RS Vertical';
-    }
+		//padAxes[axis]
+		this.axis = axis ? axis : 0;
+
+		//Axis direction: 1 or -1
+		this.axisDir = axisDir ? axisDir : null;
+		this.deadzone = deadzone ? deadzone : null;
+	}
+
+	isPressed() {
+		return (keyboard.keyPressed(this.key) || 
+				gamepads.buttonHeld(this.padButton, 0) ||
+				this.axisTouched(this.axis, this.axisDir));
+	}
+
+	isHeld() {
+		return (keyboard.keyHeld(this.key) || 
+				gamepads.buttonHeld(this.padButton, 0) ||
+				this.axisTouched(this.axis, this.axisDir));
+	}
+
+	isReleased() {
+		return (keyboard.keyReleased(this.key) || gamepads.buttonReleased(this.padButton, 0));
+	}
+
+	axisTouched() {
+		if (this.axisDir == 1) {
+			return gamepads.padAxis(this.axis, 0) > this.deadzone;
+		} else if (this.axisDir == -1) {
+			return gamepads.padAxis(this.axis, 0) < -this.deadzone;
+		} else {
+			return false;
+		}
+	}
+
+	getAxisValue() {
+		return gamepads.padAxis(this.axis, 0);
+	}
+
+	getButtonValue() {
+		//TO DO
+	}
 }
