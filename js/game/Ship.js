@@ -37,14 +37,8 @@ class Ship extends WrapPosition {
 		this.lateralThrustEmitter = new particleEmitter(this, 0, 0, 2, null, 'rectangle', '#6DC2FF', '#6DC2FF', '#6DC2FF');
 	}
 
-	// key controls used for this
-	setupControls() {
-		this.controlGas = new Control(KEY_UP_ARROW, PAD_UP, PAD_AXIS_LV, -1, 0.2);
-		this.controlTurnLeft = new Control(KEY_LEFT_ARROW, PAD_LEFT, PAD_AXIS_LH, -1, 0.2);
-		this.controlTurnRight = new Control(KEY_RIGHT_ARROW, PAD_RIGHT, PAD_AXIS_LH, 1, 0.2);
-		this.controlThrustLeft = new Control(KEY_LETTER_Q, PAD_LB, null, null);
-		this.controlThrustRight = new Control(KEY_LETTER_E, PAD_RB, null, null);
-		this.controlCannonFire = new Control(KEY_SPACEBAR, PAD_A, null, null);
+	setupControls(controls) {
+		this.controls = controls;
 	}
 
 	reset() {
@@ -133,23 +127,23 @@ class Ship extends WrapPosition {
 		}
 
 		//Turning
-		if (this.controlTurnLeft.isHeld()) {
+		if (this.controls.turnLeft.held) {
 			this.ang -= (TURN_RATE * deltaT) * Math.PI;
 		}
-		if (this.controlTurnRight.isHeld()) {
+		if (this.controls.turnRight.held) {
 			this.ang += (TURN_RATE * deltaT) * Math.PI;
 		}
 
 		//Thrust
 		if (this.thrustEnergy > 0) {
-			if (this.controlGas.isHeld()) {
+			if (this.controls.thrust.held) {
 				this.thrust(this.ang, THRUST_POWER, this.rearThrustEmitter);
 			}
-			if (this.controlThrustLeft.isHeld()) {
+			if (this.controls.strafeLeft.held) {
 				let tAng = this.ang - Math.PI / 2;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
-			if (this.controlThrustRight.isHeld()) {
+			if (this.controls.strafeRight.held) {
 				let tAng = this.ang + Math.PI / 2;;
 				this.thrust(tAng, LATERAL_THRUST, this.lateralThrustEmitter);
 			}
@@ -158,7 +152,7 @@ class Ship extends WrapPosition {
 		}
 
 		//Engine power regeneration
-		if (!this.controlGas.isHeld() && !this.controlThrustLeft.isHeld() && !this.controlThrustRight.isHeld()) {
+		if (!this.controls.thrust.held && !this.controls.strafeLeft.held && !this.controls.strafeRight.held) {
 			playerThrustSFX.pause();
 			if (this.thrustEnergy < 100) {
 				this.thrustEnergy += 1 * deltaT;
@@ -213,7 +207,7 @@ class Ship extends WrapPosition {
 	}
 
 	updateWeapons() {
-		if (this.controlCannonFire.isHeld()) {
+		if (this.controls.fire.held) {
 			if (this.weaponHeat < 100) {
 				this.fireWeapon(this.activeWeapon);
 			}

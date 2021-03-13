@@ -39,78 +39,10 @@ const KEY_CTRL = 17;
 const KEY_SPACEBAR = 32;
 
 let controllerEnabled = false;
+const inputTransitionTime = 1;
 
-let menuConfirm, scoreClear, keyboard, gamepads;
-
-function initInput() {
-	keyboard = new Keyboard();
-	gamepads = new GamePadManager();
-
-	keyboard.init();
-	gamepads.init();
-	
-	menuConfirm = new Control(KEY_ENTER, PAD_START, null, null);
-	scoreClear = new Control(KEY_LETTER_C, PAD_BACK, null, null);
-	p1.setupControls();
-}
-
-function pollInput() {
-	keyboard.update();
-	gamepads.update(deltaT);
-	menuControl();
-}
-
-function menuControl() {
-	if (menuConfirm.isReleased()) {
-		switch(gameState) {
-			case gameStarted:
-				if (p1.isDead && p1.lives >= 0) {
-					p1.respawn();
-				} else if (transDir == 0) {
-					gameState = gamePaused;
-					gamePauseSFX.play();
-					drawPauseScreen();
-					startTransition(1);
-					transitionHUD(1);
-				}
-				break;
-			case gamePaused:
-				if (transDir == 0) {
-					gameState = gameStarted;
-					gamePauseSFX.play();
-					startTransition(-1);
-					transitionHUD(-1);
-				}
-				break;
-			case gameOver:
-				menuConfirmSFX.play();
-				titleMusic.play();
-				gameState = highScores;
-				drawTitleScreen();
-				break;
-			case highScores:
-				menuConfirmSFX.play();
-				gameState = titleScreen;
-				drawTitleScreen();
-				break;
-			case titleScreen:
-				menuConfirmSFX.play();
-				resetGame();
-				gameState = gameStarted;
-				break;
-			default: 
-				break;
-		}
-	}
-
-	if (gameState === highScores) {
-		if (scoreClear.isReleased()) {
-			menuConfirmSFX.play();
-			resetScoreTable();
-			drawTitleScreen();
-		}
-	}
-}
+// TO DO: rework gross input device globals
+let keyboard, gamepads;
 
 class GamePadManager {
 	constructor() {
@@ -317,8 +249,9 @@ class Keyboard {
 	}
 }
 
-class Control {
-	constructor(key, padButton, axis, axisDir, deadzone) {
+class InputMap {
+	constructor(gameControl, key, padButton, axis, axisDir, deadzone, ) {
+		this.gameControl = gameControl;
 		this.key = key ? key : 0;
 		//padButtonsHeld[padButton]
 		this.padButton = padButton ? padButton : 0;
@@ -331,6 +264,16 @@ class Control {
 		this.deadzone = deadzone ? deadzone : null;
 	}
 
+	update(dt) {
+		if (!this.gameControl) return;
+		if (this.isPressed() || this.isHeld()) {
+			this.gameControl.press();
+		} else {
+			this.gameControl.release();
+		}
+	}
+
+	// TO DO: Remove hardcoded references to global keyboard/gamepads
 	isPressed() {
 		return (keyboard.keyPressed(this.key) || 
 				gamepads.buttonHeld(this.padButton, 0) ||
@@ -353,15 +296,45 @@ class Control {
 		} else if (this.axisDir == -1) {
 			return gamepads.padAxis(this.axis, 0) < -this.deadzone;
 		} else {
-			return false;
+			return 0;
 		}
 	}
 
 	getAxisValue() {
 		return gamepads.padAxis(this.axis, 0);
 	}
+}
 
-	getButtonValue() {
-		//TO DO
+class GameControl {
+	constructor() {
+		this.value = 0;
+		this.time = inputTransitionTime * 2; //time since pressed/released in terms of dt
+	}
+
+	press(value) {
+        if (!this.value) {
+            this.time = 0;
+            if (value) this.value = value;
+            else this.value = 1;
+        }
+	}
+
+	release() {
+        // Release only if control is currently held/pressed
+        if (this.value) this.time = this.value = 0;
+	}
+
+	update(dt) {
+		this.time += dt;
+	}
+
+	get pressed() {
+		return (this.value != 0 && this.time < inputTransitionTime);
+	}
+	get held() {
+		return (this.value != 0 && this.time >= inputTransitionTime);
+	}
+	get released() {
+		return (this.value == 0 && this.time <= inputTransitionTime);
 	}
 }
